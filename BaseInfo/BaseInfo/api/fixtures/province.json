@@ -1,0 +1,169 @@
+[
+  {
+    "model": "api.Province",
+    "pk": 1,
+    "fields": {
+      "value": "\u0622\u0630\u0631\u0628\u0627\u06cc\u062c\u0627\u0646 \u0634\u0631\u0642\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 2,
+    "fields": {
+      "value": "\u0622\u0630\u0631\u0628\u0627\u06cc\u062c\u0627\u0646 \u063a\u0631\u0628\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 3,
+    "fields": { "value": "\u0627\u0631\u062f\u0628\u06cc\u0644" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 4,
+    "fields": { "value": "\u0627\u0635\u0641\u0647\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 5,
+    "fields": { "value": "\u0627\u0644\u0628\u0631\u0632" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 6,
+    "fields": { "value": "\u0627\u06cc\u0644\u0627\u0645" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 7,
+    "fields": { "value": "\u0628\u0648\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 8,
+    "fields": { "value": "\u062a\u0647\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 9,
+    "fields": {
+      "value": "\u0686\u0647\u0627\u0631\u0645\u062d\u0627\u0644 \u0648 \u0628\u062e\u062a\u06cc\u0627\u0631\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 10,
+    "fields": {
+      "value": "\u062e\u0631\u0627\u0633\u0627\u0646 \u062c\u0646\u0648\u0628\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 11,
+    "fields": {
+      "value": "\u062e\u0631\u0627\u0633\u0627\u0646 \u0631\u0636\u0648\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 12,
+    "fields": {
+      "value": "\u062e\u0631\u0627\u0633\u0627\u0646 \u0634\u0645\u0627\u0644\u06cc"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 13,
+    "fields": { "value": "\u062e\u0648\u0632\u0633\u062a\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 14,
+    "fields": { "value": "\u0632\u0646\u062c\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 15,
+    "fields": { "value": "\u0633\u0645\u0646\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 16,
+    "fields": {
+      "value": "\u0633\u06cc\u0633\u062a\u0627\u0646 \u0648 \u0628\u0644\u0648\u0686\u0633\u062a\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 17,
+    "fields": { "value": "\u0641\u0627\u0631\u0633" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 18,
+    "fields": { "value": "\u0642\u0632\u0648\u06cc\u0646" }
+  },
+  { "model": "api.Province", "pk": 19, "fields": { "value": "\u0642\u0645" } },
+  {
+    "model": "api.Province",
+    "pk": 20,
+    "fields": { "value": "\u06af\u0644\u0633\u062a\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 21,
+    "fields": { "value": "\u06af\u06cc\u0644\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 22,
+    "fields": { "value": "\u0644\u0631\u0633\u062a\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 23,
+    "fields": { "value": "\u0645\u0627\u0632\u0646\u062f\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 24,
+    "fields": { "value": "\u0645\u0631\u06a9\u0632\u06cc" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 25,
+    "fields": { "value": "\u0647\u0631\u0645\u0632\u06af\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 26,
+    "fields": { "value": "\u0647\u0645\u062f\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 27,
+    "fields": { "value": "\u06a9\u0631\u062f\u0633\u062a\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 28,
+    "fields": { "value": "\u06a9\u0631\u0645\u0627\u0646" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 29,
+    "fields": { "value": "\u06a9\u0631\u0645\u0627\u0646\u0634\u0627\u0647" }
+  },
+  {
+    "model": "api.Province",
+    "pk": 30,
+    "fields": {
+      "value": "\u06a9\u0647\u06af\u06cc\u0644\u0648\u06cc\u0647 \u0648 \u0628\u0648\u06cc\u0631\u0627\u062d\u0645\u062f"
+    }
+  },
+  {
+    "model": "api.Province",
+    "pk": 31,
+    "fields": { "value": "\u06cc\u0632\u062f" }
+  }
+]

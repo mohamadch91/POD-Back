@@ -1,0 +1,2119 @@
+[
+  {
+    "model": "api.City",
+    "pk": 1,
+    "fields": { "province": 1, "value": "\u0622\u0630\u0631\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 2,
+    "fields": { "province": 1, "value": "\u0627\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 3,
+    "fields": { "province": 1, "value": "\u0628\u0646\u0627\u0628" }
+  },
+  {
+    "model": "api.City",
+    "pk": 4,
+    "fields": { "province": 1, "value": "\u062a\u0628\u0631\u06cc\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 5,
+    "fields": { "province": 1, "value": "\u0633\u0631\u0627\u0628" }
+  },
+  {
+    "model": "api.City",
+    "pk": 6,
+    "fields": { "province": 1, "value": "\u0633\u0647\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 7,
+    "fields": { "province": 1, "value": "\u0645\u0631\u0627\u063a\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 8,
+    "fields": { "province": 1, "value": "\u0645\u0631\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 9,
+    "fields": { "province": 1, "value": "\u0645\u06cc\u0627\u0646\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 10,
+    "fields": { "province": 2, "value": "\u0627\u0631\u0648\u0645\u06cc\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 11,
+    "fields": { "province": 2, "value": "\u0627\u0634\u0646\u0648\u06cc\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 12,
+    "fields": { "province": 2, "value": "\u0628\u0648\u06a9\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 13,
+    "fields": {
+      "province": 2,
+      "value": "\u067e\u06cc\u0631\u0627\u0646\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 14,
+    "fields": { "province": 2, "value": "\u062e\u0648\u06cc" }
+  },
+  {
+    "model": "api.City",
+    "pk": 15,
+    "fields": { "province": 2, "value": "\u0633\u0631\u062f\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 16,
+    "fields": { "province": 2, "value": "\u0633\u0644\u0645\u0627\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 17,
+    "fields": {
+      "province": 2,
+      "value": "\u0634\u0627\u0647\u06cc\u0646 \u062f\u0698"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 18,
+    "fields": { "province": 2, "value": "\u0645\u0627\u06a9\u0648" }
+  },
+  {
+    "model": "api.City",
+    "pk": 19,
+    "fields": { "province": 2, "value": "\u0645\u0647\u0627\u0628\u0627\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 20,
+    "fields": {
+      "province": 2,
+      "value": "\u0645\u06cc\u0627\u0646\u062f\u0648\u0622\u0628"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 21,
+    "fields": { "province": 2, "value": "\u0646\u0642\u062f\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 22,
+    "fields": { "province": 3, "value": "\u0627\u0631\u062f\u0628\u06cc\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 23,
+    "fields": {
+      "province": 3,
+      "value": "\u067e\u0627\u0631\u0633\u200c\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 24,
+    "fields": { "province": 3, "value": "\u062e\u0644\u062e\u0627\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 25,
+    "fields": { "province": 3, "value": "\u0633\u0631\u0639\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 26,
+    "fields": { "province": 3, "value": "\u06af\u0631\u0645\u06cc" }
+  },
+  {
+    "model": "api.City",
+    "pk": 27,
+    "fields": {
+      "province": 3,
+      "value": "\u0645\u0634\u06a9\u06cc\u0646\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 28,
+    "fields": { "province": 3, "value": "\u0646\u0645\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 29,
+    "fields": {
+      "province": 4,
+      "value": "\u0622\u0631\u0627\u0646 \u0648 \u0628\u06cc\u062f\u06af\u0644"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 30,
+    "fields": { "province": 4, "value": "\u0627\u0628\u0631\u06cc\u0634\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 31,
+    "fields": { "province": 4, "value": "\u0627\u0635\u0641\u0647\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 32,
+    "fields": {
+      "province": 4,
+      "value": "\u062e\u0645\u06cc\u0646\u06cc\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 33,
+    "fields": {
+      "province": 4,
+      "value": "\u062e\u0648\u0627\u0646\u0633\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 34,
+    "fields": { "province": 4, "value": "\u062e\u0648\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 35,
+    "fields": { "province": 4, "value": "\u062f\u0627\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 36,
+    "fields": { "province": 4, "value": "\u0633\u0645\u06cc\u0631\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 37,
+    "fields": {
+      "province": 4,
+      "value": "\u0634\u0627\u0647\u06cc\u0646\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 38,
+    "fields": {
+      "province": 4,
+      "value": "\u0641\u0644\u0627\u0648\u0631\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 39,
+    "fields": {
+      "province": 4,
+      "value": "\u0641\u0648\u0644\u0627\u062f\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 40,
+    "fields": { "province": 4, "value": "\u0642\u0645\u0635\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 41,
+    "fields": {
+      "province": 4,
+      "value": "\u06af\u0644\u067e\u0627\u06cc\u06af\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 42,
+    "fields": { "province": 4, "value": "\u0644\u0646\u062c\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 43,
+    "fields": { "province": 4, "value": "\u0645\u0628\u0627\u0631\u06a9\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 44,
+    "fields": {
+      "province": 4,
+      "value": "\u0646\u062c\u0641\u200c\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 45,
+    "fields": { "province": 4, "value": "\u06a9\u0627\u0634\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 46,
+    "fields": { "province": 5, "value": "\u0622\u0633\u0627\u0631\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 47,
+    "fields": {
+      "province": 5,
+      "value": "\u0627\u0634\u062a\u0647\u0627\u0631\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 48,
+    "fields": { "province": 5, "value": "\u062a\u0646\u06a9\u0645\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 49,
+    "fields": {
+      "province": 5,
+      "value": "\u0686\u0647\u0627\u0631\u0628\u0627\u063a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 50,
+    "fields": { "province": 5, "value": "\u0637\u0627\u0644\u0642\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 51,
+    "fields": { "province": 5, "value": "\u0641\u0631\u062f\u06cc\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 52,
+    "fields": { "province": 5, "value": "\u06af\u0631\u0645\u062f\u0631\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 53,
+    "fields": { "province": 5, "value": "\u0645\u0627\u0647\u062f\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 54,
+    "fields": {
+      "province": 5,
+      "value": "\u0645\u062d\u0645\u062f\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 55,
+    "fields": {
+      "province": 5,
+      "value": "\u0646\u0638\u0631\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 56,
+    "fields": { "province": 5, "value": "\u0647\u0634\u062a\u06af\u0631\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 57,
+    "fields": { "province": 5, "value": "\u06a9\u0631\u062c" }
+  },
+  {
+    "model": "api.City",
+    "pk": 58,
+    "fields": { "province": 5, "value": "\u06a9\u0648\u0647\u0633\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 59,
+    "fields": {
+      "province": 6,
+      "value": "\u0622\u0628\u062f\u0627\u0646\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 60,
+    "fields": { "province": 6, "value": "\u0627\u06cc\u0644\u0627\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 61,
+    "fields": { "province": 6, "value": "\u0627\u06cc\u0648\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 62,
+    "fields": { "province": 6, "value": "\u062f\u0647\u0644\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 63,
+    "fields": { "province": 6, "value": "\u0645\u0647\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 64,
+    "fields": {
+      "province": 7,
+      "value": "\u0628\u0631\u0627\u0632\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 65,
+    "fields": {
+      "province": 7,
+      "value": "\u0628\u0646\u062f\u0631 \u062f\u06cc\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 66,
+    "fields": {
+      "province": 7,
+      "value": "\u0628\u0646\u062f\u0631 \u06af\u0646\u0627\u0648\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 67,
+    "fields": {
+      "province": 7,
+      "value": "\u0628\u0646\u062f\u0631 \u06a9\u0646\u06af\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 68,
+    "fields": { "province": 7, "value": "\u0628\u0648\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 69,
+    "fields": { "province": 7, "value": "\u062c\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 70,
+    "fields": { "province": 7, "value": "\u062e\u0648\u0631\u0645\u0648\u062c" }
+  },
+  {
+    "model": "api.City",
+    "pk": 71,
+    "fields": { "province": 8, "value": "\u0622\u0628\u0633\u0631\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 72,
+    "fields": { "province": 8, "value": "\u0622\u0628\u0639\u0644\u06cc" }
+  },
+  {
+    "model": "api.City",
+    "pk": 73,
+    "fields": { "province": 8, "value": "\u0627\u0631\u062c\u0645\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 74,
+    "fields": {
+      "province": 8,
+      "value": "\u0627\u0633\u0644\u0627\u0645\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 75,
+    "fields": { "province": 8, "value": "\u0627\u0646\u062f\u06cc\u0634\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 76,
+    "fields": {
+      "province": 8,
+      "value": "\u0628\u0627\u0642\u0631\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 77,
+    "fields": { "province": 8, "value": "\u0628\u0648\u0645\u0647\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 78,
+    "fields": { "province": 8, "value": "\u067e\u0627\u06a9\u062f\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 79,
+    "fields": { "province": 8, "value": "\u067e\u0631\u062f\u06cc\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 80,
+    "fields": { "province": 8, "value": "\u067e\u0631\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 81,
+    "fields": { "province": 8, "value": "\u067e\u06cc\u0634\u0648\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 82,
+    "fields": { "province": 8, "value": "\u062a\u0647\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 83,
+    "fields": {
+      "province": 8,
+      "value": "\u062c\u0648\u0627\u062f\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 84,
+    "fields": {
+      "province": 8,
+      "value": "\u0686\u0647\u0627\u0631\u062f\u0627\u0646\u06af\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 85,
+    "fields": { "province": 8, "value": "\u062f\u0645\u0627\u0648\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 86,
+    "fields": {
+      "province": 8,
+      "value": "\u0631\u0628\u0627\u0637\u200c\u06a9\u0631\u06cc\u0645"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 87,
+    "fields": { "province": 8, "value": "\u0631\u0648\u062f\u0647\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 88,
+    "fields": { "province": 8, "value": "\u0631\u06cc" }
+  },
+  {
+    "model": "api.City",
+    "pk": 89,
+    "fields": {
+      "province": 8,
+      "value": "\u0634\u0627\u0647\u062f\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 90,
+    "fields": { "province": 8, "value": "\u0634\u0645\u0634\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 91,
+    "fields": { "province": 8, "value": "\u0634\u0647\u0631\u06cc\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 92,
+    "fields": { "province": 8, "value": "\u0635\u0628\u0627\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 93,
+    "fields": { "province": 8, "value": "\u0635\u0641\u0627\u062f\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 94,
+    "fields": {
+      "province": 8,
+      "value": "\u0641\u0631\u062f\u0648\u0633\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 95,
+    "fields": { "province": 8, "value": "\u0641\u0634\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 96,
+    "fields": {
+      "province": 8,
+      "value": "\u0641\u06cc\u0631\u0648\u0632\u06a9\u0648\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 97,
+    "fields": { "province": 8, "value": "\u0642\u062f\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 98,
+    "fields": { "province": 8, "value": "\u0642\u0631\u0686\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 99,
+    "fields": { "province": 8, "value": "\u06af\u0644\u0633\u062a\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 100,
+    "fields": { "province": 8, "value": "\u0644\u0648\u0627\u0633\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 101,
+    "fields": {
+      "province": 8,
+      "value": "\u0646\u0633\u06cc\u0645\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 102,
+    "fields": { "province": 8, "value": "\u0648\u062d\u06cc\u062f\u06cc\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 103,
+    "fields": { "province": 8, "value": "\u0648\u0631\u0627\u0645\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 104,
+    "fields": { "province": 8, "value": "\u06a9\u0647\u0631\u06cc\u0632\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 105,
+    "fields": { "province": 8, "value": "\u06a9\u06cc\u0644\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 106,
+    "fields": { "province": 9, "value": "\u0628\u0631\u0648\u062c\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 107,
+    "fields": { "province": 9, "value": "\u0633\u0627\u0645\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 108,
+    "fields": { "province": 9, "value": "\u0634\u0647\u0631\u06a9\u0631\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 109,
+    "fields": {
+      "province": 9,
+      "value": "\u0641\u0631\u062e\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 110,
+    "fields": { "province": 9, "value": "\u0644\u0631\u062f\u06af\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 111,
+    "fields": {
+      "province": 10,
+      "value": "\u0628\u06cc\u0631\u062c\u0646\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 112,
+    "fields": { "province": 10, "value": "\u0637\u0628\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 113,
+    "fields": { "province": 10, "value": "\u0641\u0631\u062f\u0648\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 114,
+    "fields": { "province": 10, "value": "\u0642\u0627\u064a\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 115,
+    "fields": {
+      "province": 11,
+      "value": "\u0628\u0631\u062f\u0633\u06a9\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 116,
+    "fields": {
+      "province": 11,
+      "value": "\u062a\u0627\u06cc\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 117,
+    "fields": {
+      "province": 11,
+      "value": "\u062a\u0631\u0628\u062a \u062c\u0627\u0645"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 118,
+    "fields": {
+      "province": 11,
+      "value": "\u062a\u0631\u0628\u062a\u200c\u062d\u06cc\u062f\u0631\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 119,
+    "fields": {
+      "province": 11,
+      "value": "\u0686\u0646\u0627\u0631\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 120,
+    "fields": { "province": 11, "value": "\u062e\u0648\u0627\u0641" }
+  },
+  {
+    "model": "api.City",
+    "pk": 121,
+    "fields": {
+      "province": 11,
+      "value": "\u0633\u0628\u0632\u0648\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 122,
+    "fields": {
+      "province": 11,
+      "value": "\u0634\u0627\u0646\u062f\u06cc\u0632"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 123,
+    "fields": { "province": 11, "value": "\u0637\u0631\u0642\u0628\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 124,
+    "fields": {
+      "province": 11,
+      "value": "\u0642\u0627\u0633\u0645\u200c\u0622\u0628\u0627\u062f (\u062e\u0648\u0627\u0641)"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 125,
+    "fields": { "province": 11, "value": "\u0642\u0648\u0686\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 126,
+    "fields": {
+      "province": 11,
+      "value": "\u06af\u0644\u0628\u0647\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 127,
+    "fields": {
+      "province": 11,
+      "value": "\u06af\u0646\u0627\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 128,
+    "fields": { "province": 11, "value": "\u0645\u0634\u0647\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 129,
+    "fields": {
+      "province": 11,
+      "value": "\u0645\u0644\u06a9\u200c\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 130,
+    "fields": {
+      "province": 11,
+      "value": "\u0646\u06cc\u0634\u0627\u0628\u0648\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 131,
+    "fields": {
+      "province": 12,
+      "value": "\u0622\u0634\u062e\u0627\u0646\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 132,
+    "fields": {
+      "province": 12,
+      "value": "\u0627\u0633\u0641\u0631\u0627\u06cc\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 133,
+    "fields": {
+      "province": 12,
+      "value": "\u0628\u062c\u0646\u0648\u0631\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 134,
+    "fields": {
+      "province": 12,
+      "value": "\u0634\u06cc\u0631\u0648\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 135,
+    "fields": {
+      "province": 13,
+      "value": "\u0622\u0628\u0627\u062f\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 136,
+    "fields": {
+      "province": 13,
+      "value": "\u0627\u0645\u06cc\u062f\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 137,
+    "fields": {
+      "province": 13,
+      "value": "\u0627\u0646\u062f\u06cc\u0645\u0634\u06a9"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 138,
+    "fields": { "province": 13, "value": "\u0627\u0647\u0648\u0627\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 139,
+    "fields": { "province": 13, "value": "\u0627\u06cc\u0630\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 140,
+    "fields": {
+      "province": 13,
+      "value": "\u0628\u0646\u062f\u0631 \u0627\u0645\u0627\u0645 \u062e\u0645\u06cc\u0646\u06cc"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 141,
+    "fields": {
+      "province": 13,
+      "value": "\u0628\u0646\u062f\u0631 \u0645\u0627\u0647\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 142,
+    "fields": {
+      "province": 13,
+      "value": "\u0628\u0647\u0628\u0647\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 143,
+    "fields": { "province": 13, "value": "\u0686\u0645\u0631\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 144,
+    "fields": {
+      "province": 13,
+      "value": "\u062d\u0645\u06cc\u062f\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 145,
+    "fields": {
+      "province": 13,
+      "value": "\u062e\u0631\u0645\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 146,
+    "fields": { "province": 13, "value": "\u062f\u0632\u0641\u0648\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 147,
+    "fields": {
+      "province": 13,
+      "value": "\u0631\u0627\u0645\u0634\u06cc\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 148,
+    "fields": {
+      "province": 13,
+      "value": "\u0631\u0627\u0645\u0647\u0631\u0645\u0632"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 149,
+    "fields": {
+      "province": 13,
+      "value": "\u0633\u0648\u0633\u0646\u06af\u0631\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 150,
+    "fields": {
+      "province": 13,
+      "value": "\u0634\u0627\u062f\u06af\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 151,
+    "fields": { "province": 13, "value": "\u0634\u0648\u0634" }
+  },
+  {
+    "model": "api.City",
+    "pk": 152,
+    "fields": { "province": 13, "value": "\u0634\u0648\u0634\u062a\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 153,
+    "fields": {
+      "province": 13,
+      "value": "\u0645\u0633\u062c\u062f \u0633\u0644\u06cc\u0645\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 154,
+    "fields": {
+      "province": 13,
+      "value": "\u0647\u0646\u062f\u06cc\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 155,
+    "fields": { "province": 14, "value": "\u0627\u0628\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 156,
+    "fields": {
+      "province": 14,
+      "value": "\u062e\u0631\u0645\u062f\u0631\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 157,
+    "fields": { "province": 14, "value": "\u0632\u0646\u062c\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 158,
+    "fields": { "province": 14, "value": "\u0642\u06cc\u062f\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 159,
+    "fields": {
+      "province": 15,
+      "value": "\u062f\u0627\u0645\u063a\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 160,
+    "fields": { "province": 15, "value": "\u0633\u0645\u0646\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 161,
+    "fields": {
+      "province": 15,
+      "value": "\u0634\u0627\u0647\u0631\u0648\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 162,
+    "fields": {
+      "province": 15,
+      "value": "\u06af\u0631\u0645\u0633\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 163,
+    "fields": {
+      "province": 16,
+      "value": "\u0627\u06cc\u0631\u0627\u0646\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 164,
+    "fields": {
+      "province": 16,
+      "value": "\u0686\u0627\u0628\u0647\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 165,
+    "fields": { "province": 16, "value": "\u062e\u0627\u0634" }
+  },
+  {
+    "model": "api.City",
+    "pk": 166,
+    "fields": { "province": 16, "value": "\u0632\u0627\u0628\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 167,
+    "fields": {
+      "province": 16,
+      "value": "\u0632\u0627\u0647\u062f\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 168,
+    "fields": { "province": 16, "value": "\u0632\u0647\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 169,
+    "fields": {
+      "province": 16,
+      "value": "\u0633\u0631\u0627\u0648\u0627\u0646-\u0633\u06cc\u0633\u062a\u0627\u0646 \u0648 \u0628\u0644\u0648\u0686\u0633\u062a\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 170,
+    "fields": { "province": 16, "value": "\u06a9\u0646\u0627\u0631\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 171,
+    "fields": { "province": 17, "value": "\u0622\u0628\u0627\u062f\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 172,
+    "fields": { "province": 17, "value": "\u0627\u0642\u0644\u06cc\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 173,
+    "fields": { "province": 17, "value": "\u062c\u0647\u0631\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 174,
+    "fields": { "province": 17, "value": "\u062e\u0648\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 175,
+    "fields": { "province": 17, "value": "\u062f\u0627\u0631\u0627\u0628" }
+  },
+  {
+    "model": "api.City",
+    "pk": 176,
+    "fields": { "province": 17, "value": "\u0632\u0631\u0642\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 177,
+    "fields": { "province": 17, "value": "\u0634\u06cc\u0631\u0627\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 178,
+    "fields": {
+      "province": 17,
+      "value": "\u0635\u062f\u0631\u0627-\u0641\u0627\u0631\u0633"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 179,
+    "fields": { "province": 17, "value": "\u0641\u0633\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 180,
+    "fields": {
+      "province": 17,
+      "value": "\u0641\u06cc\u0631\u0648\u0632\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 181,
+    "fields": { "province": 17, "value": "\u0644\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 182,
+    "fields": { "province": 17, "value": "\u0644\u0627\u0645\u0631\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 183,
+    "fields": {
+      "province": 17,
+      "value": "\u0645\u0631\u0648\u062f\u0634\u062a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 184,
+    "fields": { "province": 17, "value": "\u0645\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 185,
+    "fields": {
+      "province": 17,
+      "value": "\u0646\u0648\u0631\u0622\u0628\u0627\u062f \u0645\u0645\u0633\u0646\u06cc"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 186,
+    "fields": {
+      "province": 17,
+      "value": "\u0646\u06cc\u200c\u0631\u06cc\u0632"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 187,
+    "fields": {
+      "province": 17,
+      "value": "\u06a9\u0627\u0632\u0631\u0648\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 188,
+    "fields": { "province": 18, "value": "\u0622\u0628\u06cc\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 189,
+    "fields": {
+      "province": 18,
+      "value": "\u0627\u0642\u0628\u0627\u0644\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 190,
+    "fields": { "province": 18, "value": "\u0627\u0644\u0648\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 191,
+    "fields": {
+      "province": 18,
+      "value": "\u062a\u0627\u06a9\u0633\u062a\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 192,
+    "fields": { "province": 18, "value": "\u0634\u0627\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 193,
+    "fields": { "province": 18, "value": "\u0642\u0632\u0648\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 194,
+    "fields": {
+      "province": 18,
+      "value": "\u0645\u062d\u0645\u062f\u06cc\u0647-\u0642\u0632\u0648\u06cc\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 195,
+    "fields": { "province": 19, "value": "\u0642\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 196,
+    "fields": {
+      "province": 20,
+      "value": "\u0622\u0632\u0627\u062f\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 197,
+    "fields": { "province": 20, "value": "\u0622\u0642 \u0642\u0644\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 198,
+    "fields": {
+      "province": 20,
+      "value": "\u0628\u0646\u062f\u0631 \u062a\u0631\u06a9\u0645\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 199,
+    "fields": {
+      "province": 20,
+      "value": "\u0639\u0644\u06cc\u200c\u0622\u0628\u0627\u062f \u06a9\u062a\u0648\u0644"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 200,
+    "fields": {
+      "province": 20,
+      "value": "\u06af\u0627\u0644\u06cc\u06a9\u0634"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 201,
+    "fields": { "province": 20, "value": "\u06af\u0631\u06af\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 202,
+    "fields": {
+      "province": 20,
+      "value": "\u06af\u0645\u06cc\u0634\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 203,
+    "fields": {
+      "province": 20,
+      "value": "\u06af\u0646\u0628\u062f \u06a9\u0627\u0648\u0648\u0633"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 204,
+    "fields": {
+      "province": 20,
+      "value": "\u0645\u06cc\u0646\u0648\u062f\u0634\u062a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 205,
+    "fields": {
+      "province": 20,
+      "value": "\u06a9\u0631\u062f\u06a9\u0648\u06cc"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 206,
+    "fields": { "province": 20, "value": "\u06a9\u0644\u0627\u0644\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 207,
+    "fields": {
+      "province": 21,
+      "value": "\u0622\u0633\u062a\u0627\u0631\u0627"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 208,
+    "fields": {
+      "province": 21,
+      "value": "\u0622\u0633\u062a\u0627\u0646\u0647 \u0627\u0634\u0631\u0641\u06cc\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 209,
+    "fields": { "province": 21, "value": "\u0627\u0633\u0627\u0644\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 210,
+    "fields": { "province": 21, "value": "\u0627\u0645\u0644\u0634" }
+  },
+  {
+    "model": "api.City",
+    "pk": 211,
+    "fields": {
+      "province": 21,
+      "value": "\u0628\u0646\u062f\u0631 \u0627\u0646\u0632\u0644\u06cc"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 212,
+    "fields": { "province": 21, "value": "\u062a\u0627\u0644\u0634" }
+  },
+  {
+    "model": "api.City",
+    "pk": 213,
+    "fields": {
+      "province": 21,
+      "value": "\u0686\u0627\u0628\u06a9\u0633\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 214,
+    "fields": {
+      "province": 21,
+      "value": "\u0686\u0627\u0641 \u0648 \u0686\u0645\u062e\u0627\u0644\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 215,
+    "fields": {
+      "province": 21,
+      "value": "\u062e\u0634\u06a9\u0628\u06cc\u062c\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 216,
+    "fields": { "province": 21, "value": "\u062e\u0645\u0627\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 217,
+    "fields": {
+      "province": 21,
+      "value": "\u062f\u06cc\u0644\u0645\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 218,
+    "fields": { "province": 21, "value": "\u0631\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 219,
+    "fields": {
+      "province": 21,
+      "value": "\u0631\u0636\u0648\u0627\u0646\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 220,
+    "fields": {
+      "province": 21,
+      "value": "\u0631\u0648\u062f\u0628\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 221,
+    "fields": { "province": 21, "value": "\u0631\u0648\u062f\u0633\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 222,
+    "fields": {
+      "province": 21,
+      "value": "\u0632\u06cc\u0628\u0627\u06a9\u0646\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 223,
+    "fields": { "province": 21, "value": "\u0633\u0646\u06af\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 224,
+    "fields": {
+      "province": 21,
+      "value": "\u0633\u06cc\u0627\u0647\u06a9\u0644"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 225,
+    "fields": { "province": 21, "value": "\u0634\u0641\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 226,
+    "fields": {
+      "province": 21,
+      "value": "\u0635\u0648\u0645\u0639\u0647\u200c\u0633\u0631\u0627"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 227,
+    "fields": { "province": 21, "value": "\u0641\u0648\u0645\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 228,
+    "fields": {
+      "province": 21,
+      "value": "\u0644\u0627\u0647\u06cc\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 229,
+    "fields": {
+      "province": 21,
+      "value": "\u0644\u0634\u062a \u0646\u0634\u0627"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 230,
+    "fields": {
+      "province": 21,
+      "value": "\u0644\u0646\u06af\u0631\u0648\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 231,
+    "fields": { "province": 21, "value": "\u0645\u0627\u0633\u0627\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 232,
+    "fields": {
+      "province": 21,
+      "value": "\u0645\u0627\u0633\u0648\u0644\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 233,
+    "fields": {
+      "province": 21,
+      "value": "\u06a9\u0644\u0627\u0686\u0627\u06cc"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 234,
+    "fields": {
+      "province": 21,
+      "value": "\u06a9\u06cc\u0627\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 235,
+    "fields": { "province": 22, "value": "\u0627\u0632\u0646\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 236,
+    "fields": { "province": 22, "value": "\u0627\u0644\u0634\u062a\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 237,
+    "fields": {
+      "province": 22,
+      "value": "\u0627\u0644\u06cc\u06af\u0648\u062f\u0631\u0632"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 238,
+    "fields": {
+      "province": 22,
+      "value": "\u0628\u0631\u0648\u062c\u0631\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 239,
+    "fields": {
+      "province": 22,
+      "value": "\u067e\u0644\u062f\u062e\u062a\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 240,
+    "fields": {
+      "province": 22,
+      "value": "\u062e\u0631\u0645\u200c\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 241,
+    "fields": { "province": 22, "value": "\u062f\u0648\u0631\u0648\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 242,
+    "fields": {
+      "province": 22,
+      "value": "\u0646\u0648\u0631\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 243,
+    "fields": {
+      "province": 22,
+      "value": "\u06a9\u0648\u0647\u062f\u0634\u062a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 244,
+    "fields": { "province": 23, "value": "\u0622\u0645\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 245,
+    "fields": {
+      "province": 23,
+      "value": "\u0627\u0645\u06cc\u0631\u06a9\u0644\u0627"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 246,
+    "fields": {
+      "province": 23,
+      "value": "\u0627\u06cc\u0632\u062f\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 247,
+    "fields": { "province": 23, "value": "\u0628\u0627\u0628\u0644" }
+  },
+  {
+    "model": "api.City",
+    "pk": 248,
+    "fields": {
+      "province": 23,
+      "value": "\u0628\u0627\u0628\u0644\u0633\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 249,
+    "fields": { "province": 23, "value": "\u0628\u0647\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 250,
+    "fields": {
+      "province": 23,
+      "value": "\u067e\u0644 \u0633\u0641\u06cc\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 251,
+    "fields": {
+      "province": 23,
+      "value": "\u062a\u0646\u06a9\u0627\u0628\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 252,
+    "fields": {
+      "province": 23,
+      "value": "\u062c\u0648\u06cc\u0628\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 253,
+    "fields": { "province": 23, "value": "\u0686\u0627\u0644\u0648\u0633" }
+  },
+  {
+    "model": "api.City",
+    "pk": 254,
+    "fields": {
+      "province": 23,
+      "value": "\u0686\u0645\u0633\u062a\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 255,
+    "fields": { "province": 23, "value": "\u0631\u0627\u0645\u0633\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 256,
+    "fields": { "province": 23, "value": "\u0631\u0648\u06cc\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 257,
+    "fields": { "province": 23, "value": "\u0633\u0627\u0631\u06cc" }
+  },
+  {
+    "model": "api.City",
+    "pk": 258,
+    "fields": {
+      "province": 23,
+      "value": "\u0633\u0631\u062e\u0631\u0648\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 259,
+    "fields": {
+      "province": 23,
+      "value": "\u0633\u0644\u0645\u0627\u0646\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 260,
+    "fields": {
+      "province": 23,
+      "value": "\u0639\u0628\u0627\u0633\u200c\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 261,
+    "fields": {
+      "province": 23,
+      "value": "\u0641\u0631\u062d \u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 262,
+    "fields": {
+      "province": 23,
+      "value": "\u0641\u0631\u06cc\u062f\u0648\u0646\u200c\u06a9\u0646\u0627\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 263,
+    "fields": {
+      "province": 23,
+      "value": "\u0642\u0627\u0626\u0645\u200c\u0634\u0647\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 264,
+    "fields": {
+      "province": 23,
+      "value": "\u0645\u062d\u0645\u0648\u062f\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 265,
+    "fields": {
+      "province": 23,
+      "value": "\u0646\u0634\u062a\u0627\u0631\u0648\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 266,
+    "fields": { "province": 23, "value": "\u0646\u0648\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 267,
+    "fields": { "province": 23, "value": "\u0646\u0648\u0634\u0647\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 268,
+    "fields": { "province": 23, "value": "\u0646\u06a9\u0627" }
+  },
+  {
+    "model": "api.City",
+    "pk": 269,
+    "fields": {
+      "province": 23,
+      "value": "\u06a9\u0644\u0627\u0631\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 270,
+    "fields": {
+      "province": 23,
+      "value": "\u06a9\u0644\u0627\u0631\u062f\u0634\u062a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 271,
+    "fields": { "province": 24, "value": "\u0627\u0631\u0627\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 272,
+    "fields": { "province": 24, "value": "\u062e\u0645\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 273,
+    "fields": {
+      "province": 24,
+      "value": "\u062f\u0644\u06cc\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 274,
+    "fields": { "province": 24, "value": "\u0633\u0627\u0648\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 275,
+    "fields": { "province": 24, "value": "\u0634\u0627\u0632\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 276,
+    "fields": { "province": 24, "value": "\u0645\u062d\u0644\u0627\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 277,
+    "fields": {
+      "province": 24,
+      "value": "\u0645\u0647\u0627\u062c\u0631\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 278,
+    "fields": {
+      "province": 25,
+      "value": "\u0628\u0646\u062f\u0631\u0639\u0628\u0627\u0633"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 279,
+    "fields": { "province": 25, "value": "\u062a\u062e\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 280,
+    "fields": {
+      "province": 25,
+      "value": "\u062f\u0631\u06af\u0647\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 281,
+    "fields": { "province": 25, "value": "\u0642\u0634\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 282,
+    "fields": { "province": 25, "value": "\u0645\u06cc\u0646\u0627\u0628" }
+  },
+  {
+    "model": "api.City",
+    "pk": 283,
+    "fields": { "province": 25, "value": "\u0647\u0631\u0645\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 284,
+    "fields": { "province": 25, "value": "\u06a9\u06cc\u0634" }
+  },
+  {
+    "model": "api.City",
+    "pk": 285,
+    "fields": {
+      "province": 26,
+      "value": "\u0627\u0633\u062f\u0622\u0628\u0627\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 286,
+    "fields": { "province": 26, "value": "\u0628\u0647\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 287,
+    "fields": {
+      "province": 26,
+      "value": "\u062a\u0648\u06cc\u0633\u0631\u06a9\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 288,
+    "fields": { "province": 26, "value": "\u0645\u0644\u0627\u06cc\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 289,
+    "fields": {
+      "province": 26,
+      "value": "\u0646\u0647\u0627\u0648\u0646\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 290,
+    "fields": { "province": 26, "value": "\u0647\u0645\u062f\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 291,
+    "fields": {
+      "province": 26,
+      "value": "\u06a9\u0628\u0648\u062f\u0631\u0627\u0647\u0646\u06af"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 292,
+    "fields": { "province": 27, "value": "\u0628\u0627\u0646\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 293,
+    "fields": { "province": 27, "value": "\u0628\u06cc\u062c\u0627\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 294,
+    "fields": {
+      "province": 27,
+      "value": "\u062f\u0647\u06af\u0644\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 295,
+    "fields": { "province": 27, "value": "\u0633\u0642\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 296,
+    "fields": { "province": 27, "value": "\u0633\u0646\u0646\u062f\u062c" }
+  },
+  {
+    "model": "api.City",
+    "pk": 297,
+    "fields": { "province": 27, "value": "\u0642\u0631\u0648\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 298,
+    "fields": {
+      "province": 27,
+      "value": "\u0645\u0631\u06cc\u0648\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 299,
+    "fields": {
+      "province": 27,
+      "value": "\u06a9\u0627\u0645\u06cc\u0627\u0631\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 300,
+    "fields": { "province": 28, "value": "\u0628\u0627\u0641\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 301,
+    "fields": {
+      "province": 28,
+      "value": "\u0628\u0631\u062f\u0633\u06cc\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 302,
+    "fields": { "province": 28, "value": "\u0628\u0644\u0648\u06a9" }
+  },
+  {
+    "model": "api.City",
+    "pk": 303,
+    "fields": { "province": 28, "value": "\u0628\u0645" }
+  },
+  {
+    "model": "api.City",
+    "pk": 304,
+    "fields": { "province": 28, "value": "\u062c\u06cc\u0631\u0641\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 305,
+    "fields": {
+      "province": 28,
+      "value": "\u0631\u0641\u0633\u0646\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 306,
+    "fields": { "province": 28, "value": "\u0632\u0631\u0646\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 307,
+    "fields": {
+      "province": 28,
+      "value": "\u0633\u06cc\u0631\u062c\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 308,
+    "fields": { "province": 28, "value": "\u0645\u0627\u0647\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 309,
+    "fields": { "province": 28, "value": "\u06a9\u0631\u0645\u0627\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 310,
+    "fields": { "province": 28, "value": "\u06a9\u0647\u0646\u0648\u062c" }
+  },
+  {
+    "model": "api.City",
+    "pk": 311,
+    "fields": {
+      "province": 29,
+      "value": "\u0627\u0633\u0644\u0627\u0645\u200c\u200c\u0622\u0628\u0627\u062f \u063a\u0631\u0628"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 312,
+    "fields": {
+      "province": 29,
+      "value": "\u0628\u06cc\u0633\u062a\u0648\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 313,
+    "fields": {
+      "province": 29,
+      "value": "\u062c\u0648\u0627\u0646\u0631\u0648\u062f"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 314,
+    "fields": {
+      "province": 29,
+      "value": "\u0633\u0631\u067e\u0644 \u0630\u0647\u0627\u0628"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 315,
+    "fields": { "province": 29, "value": "\u0633\u0646\u0642\u0631" }
+  },
+  {
+    "model": "api.City",
+    "pk": 316,
+    "fields": { "province": 29, "value": "\u0635\u062d\u0646\u0647" }
+  },
+  {
+    "model": "api.City",
+    "pk": 317,
+    "fields": {
+      "province": 29,
+      "value": "\u06af\u0647\u0648\u0627\u0631\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 318,
+    "fields": { "province": 29, "value": "\u0647\u0631\u0633\u06cc\u0646" }
+  },
+  {
+    "model": "api.City",
+    "pk": 319,
+    "fields": {
+      "province": 29,
+      "value": "\u06a9\u0631\u0645\u0627\u0646\u0634\u0627\u0647"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 320,
+    "fields": {
+      "province": 29,
+      "value": "\u06a9\u0646\u06af\u0627\u0648\u0631"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 321,
+    "fields": { "province": 30, "value": "\u062f\u0647\u062f\u0634\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 322,
+    "fields": {
+      "province": 30,
+      "value": "\u062f\u0648\u06af\u0646\u0628\u062f\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 323,
+    "fields": {
+      "province": 30,
+      "value": "\u0633\u06cc\u200c\u0633\u062e\u062a"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 324,
+    "fields": { "province": 30, "value": "\u06cc\u0627\u0633\u0648\u062c" }
+  },
+  {
+    "model": "api.City",
+    "pk": 325,
+    "fields": {
+      "province": 31,
+      "value": "\u0627\u0631\u062f\u06a9\u0627\u0646"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 326,
+    "fields": { "province": 31, "value": "\u0628\u0627\u0641\u0642" }
+  },
+  {
+    "model": "api.City",
+    "pk": 327,
+    "fields": { "province": 31, "value": "\u062a\u0641\u062a" }
+  },
+  {
+    "model": "api.City",
+    "pk": 328,
+    "fields": {
+      "province": 31,
+      "value": "\u062d\u0645\u06cc\u062f\u06cc\u0627"
+    }
+  },
+  {
+    "model": "api.City",
+    "pk": 329,
+    "fields": { "province": 31, "value": "\u0645\u0647\u0631\u06cc\u0632" }
+  },
+  {
+    "model": "api.City",
+    "pk": 330,
+    "fields": { "province": 31, "value": "\u0645\u06cc\u0628\u062f" }
+  },
+  {
+    "model": "api.City",
+    "pk": 331,
+    "fields": { "province": 31, "value": "\u06cc\u0632\u062f" }
+  }
+]
