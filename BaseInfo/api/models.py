@@ -10,5 +10,5 @@ class Province(models.Model):
 class City(models.Model):
 
     id = models.AutoField(primary_key=True) 
-    province = models.ForeignKey(Province)
+    province = models.ForeignKey(Province,on_delete=models.DO_NOTHING)
     value = models.CharField(max_length=15)

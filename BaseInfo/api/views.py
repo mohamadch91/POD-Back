@@ -7,7 +7,6 @@ from .serializers import *
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import *
-from .serializers import RegisterSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -20,16 +19,17 @@ from itertools import chain
 
 
 class ProvinceView(generics.ListAPIView):
- 
+    queryset =Province.objects.all()
     def get(self, request):
         Provinces = Province.objects.all()
         serializer = ProvinceSerializer(Provinces,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class CityView(generics.ListAPIView):
+    queryset =City.objects.all()
  
     def get(self, request):
-        province = request.query_params("p_id")
-        cities = City.objects.filter(province = province)
+        prov = request.query_params["id"]
+        cities = City.objects.filter( province = prov)
         serializer = CitySerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)

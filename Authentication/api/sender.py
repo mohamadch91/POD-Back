@@ -1,14 +1,16 @@
 from kavenegar import *
 import json
+mq= 'amqp://guest:guest@rabbitmq:5672'
+
 def send_otp(otp):
     print("otp password")
     print(otp.password)
     try:
-        api = KavenegarAPI("38395854544B596663304931486958384B454168554568446F4D4D4374344F2F446F71362B5A55694B33453D")
+        api = KavenegarAPI("444E6C6378534967385758394B41572B57434F7A4C644D664558485631704464")
         params = {
             'sender': '0018018949161',
             'receptor': otp.receiver,
-             'template': 'newlogin',
+             'template': 'verify',
             'token': otp.password,
             'type': 'sms'
         }   

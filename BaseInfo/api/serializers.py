@@ -19,6 +19,6 @@ class ProvinceSerializer(serializers.ModelSerializer):
         
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Province
-        fields = ['id','value','label']
+        model = City
+        fields = ['id','value','province']
         

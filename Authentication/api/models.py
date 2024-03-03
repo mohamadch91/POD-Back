@@ -9,6 +9,7 @@ from django.core.validators import RegexValidator
 from datetime import timedelta
 from django.utils import timezone
 from .sender import send_otp
+from django.contrib.auth.hashers import make_password
 
 class CustomUserManager(BaseUserManager):
     """
@@ -17,7 +18,6 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(self, phone, password, **extra_fields):
         # print("debug")
-        print(phone)
         if not phone:
             raise ValueError('The phone must be set')
 
@@ -28,7 +28,9 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, phone, password ,**extra_fields):
+    def create_superuser(self, phone,password ,**extra_fields):
+        # password= '123'
+        # password =make_password('123')
         """
         Create and save a SuperUser with the given email and password.
         """
@@ -45,7 +47,7 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    password = None
+    # password = None
     phone = models.CharField( max_length = 13, unique = True)
     birth = models.DateField(blank=True,null=True)
     national_code=models.CharField(max_length=10,blank=True,null=True,unique=True)
@@ -64,11 +66,11 @@ class LegalUser(User):
     presenterName= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
     presenterLastname=models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
     presenterPhone = models.CharField( max_length = 13, unique = True)
-    companyID = models.IntegerField()
+    companyID = models.IntegerField(unique=True,null=True,blank=True)
     buissnessType= models.CharField(max_length = 50)
     city = models.CharField (max_length =50)
-    Province = models.CharField(max_length = 50)
-    address = models.CharField(max_length = 200)
+    Province = models.IntegerField(unique=True,null=True,blank=True)
+    address = models.IntegerField(unique=True,null=True,blank=True)
     
     def __str__(self):
         return "{}".format(self.phone)
@@ -81,7 +83,7 @@ class OtpRequestQuerySet(models.QuerySet):
             request_id=request,
             password=password,
             created__lt=current_time,
-            created__gt=current_time-timedelta(seconds=120),
+            created__gt=current_time-timedelta(seconds=60),
 
         ).exists()
 
@@ -104,7 +106,7 @@ class OTPManager(models.Manager):
 
 def generate_otp():
     rand = random.SystemRandom()
-    digits = rand.choices(string.digits, k=7 )
+    digits = rand.choices(string.digits, k=5 )
     return  ''.join(digits)
 
 

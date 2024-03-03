@@ -9,11 +9,23 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 
 
-
-class TeacherSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Teacher
-        fields = ['pk','phone','birth','national_code','role','first_name','last_name','created_at','updated_at','picture']
+        model = User
+        fields = ['pk','phone','birth','national_code','first_name','last_name','created_at','updated_at','picture']
+    def validate_password(self, value: str) -> str:
+        """
+        Hash value passed by user.
+
+        :param value: password of a user
+        :return: a hashed version of the password
+        """
+        return make_password(value)   
+       
+class LegalUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LegalUser
+        fields = ['pk','phone','birth','national_code','companyName','presenterName','presenterLastname','presenterPhone','companyID','buissnessType','city','Province','address','first_name','last_name','created_at','updated_at','picture']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -30,10 +42,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 
-class updateStudentSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','grade','department','birth','national_code','role','first_name','last_name','created_at','updated_at','picture','gpaverage','disipcline','school','parentName','parentNationalCode','pbirthday','peducation','pjob','address']
+        fields = ['pk','phone','birth','national_code','first_name','last_name','created_at','updated_at','picture']
+
+class UpdateLegalUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LegalUser
+        fields = ['pk','phone','birth','national_code','companyName','presenterName','presenterLastname','presenterPhone','companyID','buissnessType','city','Province','address','first_name','last_name','created_at','updated_at','picture']
+
 
 class requestOTPSerializer(serializers.Serializer):
     reciever=serializers.IntegerField(allow_null=False)
@@ -56,6 +74,12 @@ class ObtainTokenSerializer(serializers.Serializer):
     access = serializers.CharField( allow_null=False)
     refresh = serializers.CharField( allow_null=False)
     created = serializers.BooleanField()
+
+
+
+# class VerifyOtpResponseSuccesSerializer(serializers.Serializer):
+#       login_data = ObtainTokenSerializer,
+#       user_data = UserSerializer
 
 # class userIpSerializer(serializers.ModelSerializer):
 #     class Meta:
