@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 
   
 
-class Commerceerializer(serializers.ModelSerializer):
+class CommerceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commerce
         fields = '__all__'
