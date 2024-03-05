@@ -60,6 +60,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
     def __str__(self):
         return "{}".format(self.phone)
+    
 
 class LegalUser(User):
     companyName= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)

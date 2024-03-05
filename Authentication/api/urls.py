@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView,TokenVerifyView
 
 
 urlpatterns = [
@@ -16,6 +16,8 @@ urlpatterns = [
     path('delete/',deleteUser.as_view(),name="delete user"),
     path('user/', UserView.as_view(), name='admin_login'),
     path('legal/', LegalUserView.as_view(), name='profile'),
+    path('token/', TokenObtainPairView.as_view(), name='profile'),
+
 
     # path('currupted/', CurruptedView.as_view(), name='currupted'),
     # path('login_to_user/', loginUserView.as_view(), name='l user'),

@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404
 from itertools import chain
 import copy
 from drf_yasg import openapi
-
+from .tests import *
 
 class UpdateProfileView(APIView):
     # permission_classes=(IsAuthenticated,)
@@ -65,10 +65,9 @@ class LogoutView(APIView):
 
 
 
-class OTPViewLogin(generics.GenericAPIView):
+class OTPViewLogin(APIView):
 
     def get(self, request):
-        
         serializer = RequestOTPSerializer(data=request.query_params)
         # user=get_object_or_404(User,phone=request.query_params.get('receiver'))
         if serializer.is_valid():
