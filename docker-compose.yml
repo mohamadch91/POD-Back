@@ -1,0 +1,100 @@
+version: "3.2"
+services:
+
+  authentication:
+    image: authentication:latest
+    build:
+      context: .
+      dockerfile: Authentication/Dockerfile
+    container_name: authentication
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+        - 8000:8000
+    
+    networks:
+        - pod_net
+    depends_on:
+      - rabbitmq
+  baseInfo:
+    image: baseInfo:latest
+    build:
+      context: .
+      dockerfile: BaseInfo/Dockerfile
+    container_name: baseInfo
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+        - 8000:8001
+    
+    networks:
+        - pod_net
+    depends_on:
+      - rabbitmq
+  commerce:
+    image: commerce:latest
+    build:
+      context: .
+      dockerfile: Services/Commerce/Dockerfile
+    container_name: commerce
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+        - 8000:8002
+    
+    networks:
+        - pod_net
+    depends_on:
+      - rabbitmq
+  service:
+    image: baseInfo:latest
+    build:
+      context: .
+      dockerfile: Services/Service/Dockerfile
+    container_name: service
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+        - 8000:8003
+    
+    networks:
+        - pod_net
+    depends_on:
+      - rabbitmq
+  nginx:
+    image: nginx
+    build:
+      context: .
+      dockerfile: configs/Dockerfile
+    container_name: nginx
+
+    ports:
+        - 80:80
+        - 443:443
+    
+    networks:
+        - pod_net
+    depends_on:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.12.13-management-alpine
+    container_name: 'rabbitmq'
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - pod_net
+
+networks:
+  pod_net:
+    driver: bridge
