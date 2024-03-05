@@ -11,4 +11,6 @@ COPY . /code/
 
 RUN python manage.py makemigrations && python manage.py migrate
 
+RUN python manage.py pubSub
+
 CMD  python manage.py runserver 
