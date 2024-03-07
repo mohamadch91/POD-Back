@@ -24,6 +24,11 @@ class Service(models.Model):
     status = models.BooleanField()
     logistic_price =models.IntegerField()
     free_transport = models.BooleanField()
+    discount = models.IntegerField()
+    category = models.IntegerField()
+    brand = models.IntegerField()
+    available_count =models.IntegerField()
+
 
 
 
@@ -38,5 +43,5 @@ class ServiceComments(models.Model):
 
 class ServiceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
-    votes = models.IntegerField(max = 5)
+    votes = models.IntegerField()
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
