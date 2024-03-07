@@ -138,11 +138,14 @@ class OTPViewRegister(APIView):
                 else:
                     user_data= get_object_or_404(User,phone=data['receiver'])
 
+                wallet = get_object_or_404(Wallet,user = user_data.pk) 
+                w_ser= WalletSerializer(wallet)   
                 ser = UserSerializer(user_data)
                 # print(ser.data)
                 res ={
                     "login_data" : login_data,
-                    "user_data" : ser.data
+                    "user_data" : ser.data,
+                    "wallet_data" :w_ser.data
                 }
                 return Response(res, status=status.HTTP_200_OK)
             
@@ -159,10 +162,11 @@ class OTPViewRegister(APIView):
                 s=get_object_or_404(LegalUser,phone=otp['receiver'])
                 return False
             except:    
-                user = LegalUser.objects.create(phone=otp['receiver'] )
-                #create wallet for students
+                new_user = LegalUser.objects.create(phone=otp['receiver'] )
+                #create wallet for Legal User
+                wallet = Wallet.objects.create(user = new_user.pk)
                 created = True
-                refresh = RefreshToken.for_user(user)
+                refresh = RefreshToken.for_user(new_user)
         elif(type=="real"):
             try:
                 s=get_object_or_404(Teacher,phone=otp['receiver'])

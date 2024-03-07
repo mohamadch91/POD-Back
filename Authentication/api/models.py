@@ -64,17 +64,19 @@ class User(AbstractUser):
 
 class LegalUser(User):
     companyName= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
-    presenterName= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
-    presenterLastname=models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
-    presenterPhone = models.CharField( max_length = 13, unique = True)
     companyID = models.IntegerField(unique=True,null=True,blank=True)
-    buissnessType= models.CharField(max_length = 50)
-    city = models.CharField (max_length =50)
+    companyTitle = models.CharField(max_length = 50,null=True,blank=True)
+    postalCode =models.CharField(max_length = 50,null=True,blank=True)
+    city = models.CharField (max_length =50,null=True,blank=True)
     Province = models.IntegerField(unique=True,null=True,blank=True)
-    address = models.IntegerField(unique=True,null=True,blank=True)
+    address =models.CharField (max_length =500,null=True,blank=True)
     
     def __str__(self):
         return "{}".format(self.phone)
+
+class Wallet(User):
+    amount = models.IntegerField(unique=True,null=True,blank=True,default = 0)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'user_waller')
 
 class OtpRequestQuerySet(models.QuerySet):
     def is_valid(self, receiver, request, password):

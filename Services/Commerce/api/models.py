@@ -7,7 +7,6 @@ from django.db import models
 
 
 class Commerce(models.Model):
-
     id = models.AutoField(primary_key=True) 
     name = models.CharField(max_length = 200)
     year = models.IntegerField()
@@ -20,6 +19,10 @@ class Commerce(models.Model):
     code = models.CharField(max_length = 200)
     status = models.BooleanField()
     logistic_price =models.IntegerField()
+    discount = models.IntegerField()
+    category = models.IntegerField()
+    brand = models.IntegerField()
+    available_count =models.IntegerField()
     free_transport = models.BooleanField()
 
 
@@ -36,5 +39,5 @@ class CommerceComments(models.Model):
 
 class CommerceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
-    votes = models.IntegerField(max = 5)
+    votes = models.IntegerField()
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)

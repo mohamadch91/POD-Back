@@ -33,3 +33,35 @@ class CityView(generics.ListAPIView):
         cities = City.objects.filter( province = prov)
         serializer = CitySerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+class CommerceCategoryView(generics.ListAPIView):
+    queryset =CommerceCategory.objects.all()
+ 
+    def get(self, request):
+        prov = request.query_params["id"]
+        cities = CommerceCategory.objects.filter( province = prov)
+        serializer = CommerceCategorySerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+class ServiceCategoryView(generics.ListAPIView):
+    queryset =ServiceCategory.objects.all()
+ 
+    def get(self, request):
+        prov = request.query_params["id"]
+        cities = ServiceCategory.objects.filter( province = prov)
+        serializer = ServiceCategorySerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+class CommerceBrands(generics.ListAPIView):
+    queryset =CommerceBrands.objects.all()
+ 
+    def get(self, request):
+        prov = request.query_params["id"]
+        cities = CommerceBrands.objects.filter( province = prov)
+        serializer = CommerceBrandsSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+class ServiceBrandsView(generics.ListAPIView):
+    queryset =ServiceBrands.objects.all()
+ 
+    def get(self, request):
+        prov = request.query_params["id"]
+        cities = ServiceBrands.objects.filter( province = prov)
+        serializer = ServiceBrandsSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

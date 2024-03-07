@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 class LegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','birth','national_code','companyName','presenterName','presenterLastname','presenterPhone','companyID','buissnessType','city','Province','address','first_name','last_name','created_at','updated_at','picture']
+        fields = ['pk','phone','birth','national_code','companyName','companyID','companyTitle','buissnessType','city','Province','address','created_at','updated_at','picture']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -75,7 +75,11 @@ class ObtainTokenSerializer(serializers.Serializer):
     refresh = serializers.CharField( allow_null=False)
     created = serializers.BooleanField()
 
+class WalletSerializer(serializers.Serializer):
 
+    class Meta:
+        model =Wallet
+        fields = '__all__'
 
 # class VerifyOtpResponseSuccesSerializer(serializers.Serializer):
 #       login_data = ObtainTokenSerializer,

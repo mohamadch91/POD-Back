@@ -22,3 +22,23 @@ class CitySerializer(serializers.ModelSerializer):
         model = City
         fields = ['id','value','province']
         
+class CommerceCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommerceCategory
+        fields = '__all__'
+class ServiceCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServiceCategory
+        fields = '__all__'
+class CommerceBrandsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommerceBrands
+        fields = '__all__'
+class ServiceBrandsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServiceBrands
+        fields = '__all__'
