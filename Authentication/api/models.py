@@ -74,6 +74,8 @@ class LegalUser(User):
     def __str__(self):
         return "{}".format(self.phone)
 
+    class Meta:
+        verbose_name_plural = "LegalUser"
 class Wallet(User):
     amount = models.IntegerField(unique=True,null=True,blank=True,default = 0)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'user_waller')
