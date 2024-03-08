@@ -18,7 +18,6 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from django.shortcuts import get_object_or_404
 from itertools import chain
 import copy
-from drf_yasg import openapi
 from .tests import *
 
 class UpdateProfileView(APIView):
