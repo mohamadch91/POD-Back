@@ -85,10 +85,13 @@ class OTPViewLogin(APIView):
                 login_data =self._handle_login(data)
                 user_data= get_object_or_404(User,phone=data['receiver'])
                 ser = UserSerializer(user_data)
-                print(ser.data)
+                
+                wallet = get_object_or_404(Wallet,user = user_data.pk) 
+                w_ser= WalletSerializer(wallet)   
                 res ={
                     "login_data" : login_data,
-                    "user_data" : ser.data
+                    "user_data" : ser.data,
+                    "wallet_data" :w_ser.data 
                 }
                 return Response(res, status=status.HTTP_200_OK)
             else:
