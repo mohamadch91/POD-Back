@@ -87,7 +87,11 @@ class OTPViewLogin(APIView):
                 ser = UserSerializer(user_data)
                 
                 wallet = get_object_or_404(Wallet,user = user_data.pk) 
-                w_ser= WalletSerializer(wallet)   
+                print(wallet.amount)
+                print(wallet.user)
+
+                w_ser= WalletSerializer(wallet,many = False)   
+                print(w_ser.data)
                 res ={
                     "login_data" : login_data,
                     "user_data" : ser.data,

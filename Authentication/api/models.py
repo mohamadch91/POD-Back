@@ -76,7 +76,8 @@ class LegalUser(User):
 
     class Meta:
         verbose_name_plural = "LegalUser"
-class Wallet(User):
+class Wallet(models.Model):
+    id= models.AutoField(primary_key=True)
     amount = models.IntegerField(unique=True,null=True,blank=True,default = 0)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'user_waller')
 
@@ -88,7 +89,7 @@ class OtpRequestQuerySet(models.QuerySet):
             request_id=request,
             password=password,
             created__lt=current_time,
-            created__gt=current_time-timedelta(seconds=60),
+            created__gt=current_time-timedelta(seconds=4000),
 
         ).exists()
 

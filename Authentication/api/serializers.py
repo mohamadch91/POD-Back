@@ -75,7 +75,7 @@ class ObtainTokenSerializer(serializers.Serializer):
     refresh = serializers.CharField( allow_null=False)
     created = serializers.BooleanField()
 
-class WalletSerializer(serializers.Serializer):
+class WalletSerializer(serializers.ModelSerializer):
 
     class Meta:
         model =Wallet
