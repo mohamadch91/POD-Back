@@ -78,7 +78,7 @@ class LegalUser(User):
         verbose_name_plural = "LegalUser"
 class Wallet(models.Model):
     id= models.AutoField(primary_key=True)
-    amount = models.IntegerField(unique=True,null=True,blank=True,default = 0)
+    amount = models.IntegerField(null=True,blank=True,default = 0)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'user_waller')
 
 class OtpRequestQuerySet(models.QuerySet):

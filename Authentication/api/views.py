@@ -87,11 +87,8 @@ class OTPViewLogin(APIView):
                 ser = UserSerializer(user_data)
                 
                 wallet = get_object_or_404(Wallet,user = user_data.pk) 
-                print(wallet.amount)
-                print(wallet.user)
 
                 w_ser= WalletSerializer(wallet,many = False)   
-                print(w_ser.data)
                 res ={
                     "login_data" : login_data,
                     "user_data" : ser.data,
@@ -138,11 +135,8 @@ class OTPViewRegister(APIView):
             if OTPRequest.objects.is_valid(data['receiver'], data['request_id'], data['password']):
                 login_data =self._handle_login(data,request)
                 if(login_data == False):
-                    return Response({"messgae":"phone already exists"},status=status.HTTP_400_BAD_REQUEST)
-                if(request.data["type"] =="legal"):
-                    user_data= get_object_or_404(LegalUser,phone=data['receiver'])
-                else:
-                    user_data= get_object_or_404(User,phone=data['receiver'])
+                    return Response({"message":"phone already exists"},status=status.HTTP_400_BAD_REQUEST)
+                user_data= get_object_or_404(User,phone=data['receiver'])
 
                 wallet = get_object_or_404(Wallet,user = user_data.pk) 
                 w_ser= WalletSerializer(wallet)   
@@ -170,7 +164,7 @@ class OTPViewRegister(APIView):
             except:    
                 new_user = LegalUser.objects.create(phone=otp['receiver'] )
                 #create wallet for Legal User
-                wallet = Wallet.objects.create(user = new_user.pk)
+                wallet = Wallet.objects.create(user = new_user)
                 created = True
                 refresh = RefreshToken.for_user(new_user)
         elif(type=="real"):
