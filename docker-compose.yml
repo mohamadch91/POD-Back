@@ -13,7 +13,7 @@ services:
     networks:
         - pod_net
     depends_on:
-      - check-rabbit-started
+      - rabbitmq
   baseInfo:
     image: baseinfo
     build: ./BaseInfo
@@ -25,7 +25,7 @@ services:
     networks:
         - pod_net
     depends_on:
-       - check-rabbit-started
+      - rabbitmq
   
   commerce:
     image: commerce:latest
@@ -38,7 +38,7 @@ services:
     networks:
         - pod_net
     depends_on:
-      - check-rabbit-started
+      - rabbitmq
   service:
     image: service:latest
     build: ./Services/Service
@@ -51,7 +51,7 @@ services:
     networks:
         - pod_net
     depends_on:
-      - check-rabbit-started
+      - rabbitmq
   nginx:
     image: nginx
     build:
@@ -70,7 +70,7 @@ services:
     networks:
         - pod_net
     depends_on:
-      - check-rabbit-started
+      - rabbitmq
     
   rabbitmq:
     image: rabbitmq:3.12.13-management-alpine
@@ -86,11 +86,6 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - pod_net
-  check-rabbit-started: 
-    image: jwilder/dockerize:0.6.1
-    depends_on:
-      - rabbitmq
-    command: 'dockerize -wait=tcp://rabbit:5672'
 
 networks:
   pod_net:
