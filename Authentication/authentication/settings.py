@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-#!)@4ew623@&!!rs&$ne8f^i4_4s4=p)p+tj@7u+uyrvj7519w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','authentication']
+
 AUTH_USER_MODEL = 'api.User'
 
 SIMPLE_JWT = {
@@ -177,3 +177,4 @@ REST_FRAMEWORK = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_pictures/')
 MEDIA_URL = '/profile_pictures/'
+ALLOWED_HOSTS = ['*']
