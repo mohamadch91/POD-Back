@@ -7,7 +7,7 @@ services:
     container_name: authentication
 
     ports:
-        - 8000:8001
+        - 8001:8000
     volumes:
       - .:/code
     networks:
@@ -20,7 +20,7 @@ services:
     container_name: baseInfo
 
     ports:
-        - 8000:8002
+        - 8002:8000
     
     networks:
         - pod_net
@@ -32,7 +32,7 @@ services:
     container_name: commerce
 
     ports:
-        - 8000:8003
+        - 8003:8000
     
     networks:
         - pod_net
@@ -44,7 +44,7 @@ services:
     container_name: service
 
     ports:
-        - 8000:8004
+        - 8004:8000
     
     networks:
         - pod_net
