@@ -11,7 +11,7 @@ services:
       - RABBITMQ_DEFAULT_USER=rabbitmq
       - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
-        - 8000:8000
+        - 8000:8001
     
     networks:
         - pod_net
@@ -27,7 +27,7 @@ services:
       - RABBITMQ_DEFAULT_USER=rabbitmq
       - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
-        - 8000:8001
+        - 8000:8002
     
     networks:
         - pod_net
@@ -43,7 +43,7 @@ services:
       - RABBITMQ_DEFAULT_USER=rabbitmq
       - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
-        - 8000:8002
+        - 8000:8003
     
     networks:
         - pod_net
@@ -59,7 +59,7 @@ services:
       - RABBITMQ_DEFAULT_USER=rabbitmq
       - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
-        - 8000:8003
+        - 8000:8004
     
     networks:
         - pod_net
