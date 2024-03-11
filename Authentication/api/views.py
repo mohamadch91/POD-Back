@@ -24,21 +24,19 @@ class UpdateProfileView(APIView):
     # permission_classes=(IsAuthenticated,)
    
     def put (self,request):
-        # if('pk' not in request.data or request.data['pk'] == ''):
-        #     return Response({'message': 'pk is required'}, status=status.HTTP_400_BAD_REQUEST)
         if('type' not in request.data or 'type' =='' ):
             return Response("neeed type",status=status.HTTP_400_BAD_REQUEST)
         type=request.data["type"]
         phone=request.data["phone"]
-        if(type=="user"):
-            user=get_object_or_404(User,phone=phone)
-            ser=UpdateUserSerializer(user,data=request.data)
+        if(type=="real"):
+            user = RealUser.objects.get_or_create(phone=phone)
+            ser=UpdateRealUserSerializer(user,data=request.data)
             if(ser.is_valid()):
                 ser.save()
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)
             return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
         if(type=="legal"):
-            user=get_object_or_404(LegalUser,phone=phone)
+            user = LegalUser.objects.get_or_create(phone=phone)
             ser=UpdateLegalUserSerializer(user,data=request.data)
             if(ser.is_valid()):
                 ser.save()
@@ -127,8 +125,6 @@ class OTPViewRegister(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
     def post(self, request):
-        if('type' not in request.data ):
-            return Response("neeed type",status=status.HTTP_400_BAD_REQUEST)#
         serializer = VerifyOtpRequestSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
@@ -156,35 +152,15 @@ class OTPViewRegister(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
 
     def _handle_login(self, otp,request):
-        type=request.data["type"]
-        if(type=="legal"):
-            try:
-                s=get_object_or_404(LegalUser,phone=otp['receiver'])
-                return False
-            except:    
-                new_user = LegalUser.objects.create(phone=otp['receiver'] )
-                #create wallet for Legal User
-                wallet = Wallet.objects.create(user = new_user)
-                created = True
-                refresh = RefreshToken.for_user(new_user)
-        elif(type=="real"):
-            try:
-                s=get_object_or_404(Teacher,phone=otp['receiver'])
-                return False
-            except:    
-                # user =  Teacher.objects.create(phone=otp['receiver']) #in badan ok she
-                created = True
-                refresh = RefreshToken.for_user(user)
-    
-        else:
-            try:
-                s=get_object_or_404(User,phone=otp['receiver'])
-                return False
-            except:
-                    
-                user = User.objects.create(phone=otp['receiver'] )
-                created = True
-                refresh = RefreshToken.for_user(user)
+
+        try:
+            s=get_object_or_404(User,phone=otp['receiver'])
+            return False
+        except:
+                
+            user = User.objects.create(phone=otp['receiver'] )
+            created = True
+            refresh = RefreshToken.for_user(user)
 
         return ObtainTokenSerializer({
             'refresh': str(refresh),

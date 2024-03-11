@@ -50,7 +50,7 @@ services:
     depends_on:
       - rabbitmq
   service:
-    image: baseInfo:latest
+    image: service:latest
     build:
       context: .
       dockerfile: Services/Service/Dockerfile

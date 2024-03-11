@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk','phone','birth','national_code','first_name','last_name','created_at','updated_at','picture']
+        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 class LegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','birth','national_code','companyName','companyID','companyTitle','buissnessType','city','Province','address','created_at','updated_at','picture']
+        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -34,7 +34,20 @@ class LegalUserSerializer(serializers.ModelSerializer):
         :return: a hashed version of the password
         """
         return make_password(value)   
-       
+
+class RealUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealUser
+        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','gender','first_name','last_name']
+    def validate_password(self, value: str) -> str:
+        """
+        Hash value passed by user.
+
+        :param value: password of a user
+        :return: a hashed version of the password
+        """
+        return make_password(value)   
+         
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,12 +58,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','birth','national_code','first_name','last_name','created_at','updated_at','picture']
+        fields = ['pk','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture']
 
 class UpdateLegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','birth','national_code','companyName','presenterName','presenterLastname','presenterPhone','companyID','buissnessType','city','Province','address','first_name','last_name','created_at','updated_at','picture']
+        fields = ['pk','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
+
+class UpdateRealUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealUser
+        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','gender','first_name','last_name']
 
 
 class requestOTPSerializer(serializers.Serializer):

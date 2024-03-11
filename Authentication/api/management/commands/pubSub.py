@@ -39,7 +39,7 @@ def on_user_detail_request(ch, method, props, body):
                 if(isinstance(user, LegalUser)):
                     serializer = LegalUserSerializer(user)
                 else:
-                        serializer =UserSerializer(user)
+                        serializer =RealUserSerializer(user)
                 
                 final_response = json.dumps(serializer.data)
             except Exception as e:
