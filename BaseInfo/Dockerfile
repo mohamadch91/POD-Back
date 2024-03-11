@@ -18,4 +18,3 @@ RUN python3 manage.py loaddata api/fixtures/province.json
 RUN python3 manage.py loaddata api/fixtures/city.json
 
 
-CMD  python manage.py runserver 

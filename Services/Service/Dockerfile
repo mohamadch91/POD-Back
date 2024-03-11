@@ -13,7 +13,3 @@ RUN pip install -r requirements.txt
 COPY . /code/
 
 RUN python manage.py makemigrations && python manage.py migrate
-
-RUN ./rabbit.sh
-
-CMD  python manage.py runserver 

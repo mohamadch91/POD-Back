@@ -5,6 +5,8 @@ services:
     image: authentication:latest
     build: ./Authentication
     container_name: authentication
+    command: > 
+      sh -c "./rabbit.sh && python manage.py runserver  "
 
   
 
@@ -16,6 +18,8 @@ services:
     image: baseinfo
     build: ./BaseInfo
     container_name: baseInfo
+    command: > 
+      sh -c "./rabbit.sh && python manage.py runserver  "
 
     
     networks:
@@ -38,6 +42,8 @@ services:
     image: service:latest
     build: ./Services/Service
     container_name: service
+    command: > 
+      sh -c "./rabbit.sh && python manage.py runserver  "
 
   
     
