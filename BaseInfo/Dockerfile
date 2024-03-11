@@ -1,7 +1,7 @@
 FROM python:3.9
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /code
+RUN mkdir code
 
 WORKDIR /code
 

@@ -1,6 +1,6 @@
 FROM python:3.9
 
-RUN mkdir /code
+RUN mkdir code
 
 WORKDIR /code
 
