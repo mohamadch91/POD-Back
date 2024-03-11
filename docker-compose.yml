@@ -26,7 +26,8 @@ services:
     image: commerce:latest
     build: ./Services/Commerce
     container_name: commerce
-
+    command: > 
+      sh -c "./rabbit.sh"
    
     
     networks:
