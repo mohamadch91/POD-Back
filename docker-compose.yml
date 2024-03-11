@@ -3,25 +3,22 @@ services:
 
   authentication:
     image: authentication:latest
-    build:
-      # context: .
-      dockerfile: Authentication/Dockerfile
+    build: ./Authentication
     container_name: authentication
     environment:
       - RABBITMQ_DEFAULT_USER=rabbitmq
       - RABBITMQ_DEFAULT_PASS=rabbitmq
     ports:
         - 8000:8001
-    
+    volumes:
+      - .:/code
     networks:
         - pod_net
     depends_on:
       - rabbitmq
   baseInfo:
     image: baseinfo
-    build:
-      # context: .
-      dockerfile: BaseInfo/Dockerfile
+    build: ./BaseInfo
     container_name: baseInfo
     environment:
       - RABBITMQ_DEFAULT_USER=rabbitmq
@@ -35,9 +32,7 @@ services:
       - rabbitmq
   commerce:
     image: commerce:latest
-    build:
-      # context: .
-      dockerfile: Services/Commerce/Dockerfile
+    build: ./Services/Commerce
     container_name: commerce
     environment:
       - RABBITMQ_DEFAULT_USER=rabbitmq
@@ -51,9 +46,7 @@ services:
       - rabbitmq
   service:
     image: service:latest
-    build:
-      # context: .
-      dockerfile: Services/Service/Dockerfile
+    build: ./Services/Service
     container_name: service
     environment:
       - RABBITMQ_DEFAULT_USER=rabbitmq
