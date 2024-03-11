@@ -4,7 +4,7 @@ services:
   authentication:
     image: authentication:latest
     build:
-      context: .
+      # context: .
       dockerfile: Authentication/Dockerfile
     container_name: authentication
     environment:
@@ -20,7 +20,7 @@ services:
   baseInfo:
     image: baseinfo
     build:
-      context: .
+      # context: .
       dockerfile: BaseInfo/Dockerfile
     container_name: baseInfo
     environment:
@@ -36,7 +36,7 @@ services:
   commerce:
     image: commerce:latest
     build:
-      context: .
+      # context: .
       dockerfile: Services/Commerce/Dockerfile
     container_name: commerce
     environment:
@@ -52,7 +52,7 @@ services:
   service:
     image: service:latest
     build:
-      context: .
+      # context: .
       dockerfile: Services/Service/Dockerfile
     container_name: service
     environment:
