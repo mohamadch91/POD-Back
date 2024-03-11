@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import pika
 import uuid
-
+import json
 
 class RpcClient(object):
 
@@ -45,4 +45,4 @@ class RpcClient(object):
 def auth(data,queue,source):
     rpc = RpcClient(queue_name=source)
     response = rpc.call(queue=queue,data=data)
-    return(response.decode('ascii'))
+    return(json.loads(response.decode('ascii')))

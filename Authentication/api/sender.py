@@ -1,6 +1,5 @@
 from kavenegar import *
 import json
-mq= 'amqp://guest:guest@rabbitmq:5672'
 
 def send_otp(otp):
     try:
