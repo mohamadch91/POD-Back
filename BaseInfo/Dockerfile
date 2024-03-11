@@ -5,9 +5,9 @@ RUN mkdir /code
 
 WORKDIR /code
 
-COPY requirements.txt /code/
+COPY requirments.txt /code/
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirments.txt
 COPY . /code/
 
 RUN python manage.py makemigrations && python manage.py migrate
