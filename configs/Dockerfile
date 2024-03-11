@@ -5,7 +5,6 @@ FROM nginx:alpine
 # COPY etc/cert/goldiranasayesh.key /etc/nginx/certs/goldiranasayesh.key
 COPY ngnix.conf /etc/nginx/conf.d/ngnix.conf
 # Copy the React app build files to the container
-COPY --from=build /app/dist /usr/share/nginx/html
 # Expose port 80 for Nginx
 EXPOSE 80
 # Start Nginx when the container starts
