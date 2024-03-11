@@ -6,8 +6,7 @@ services:
     build: ./Authentication
     container_name: authentication
 
-    ports:
-        - 8001:8000
+  
 
     networks:
         - pod_net
@@ -18,8 +17,6 @@ services:
     build: ./BaseInfo
     container_name: baseInfo
 
-    ports:
-        - 8002:8000
     
     networks:
         - pod_net
@@ -30,8 +27,7 @@ services:
     build: ./Services/Commerce
     container_name: commerce
 
-    ports:
-        - 8003:8000
+   
     
     networks:
         - pod_net
@@ -42,8 +38,7 @@ services:
     build: ./Services/Service
     container_name: service
 
-    ports:
-        - 8004:8000
+  
     
     networks:
         - pod_net
