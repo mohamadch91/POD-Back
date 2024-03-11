@@ -21,6 +21,17 @@ class CommerceListView(generics.ListAPIView):
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
+        
+        page = request.GET.get("page")
+        category = request.GET.get("category")
+        brand = request.GET.get("brand")
+        if(brand):
+            commerce =commerce.filter(brand =brand)
+        if(category):
+            commerce = commerce.filter(category = category)
+        if (page):
+            commerce = commerce[12*int(page):12*(int(page)+1)]
+
         serializer = CommerceSerializer(commerce,many=True)
         answer = []
         for i in serializer.data:

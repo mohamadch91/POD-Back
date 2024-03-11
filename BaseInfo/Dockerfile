@@ -15,6 +15,11 @@ RUN pip install -r requirements.txt
 
 RUN python manage.py makemigrations && python manage.py migrate
 RUN python3 manage.py loaddata api/fixtures/province.json
+RUN python3 manage.py loaddata api/fixtures/commerce_brand.json
+RUN python3 manage.py loaddata api/fixtures/commerce_category.json
+RUN python3 manage.py loaddata api/fixtures/service_brand.json
+RUN python3 manage.py loaddata api/fixtures/service_category.json
 RUN python3 manage.py loaddata api/fixtures/city.json
+
 
 
