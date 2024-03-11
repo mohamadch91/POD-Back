@@ -5,14 +5,19 @@ from .publish import auth
 def authenitcate (request):
         jwt_auth = JWTAuthentication()
         header = jwt_auth.get_header(request=request)
-        token = jwt_auth.get_raw_token(header)
-        response =auth(token,'verify','service')
-        if response:
-            response = response
-            user= response['user']
-            token = response ['token']
-            return user , token
+        if(header):
+            token = jwt_auth.get_raw_token(header)
+            if(token):
+                response =auth(token,'verify','commerce')
+                if response:
+                    response = response
+                    user= response['user']
+                    token = response ['token']
+                    return user , token
+                return None
+            return None
         return None
+
 
 class IsAuthenticatedM(permissions.BasePermission):
 
