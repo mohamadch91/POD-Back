@@ -7,7 +7,7 @@ class RpcClient(object):
 
     def __init__(self,queue_name):
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='0.0.0.0',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
+            pika.ConnectionParameters(host='rabbitmq',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
 
         self.channel = self.connection.channel(1)
         self.response = None
