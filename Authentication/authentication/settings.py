@@ -174,3 +174,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_pictures/')
+MEDIA_URL = '/profile_pictures/'

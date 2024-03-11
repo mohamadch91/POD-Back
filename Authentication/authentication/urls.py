@@ -21,7 +21,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from django.conf import settings
 from rest_framework import permissions
 from django.conf.urls.static import static
-
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/',include('api.urls')),
@@ -30,3 +31,6 @@ urlpatterns = [
     
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

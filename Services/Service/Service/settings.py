@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-*k%bv9a1w*29bo-*w+#)t7p1!p-+9csw_4q#n)k*(dp_8#8%z=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     'corsheaders',
+     'django_filters',
     'api'
 ]
 
@@ -125,3 +127,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+  
+}
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_pictures/')
+MEDIA_URL = '/profile_pictures/'
