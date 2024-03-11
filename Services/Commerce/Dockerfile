@@ -13,4 +13,3 @@ COPY . /code/
 
 RUN python manage.py makemigrations && python manage.py migrate
 
-CMD  python manage.py runserver 

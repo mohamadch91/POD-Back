@@ -27,7 +27,7 @@ services:
     build: ./Services/Commerce
     container_name: commerce
     command: > 
-      sh -c "./rabbit.sh"
+      sh -c "./rabbit.sh && python manage.py runserver  "
    
     
     networks:
