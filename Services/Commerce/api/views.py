@@ -17,7 +17,7 @@ import math
 #TODO return images in list 
 
 class CommerceListView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
