@@ -89,7 +89,7 @@ services:
   check-rabbit-started: 
     image: jwilder/dockerize:0.6.1
     depends_on:
-      - rabbit
+      - rabbitmq
     command: 'dockerize -wait=tcp://rabbit:5672'
 
 networks:
