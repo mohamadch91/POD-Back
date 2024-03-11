@@ -11,7 +11,7 @@ def authenitcate (request):
             user= response['user']
             token = response ['token']
             return user , token
-        return None
+        return None,None
 
 class IsAuthenticatedM(permissions.BasePermission):
 

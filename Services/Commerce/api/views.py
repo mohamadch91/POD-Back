@@ -12,18 +12,37 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .permissions import auth,IsAuthenticatedM
 import copy
-
+import math
 #TODO return comments and votes and images in detail 
 #TODO return images in list 
 
 class CommerceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
         serializer = CommerceSerializer(commerce,many=True)
+        answer = []
+        for i in serializer.data:
+            image  = CommerceImages.objects.filter(commerce=i["id"] )[0]
+            print(image.image)
+            votes = CommerceVotes.objects.filter(commerce=i["id"] )
+            sum_votes = 0
+            for k in votes:
+                sum_votes+=k.votes
+            sum_votes /= len(votes)
+            sum_votes = math.ceil(sum_votes)
+            data ={
+                "id":i["id"],
+                "name":i["name"],
+                "description":i["description"],
+                "month_price":i["month_price"],
+                "image":str(image.image),
+                "votes" : sum_votes
+            }
+            answer.append(data)
         #TODO  return just 3 or 4 field for card view
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(answer,status=status.HTTP_200_OK)
     
 class CommerceDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedM]
