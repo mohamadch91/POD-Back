@@ -18,7 +18,7 @@ services:
     depends_on:
       - rabbitmq
   baseInfo:
-    image: baseInfo:latest
+    image: baseinfo
     build:
       context: .
       dockerfile: BaseInfo/Dockerfile
