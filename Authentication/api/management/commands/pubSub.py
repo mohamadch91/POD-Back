@@ -63,15 +63,15 @@ class Command(BaseCommand):
         connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='rabbitmq',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
 
-        channel = connection.channel(1)
+        channel = connection.channel()
 
         channel.queue_declare(queue='user_data')
         channel.queue_declare(queue='verify')
 
     
         channel.basic_qos(prefetch_count=1)
-        channel.basic_consume(queue='user_data', on_message_callback=on_user_detail_request)
-        channel.basic_consume(queue='verify', on_message_callback=on_verify_request)
+        channel.basic_consume(queue='user_data', on_message_callback=on_user_detail_request,auto_ack=False)
+        channel.basic_consume(queue='verify', on_message_callback=on_verify_request,auto_ack=False)
 
         print("started")
         channel.start_consuming()

@@ -10,7 +10,7 @@ class Command(BaseCommand):
         # Code for your custom command goes here
         connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='rabbitmq',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
-        channel = connection.channel(1)
+        channel = connection.channel()
         channel.queue_declare(queue='service')
 
 

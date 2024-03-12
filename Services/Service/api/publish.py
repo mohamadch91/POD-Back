@@ -9,7 +9,7 @@ class RpcClient(object):
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(host='rabbitmq',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
 
-        self.channel = self.connection.channel(1)
+        self.channel = self.connection.channel()
         self.response = None
         self.corr_id = None
         self.name= queue_name
@@ -45,4 +45,6 @@ class RpcClient(object):
 def auth(data,queue,source):
     rpc = RpcClient(queue_name=source)
     response = rpc.call(queue=queue,data=data)
+    rpc.connection.close()
+
     return(json.loads(response.decode('ascii')))
