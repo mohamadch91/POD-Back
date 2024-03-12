@@ -81,6 +81,8 @@ class RealUser(User):
     gender = models.BooleanField()
     first_name =models.CharField(max_length=20,blank=True,null=True)
     last_name =models.CharField(max_length=20,blank=True,null=True)
+    class Meta:
+        verbose_name_plural = "RealUser"
 
 class Wallet(models.Model):
     id= models.AutoField(primary_key=True)

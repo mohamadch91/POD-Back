@@ -4,6 +4,8 @@ from .models import *
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
  
 admin.site.register(LegalUser)
+admin.site.register(RealUser)
+
 admin.site.register(Wallet)
 admin.site.register(User)
 admin.site.register(OTPRequest)
