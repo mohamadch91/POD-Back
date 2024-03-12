@@ -139,5 +139,5 @@ REST_FRAMEWORK = {
   
 }
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_pictures/')
-MEDIA_URL = '/profile_pictures/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'service/')
+MEDIA_URL = '/service/'
