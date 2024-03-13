@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from django.contrib import admin
 
 urlpatterns = [
     path('list/', ServiceListView.as_view(), name='get all service'),
@@ -8,6 +9,6 @@ urlpatterns = [
     path('add/', AddServiceView.as_view(), name='add service'),
     path('delete/', DeleteServiceView.as_view(), name='delete service'),
     path('edit/', EditServiceView.as_view(), name='edit  service'),
-
+    path('admin/', admin.site.urls),
 
 ]

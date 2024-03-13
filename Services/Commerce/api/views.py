@@ -134,25 +134,40 @@ class UserCommerceView(generics.RetrieveAPIView):
 
 class AddCommerceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticatedM]
+    serializer_class = CommerceSerializer
 
     queryset =Commerce.objects.all()
     def post(self, request):
-        user = request.user
+        user,_ = request.user
+        user = json.loads(user)
         temp = copy.deepcopy(request.data)
         temp["user_id"] = user["id"]
-        serializer = CommerceSerializer(temp)
+        serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
+            id = serializer.data["id"]
+            for i in temp["images"]:
+                body ={
+                    "commerce": id,
+                    "image" : i
+                }
+                image_ser = CommerceImagesSerializer (data =body)
+                if (image_ser.is_valid()):
+                    image_ser.save()
+                else:
+                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class EditCommerceView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticatedM]
-
+    serializer_class = CommerceSerializer
     queryset =Commerce.objects.all()
     def put(self, request):
-        serializer = CommerceSerializer(data = request.data)
+        id = request.data["id"]
+        commerce = get_object_or_404(Commerce,id=id)
+        serializer = CommerceSerializer(commerce,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
@@ -166,9 +181,8 @@ class DeleteCommerceView(generics.DestroyAPIView):
 
     queryset =Commerce.objects.all()
     def delete(self, request):
-        commerce=  get_object_or_404(Commerce,request.data["id"])
+        commerce=  get_object_or_404(Commerce,id=request.data["id"])
         commerce.delete()
-        
         return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
         
      

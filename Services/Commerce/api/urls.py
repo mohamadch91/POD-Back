@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from django.contrib import admin
 
 urlpatterns = [
     path('list/', CommerceListView.as_view(), name='get all commerce'),
@@ -8,6 +9,7 @@ urlpatterns = [
     path('add/', AddCommerceView.as_view(), name='add commerce'),
     path('delete/', DeleteCommerceView.as_view(), name='delete commerce'),
     path('edit/', EditCommerceView.as_view(), name='edit  commerce'),
+    path('admin/', admin.site.urls),
 
 
 ]
