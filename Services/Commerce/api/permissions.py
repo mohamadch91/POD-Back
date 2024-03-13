@@ -1,13 +1,13 @@
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .publish import auth
+from .publish import transfer
 def authenitcate (request):
         jwt_auth = JWTAuthentication()
         header = jwt_auth.get_header(request=request)
         if(header):
             token = jwt_auth.get_raw_token(header)
             if(token):
-                response =auth(token,'verify','commerce')
+                response =transfer(token,'verify','commerce')
                 if response:
                     response = response
                     user= response['user']

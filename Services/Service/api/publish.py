@@ -42,7 +42,7 @@ class RpcClient(object):
         return self.response
 
 
-def auth(data,queue,source):
+def transfer(data,queue,source):
     rpc = RpcClient(queue_name=source)
     response = rpc.call(queue=queue,data=data)
     rpc.connection.close()

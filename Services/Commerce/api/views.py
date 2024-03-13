@@ -10,12 +10,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .permissions import auth,IsAuthenticatedM
+from .permissions import transfer,IsAuthenticatedM
 import copy
 import math
 from django.http import QueryDict
 from django.db.models import Case, When
 from django.db.models import Sum
+import json
 #TODO return comments and votes and images in detail 
 #TODO return images in list 
 
@@ -72,14 +73,14 @@ class CommerceListView(generics.ListAPIView):
             for k in votes:
                 sum_votes+=k.votes
             sum_votes /= len(votes)
-            sum_votes = math.ceil(sum_votes)
+          
             data ={
                 "id":i["id"],
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
                 "image":str(image.image),
-                "votes" : sum_votes
+                "votes" : float(format(sum_votes, ".2f"))
             }
             answer.append(data)
         final_response = {
@@ -89,14 +90,36 @@ class CommerceListView(generics.ListAPIView):
         return Response(final_response,status=status.HTTP_200_OK)
     
 class CommerceDetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
 
     queryset =Commerce.objects.all()
     def get(self, request):
-        id =request.query_params["id"]
-        commerce = get_object_or_404(Commerce,id = id)
-        serializer = CommerceSerializer(commerce,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        id =request.GET.get("id")
+        if(id):
+            commerce = get_object_or_404(Commerce,id = id)
+            i = CommerceSerializer(commerce).data
+            transfer_data={
+                "city":commerce.city_id,
+                "brand" : commerce.brand,
+                "category" : commerce.category
+            }
+            datas= transfer(json.dumps(transfer_data),'base_info','commerce')
+            images  = CommerceImages.objects.filter(commerce=i["id"] )
+            image_data = CommerceImagesSerializer(images,many=True).data
+            votes = CommerceVotes.objects.filter(commerce=i["id"] )
+            sum_votes = 0
+            for k in votes:
+                sum_votes+=k.votes
+            sum_votes /= len(votes)
+            sum_votes =float(format(sum_votes, ".2f"))
+            final_response =copy.deepcopy(i)
+            final_response["city"] = datas["city"]
+            final_response["brand"] = datas["brand"]
+            final_response["category"] = datas["category"]
+            final_response["images"] = image_data
+            final_response["votes"] = sum_votes
+            return Response(i,status=status.HTTP_200_OK)
+        return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
     
 
 class UserCommerceView(generics.RetrieveAPIView):
