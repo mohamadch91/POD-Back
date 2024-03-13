@@ -24,6 +24,8 @@ class Commerce(models.Model):
     brand = models.IntegerField()
     available_count =models.IntegerField()
     free_transport = models.BooleanField()
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
 
 
@@ -36,6 +38,8 @@ class CommerceComments(models.Model):
     id = models.AutoField(primary_key=True) 
     comment = models.CharField(max_length = 200)
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
 class CommerceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
