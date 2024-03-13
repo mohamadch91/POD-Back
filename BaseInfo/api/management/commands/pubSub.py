@@ -5,16 +5,35 @@ from api.serializers import *
 from django.shortcuts import get_object_or_404
 import json
 def on_request(ch, method, props, body):
+            data = json.loads(body)
             final_response ={}
-
+            for i in data:
+                if(i =="city"):
+                        city = get_object_or_404(City,id=data[i])
+                        final_response["city"] = city.value
+                if(i =="provine"):
+                        province = get_object_or_404(Province,id=data[i])
+                        final_response["provine"] = province.value
+                if(i =="commerceBrand"):
+                        brand = get_object_or_404(CommerceBrands,id=data[i])
+                        final_response["brand"] = brand.value
+                if(i =="commerceCategory"):
+                        cat = get_object_or_404(CommerceCategory,id=data[i])
+                        final_response["category"] = cat.value
+                if(i =="serviceBrand"):
+                        brand = get_object_or_404(ServiceBrands,id=data[i])
+                        final_response["brand"] = brand.value
+                
+                if(i =="serviceCategory"):
+                        cat = get_object_or_404(ServiceCategory,id=data[i])
+                        final_response["category"] = cat.value
+                    
             ch.basic_publish(exchange='',
                             routing_key=props.reply_to,
                             properties=pika.BasicProperties(correlation_id = \
                                                                 props.correlation_id),
-                            body=str(final_response))
+                            body=json.dumps(final_response))
             ch.basic_ack(delivery_tag=method.delivery_tag)
-
-
 
 
 class Command(BaseCommand):

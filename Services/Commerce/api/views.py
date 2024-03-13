@@ -100,8 +100,8 @@ class CommerceDetailView(generics.RetrieveAPIView):
             i = CommerceSerializer(commerce).data
             transfer_data={
                 "city":commerce.city_id,
-                "brand" : commerce.brand,
-                "category" : commerce.category
+                "commerceBrand" : commerce.brand,
+                "commerceCategory" : commerce.category
             }
             datas= transfer(json.dumps(transfer_data),'base_info','commerce')
             images  = CommerceImages.objects.filter(commerce=i["id"] )
@@ -113,12 +113,12 @@ class CommerceDetailView(generics.RetrieveAPIView):
             sum_votes /= len(votes)
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
-            final_response["city"] = datas["city"]
+            final_response["city_id"] = datas["city"]
             final_response["brand"] = datas["brand"]
             final_response["category"] = datas["category"]
             final_response["images"] = image_data
             final_response["votes"] = sum_votes
-            return Response(i,status=status.HTTP_200_OK)
+            return Response(final_response,status=status.HTTP_200_OK)
         return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
     
 
