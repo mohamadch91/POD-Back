@@ -17,11 +17,10 @@ from django.http import QueryDict
 from django.db.models import Case, When
 from django.db.models import Sum
 import json
-#TODO return comments and votes and images in detail 
-#TODO return images in list 
+ 
 
 class CommerceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
@@ -48,10 +47,13 @@ class CommerceListView(generics.ListAPIView):
                 for j in commerce:
                     votes= CommerceVotes.objects.filter(commerce=j).aggregate(Sum('votes'))
                     len_votes=len(CommerceVotes.objects.filter(commerce=j))
-                    sum_votes[votes['votes__sum']/len_votes] = j
-                sum_votes = dict(sorted(sum_votes.items() , reverse=True))
-                for k in sum_votes.values():
-                    pk_in.append(k.id)
+                    if(len_votes == 0):
+                        sum_votes[j.id]=0    
+                    else:
+                        sum_votes[j.id] = votes['votes__sum']/len_votes
+                sum_votes = dict(sorted(sum_votes.items(), key=lambda item: item[1],reverse=True))
+                for k in sum_votes.keys():
+                    pk_in.append(k)
                 preferred = Case(
                        *(When(id=id, then=pos) for pos, id in enumerate(pk_in, start=1)))
                 commerce = commerce.filter(id__in=pk_in).order_by(preferred)                   
