@@ -21,7 +21,7 @@ import json
 #TODO return images in list 
 
 class CommerceListView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
@@ -67,19 +67,24 @@ class CommerceListView(generics.ListAPIView):
         answer = []
 
         for i in serializer.data:
-            image  = CommerceImages.objects.filter(commerce=i["id"] )[0]
+            img =''
+            image  = CommerceImages.objects.filter(commerce=i["id"] )
+            if(len(image)>0):
+                image =image[0]
+                img = str(image.image)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
-            for k in votes:
-                sum_votes+=k.votes
-            sum_votes /= len(votes)
+            if(len(votes)>0):
+                for k in votes:
+                    sum_votes+=k.votes
+                sum_votes /= len(votes)
           
             data ={
                 "id":i["id"],
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
-                "image":str(image.image),
+                "image":img,
                 "votes" : float(format(sum_votes, ".2f"))
             }
             answer.append(data)
@@ -90,7 +95,7 @@ class CommerceListView(generics.ListAPIView):
         return Response(final_response,status=status.HTTP_200_OK)
     
 class CommerceDetailView(generics.RetrieveAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
 
     queryset =Commerce.objects.all()
     def get(self, request):
