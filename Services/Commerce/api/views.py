@@ -115,9 +115,10 @@ class CommerceDetailView(generics.RetrieveAPIView):
             image_data = CommerceImagesSerializer(images,many=True).data
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
-            for k in votes:
-                sum_votes+=k.votes
-            sum_votes /= len(votes)
+            if(len(votes)>0):
+                for k in votes:
+                    sum_votes+=k.votes
+                sum_votes /= len(votes)
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
             final_response["city_id"] = datas["city"]
@@ -148,12 +149,13 @@ class AddCommerceView(generics.CreateAPIView):
         user,_ = request.user
         user = json.loads(user)
         temp = copy.deepcopy(request.data)
+        images = request.FILES.getlist('images')
         temp["user_id"] = user["id"]
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in temp["images"]:
+            for i in images:
                 body ={
                     "commerce": id,
                     "image" : i

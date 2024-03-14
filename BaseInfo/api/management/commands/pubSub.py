@@ -6,27 +6,51 @@ from django.shortcuts import get_object_or_404
 import json
 def on_request(ch, method, props, body):
             data = json.loads(body)
+            print(data)
             final_response ={}
             for i in data:
                 if(i =="city"):
-                        city = get_object_or_404(City,id=data[i])
-                        final_response["city"] = city.value
-                if(i =="provine"):
-                        province = get_object_or_404(Province,id=data[i])
-                        final_response["provine"] = province.value
+                        if(data[i]):
+                                city = get_object_or_404(City,id=data[i])
+                                final_response["city"] = city.value
+                        else:
+                                final_response["city"] = None
+                if(i =="province"):
+                        if(data[i]):
+                                province = get_object_or_404(Province,id=data[i])
+                                final_response["province"] = province.value
+                        else:
+                                final_response["province"] = None
+
                 if(i =="commerceBrand"):
-                        brand = get_object_or_404(CommerceBrands,id=data[i])
-                        final_response["brand"] = brand.value
+                        if(data[i]):
+                                brand = get_object_or_404(CommerceBrands,id=data[i])
+                                final_response["brand"] = brand.value
+                        else:
+                                final_response["brand"] = None
+
                 if(i =="commerceCategory"):
-                        cat = get_object_or_404(CommerceCategory,id=data[i])
-                        final_response["category"] = cat.value
+                        if(data[i]):
+                                cat = get_object_or_404(CommerceCategory,id=data[i])
+                                final_response["category"] = cat.value
+                        else:
+                                final_response["category"] = None
+
                 if(i =="serviceBrand"):
-                        brand = get_object_or_404(ServiceBrands,id=data[i])
-                        final_response["brand"] = brand.value
+                        if(data[i]):
+                                brand = get_object_or_404(ServiceBrands,id=data[i])
+                                final_response["brand"] = brand.value
+                        else:
+
+                                final_response["brand"] = None
                 
                 if(i =="serviceCategory"):
-                        cat = get_object_or_404(ServiceCategory,id=data[i])
-                        final_response["category"] = cat.value
+                        if(data[i]):
+                                cat = get_object_or_404(ServiceCategory,id=data[i])
+                                final_response["category"] = cat.value
+                        else:
+                                final_response["category"] = None
+
                     
             ch.basic_publish(exchange='',
                             routing_key=props.reply_to,
