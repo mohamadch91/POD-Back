@@ -16,7 +16,7 @@ from django.db.models import Case, When,Sum
 from . publish import transfer
 import json
 class ServiceListView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
     queryset =Service.objects.all()
     def get(self, request):
         service = Service.objects.all()
