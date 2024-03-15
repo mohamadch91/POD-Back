@@ -1,14 +1,14 @@
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import json
-from .publish import auth
+from .publish import transfer
 def authenitcate (request):
         jwt_auth = JWTAuthentication()
         header = jwt_auth.get_header(request=request)
         if(header):
             token = jwt_auth.get_raw_token(header)
             if(token):
-                response =transfer(token,'verify','commerce')
+                response =transfer(token,'verify','service')
                 if response:
                     response = response
                     user= response['user']
@@ -24,7 +24,7 @@ class IsAuthenticatedM(permissions.BasePermission):
     # edit_methods = ("PUT", "PATCH")
 
     def has_permission(self, request, view):
-        user,token = authenitcate(request)
+        user = authenitcate(request)
         if( user):
             request.user = user
             return True
