@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 import json
 def on_request(ch, method, props, body):
             data = json.loads(body)
-            print(data)
             final_response ={}
             for i in data:
                 if(i =="city"):

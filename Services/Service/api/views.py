@@ -16,50 +16,17 @@ from django.db.models import Case, When,Sum
 from . publish import transfer
 import json
 class ServiceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
     queryset =Service.objects.all()
     def get(self, request):
         service = Service.objects.all()
         page = request.GET.get("page")
         category = request.GET.get("category")
-        brand = request.GET.get("brand")
-        sort = request.GET.get("sort")
-        total_count= len(service)
-        if(brand):
-            print(brand)
-            service =service.filter(brand =brand)
-            total_count = len(service)
+       
         if(category):
             service = service.filter(category = category)
-            total_count = len(service)
-        if(sort):
-            if(sort=="old"):
-                service=service.order_by('created_at')
-            if(sort=="new"):
-                service=service.order_by('-created_at')
-            if(sort=="pop"):
-                sum_votes={}
-                pk_in=[]
-                for j in service:
-                    votes= ServiceVotes.objects.filter(service=j).aggregate(Sum('votes'))
-                    len_votes=len(ServiceVotes.objects.filter(service=j))
-                    if(len_votes == 0):
-                        sum_votes[j.id]=0    
-                    else:
-                        sum_votes[j.id] = votes['votes__sum']/len_votes
-                sum_votes = dict(sorted(sum_votes.items(), key=lambda item: item[1],reverse=True))
-                for k in sum_votes.keys():
-                    pk_in.append(k)
-                preferred = Case(
-                       *(When(id=id, then=pos) for pos, id in enumerate(pk_in, start=1)))
-                service = service.filter(id__in=pk_in).order_by(preferred)                   
-                # query_dict.update(ordinary_dict)
-            if(sort=="alpha"):
-               service= service.order_by('name')    
-                
-
         if (page):
-            service = service[12*int(page):12*(int(page)+1)]
+            service = service[9*int(page):9*(int(page)+1)]
         
         serializer = ServiceSerializer(service,many=True)
         answer = []
@@ -70,27 +37,24 @@ class ServiceListView(generics.ListAPIView):
             if(len(image)>0):
                 image =image[0]
                 img = str(image.image)
-            votes = ServiceVotes.objects.filter(service=i["id"] )
-            sum_votes = 0
-            if(len(votes)>0):
-                for k in votes:
-                    sum_votes+=k.votes
-                sum_votes /= len(votes)
-          
+            transfer_data={
+              
+                "serviceCategory" : i["category"]
+            }
+            datas= transfer(json.dumps(transfer_data),'base_info','service')
             data ={
                 "id":i["id"],
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
                 "image":img,
-                "votes" : float(format(sum_votes, ".2f"))
+                "available" : i["available_count"],
+                "sold" : 2455,
+                "category" : datas["category"]
             }
             answer.append(data)
-        final_response = {
-            "total_count" : total_count,
-            "list" : answer
-        }
-        return Response(final_response,status=status.HTTP_200_OK)
+       
+        return Response(answer,status=status.HTTP_200_OK)
     
        
 class ServiceDetailView(generics.RetrieveAPIView):

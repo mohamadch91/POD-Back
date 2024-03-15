@@ -21,7 +21,7 @@ import copy
 from .tests import *
 
 class UpdateProfileView(APIView):
-    # permission_classes=(IsAuthenticated,)
+    permission_classes=(IsAuthenticated,)
    
     def put (self,request):
         if('type' not in request.data or 'type' =='' ):
