@@ -157,10 +157,7 @@ class AddCommerceView(generics.CreateAPIView):
         user,_ = request.user
         user = json.loads(user)
         temp = copy.deepcopy(request.data)
-        # print(request.data["images"])
-        print(request.data)
         images = request.FILES.getlist('images')
-        print(images)
         temp["user_id"] = user["id"]
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
