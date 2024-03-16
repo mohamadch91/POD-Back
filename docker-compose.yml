@@ -32,7 +32,7 @@ services:
     build: ./Services/Commerce
     container_name: commerce
     command: > 
-      "python manage.py runserver "
+      "python manage.py runserver"
    
     
     networks:
