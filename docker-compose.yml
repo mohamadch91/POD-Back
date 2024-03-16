@@ -31,6 +31,8 @@ services:
     image: commerce:latest
     build: ./Services/Commerce
     container_name: commerce
+    ports:
+        - 8001:8000
     command: > 
       python manage.py runserver
    
