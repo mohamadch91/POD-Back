@@ -20,7 +20,7 @@ import json
  
 
 class CommerceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
@@ -97,7 +97,7 @@ class CommerceListView(generics.ListAPIView):
         return Response(final_response,status=status.HTTP_200_OK)
     
 class CommerceDetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    # permission_classes = [IsAuthenticatedM]
 
     queryset =Commerce.objects.all()
     def get(self, request):
