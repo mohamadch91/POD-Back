@@ -63,7 +63,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 class UpdateLegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
+        fields = ['phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
 
 class UpdateRealUserSerializer(serializers.ModelSerializer):
     class Meta:
