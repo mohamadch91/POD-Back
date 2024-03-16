@@ -45,3 +45,4 @@ class CommerceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
     votes = models.IntegerField()
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
+

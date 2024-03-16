@@ -20,7 +20,7 @@ import json
  
 
 class CommerceListView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
@@ -73,7 +73,7 @@ class CommerceListView(generics.ListAPIView):
             image  = CommerceImages.objects.filter(commerce=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = str(image.image)
+                img = 'commerce/media/'+str(image.image)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -97,7 +97,7 @@ class CommerceListView(generics.ListAPIView):
         return Response(final_response,status=status.HTTP_200_OK)
     
 class CommerceDetailView(generics.RetrieveAPIView):
-    # permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticatedM]
 
     queryset =Commerce.objects.all()
     def get(self, request):
@@ -111,10 +111,12 @@ class CommerceDetailView(generics.RetrieveAPIView):
                 "commerceBrand" : commerce.brand,
                 "commerceCategory" : commerce.category
             }
-            datas= transfer(json.dumps(transfer_data),'base_info','commerce')
-            print(datas)
+            datas= transfer(json.dumps(transfer_data),'base_info')
             images  = CommerceImages.objects.filter(commerce=i["id"] )
             image_data = CommerceImagesSerializer(images,many=True).data
+            img_copy = copy.deepcopy(image_data)
+            for j in img_copy:
+                j["image"] = 'commerce'+j["image"] 
             comments = CommerceComments.objects.filter(commerce = i["id"])
             comments_data = CommerceCommentsSerializer(comments,many=True).data
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
@@ -128,7 +130,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
             final_response["city_id"] = datas["city"]
             final_response["brand"] = datas["brand"]
             final_response["category"] = datas["category"]
-            final_response["images"] = image_data
+            final_response["images"] = img_copy
             final_response["votes"] = sum_votes
             final_response["comments"] = comments_data
 

@@ -36,7 +36,7 @@ class Service(models.Model):
 
 
 class ServiceImages(models.Model):
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='images',)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
 class ServiceComments(models.Model):
     id = models.AutoField(primary_key=True) 

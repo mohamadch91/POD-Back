@@ -32,7 +32,7 @@ services:
     build: ./Services/Commerce
     container_name: commerce
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver  "
+      python manage.py runserver  "
    
     
     networks:
@@ -44,7 +44,7 @@ services:
     build: ./Services/Service
     container_name: service
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver  "
+      python manage.py runserver  "
 
   
     

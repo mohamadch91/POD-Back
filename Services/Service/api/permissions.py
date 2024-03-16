@@ -8,7 +8,7 @@ def authenitcate (request):
         if(header):
             token = jwt_auth.get_raw_token(header)
             if(token):
-                response =transfer(token,'verify','service')
+                response =transfer(token,'verify')
                 if response:
                     response = response
                     user= response['user']

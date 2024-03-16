@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import *
 from django.contrib import admin
-
+from Commerce import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import *
 urlpatterns = [
     path('list/', CommerceListView.as_view(), name='get all commerce'),
     path('detail/', CommerceDetailView.as_view(), name='get detail of one commerce'),
@@ -13,3 +15,5 @@ urlpatterns = [
 
 
 ]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

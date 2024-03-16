@@ -36,12 +36,12 @@ class ServiceListView(generics.ListAPIView):
             image  = ServiceImages.objects.filter(service=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = str(image.image)
+                img = '/service/media/'+str(image.image)
             transfer_data={
               
                 "serviceCategory" : i["category"]
             }
-            datas= transfer(json.dumps(transfer_data),'base_info','service')
+            datas= transfer(json.dumps(transfer_data),'base_info')
             data ={
                 "id":i["id"],
                 "name":i["name"],
