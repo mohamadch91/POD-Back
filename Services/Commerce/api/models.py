@@ -31,7 +31,7 @@ class Commerce(models.Model):
 
 class CommerceImages(models.Model):
     id = models.AutoField(primary_key=True) 
-    image = models.ImageField(upload_to='commerce/images')
+    image = models.ImageField(upload_to='images')
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
 
 class CommerceComments(models.Model):

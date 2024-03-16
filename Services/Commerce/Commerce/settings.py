@@ -140,5 +140,5 @@ REST_FRAMEWORK = {
 
 }
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'commerce/')
-MEDIA_URL = '/commerce/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
+MEDIA_URL = ''

@@ -101,6 +101,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
 
     queryset =Commerce.objects.all()
     def get(self, request):
+        print("request")
         id =request.GET.get("id")
         if(id):
             commerce = get_object_or_404(Commerce,id = id)
@@ -111,6 +112,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
                 "commerceCategory" : commerce.category
             }
             datas= transfer(json.dumps(transfer_data),'base_info','commerce')
+            print(datas)
             images  = CommerceImages.objects.filter(commerce=i["id"] )
             image_data = CommerceImagesSerializer(images,many=True).data
             comments = CommerceComments.objects.filter(commerce = i["id"])

@@ -24,7 +24,7 @@ def on_verify_request(ch, method, props, body):
                     final_response['token'] = v_token['token_type']
             except:
                  print('invalid')
-            
+            print('send')
             ch.basic_publish(exchange='',
                             routing_key=props.reply_to,
                             properties=pika.BasicProperties(correlation_id = \
@@ -69,7 +69,7 @@ class Command(BaseCommand):
         channel.queue_declare(queue='verify')
 
     
-        channel.basic_qos(prefetch_count=1)
+        channel.basic_qos(prefetch_count=0)
         channel.basic_consume(queue='user_data', on_message_callback=on_user_detail_request,auto_ack=False)
         channel.basic_consume(queue='verify', on_message_callback=on_verify_request,auto_ack=False)
 

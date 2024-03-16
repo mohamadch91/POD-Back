@@ -45,6 +45,7 @@ class RpcClient(object):
 def transfer(data,queue,source):
     rpc = RpcClient(queue_name=source)
     response = rpc.call(queue=queue,data=data)
+    print("closed")
     rpc.connection.close()
 
     return(json.loads(response.decode('ascii')))
