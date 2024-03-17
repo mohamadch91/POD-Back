@@ -135,9 +135,16 @@ class OTPViewRegister(APIView):
                 if(login_data == False):
                     return Response({"message":"phone already exists"},status=status.HTTP_400_BAD_REQUEST)
                 user_data= get_object_or_404(User,phone=data['receiver'])
-
-                wallet = get_object_or_404(Wallet,user = user_data.pk) 
-                w_ser= WalletSerializer(wallet)   
+                body ={
+                    "amount" : 0,
+                        "user" : user_data.pk
+                }
+                w_ser= WalletSerializer(data =body)   
+                if(w_ser.is_valid()):
+                    w_ser.save()
+                else:
+                    return Response(w_ser.errors,status = status.HTTP_400_BAD_REQUEST)
+                
                 ser = UserSerializer(user_data)
                 # print(ser.data)
                 res ={
@@ -159,7 +166,6 @@ class OTPViewRegister(APIView):
             s=get_object_or_404(User,phone=otp['receiver'])
             return False
         except:
-                
             user = User.objects.create(phone=otp['receiver'] )
             created = True
             refresh = RefreshToken.for_user(user)
