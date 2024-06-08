@@ -61,3 +61,10 @@ class ServiceBrandsView(generics.ListAPIView):
         cities = ServiceBrands.objects.all()
         serializer = ServiceBrandsSerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+class SaleMethodsView(generics.ListAPIView):
+    queryset =SaleMethod.objects.all()
+ 
+    def get(self, request):
+        cities = SaleMethod.objects.all()
+        serializer = SaleMethodSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

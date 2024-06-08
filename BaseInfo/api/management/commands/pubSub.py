@@ -50,6 +50,13 @@ def on_request(ch, method, props, body):
                         else:
                                 final_response["category"] = None
 
+                if(i =="saleMethod"):
+                        if(data[i]):
+                                cat = get_object_or_404(SaleMethod,id=data[i])
+                                final_response["method"] = cat.value
+                        else:
+                                final_response["method"] = None
+
                     
             ch.basic_publish(exchange='',
                             routing_key=props.reply_to,

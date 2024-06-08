@@ -20,6 +20,8 @@ RUN python3 manage.py loaddata api/fixtures/commerce_category.json
 RUN python3 manage.py loaddata api/fixtures/service_brand.json
 RUN python3 manage.py loaddata api/fixtures/service_category.json
 RUN python3 manage.py loaddata api/fixtures/city.json
+RUN python3 manage.py loaddata api/fixtures/sale_method.json
+
 
 
 
