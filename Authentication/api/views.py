@@ -36,9 +36,7 @@ class UpdateProfileView(APIView):
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)
             return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
         if(type=="legal"):
-            print("salam")
             user = LegalUser.objects.get_or_create(phone=phone)
-           
             ser=UpdateLegalUserSerializer(user[0],data=request.data)
             if(ser.is_valid()):
                 ser.save()
@@ -107,7 +105,16 @@ class OTPViewLogin(APIView):
         if query.exists():
             created = False
             user = query.first()
-
+        else:
+            user = User.objects.create(phone=otp['receiver'] )
+            created = True
+            body ={
+                    "amount" : 0,
+                    "user" : user.pk
+                }
+            w_ser= WalletSerializer(data =body)   
+            if(w_ser.is_valid()):
+                w_ser.save()
         refresh = RefreshToken.for_user(user)
 
         return ObtainTokenSerializer({
