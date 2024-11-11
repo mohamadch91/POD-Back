@@ -10,6 +10,8 @@ urlpatterns = [
     path('serviceBrands/', ServiceBrandsView.as_view(), name='get all cities'),
     path('serviceCategories/', ServiceCategoryView.as_view(), name='get all cities'),
     path('saleMethods/', SaleMethodsView.as_view(), name='get all cities'),
+    path('deliveryMethods/', DeliveryMethodsView.as_view(), name='get all cities'),
+
 
     path('admin/', admin.site.urls),
 

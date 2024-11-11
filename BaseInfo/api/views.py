@@ -68,3 +68,11 @@ class SaleMethodsView(generics.ListAPIView):
         cities = SaleMethod.objects.all()
         serializer = SaleMethodSerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+class DeliveryMethodsView(generics.ListAPIView):
+    queryset =SaleMethod.objects.all()
+ 
+    def get(self, request):
+        cities = DeliveryMethod.objects.all()
+        serializer = DeliveryMethodSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

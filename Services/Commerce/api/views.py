@@ -1,5 +1,4 @@
-import http
-from re import L
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -23,7 +22,7 @@ class CommerceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
     def get(self, request):
-        commerce = Commerce.objects.all()
+        commerce = Commerce.objects.filter(status=1)
         page = request.GET.get("page")
         category = request.GET.get("category")
         brand = request.GET.get("brand")
@@ -144,7 +143,7 @@ class UserCommerceView(generics.RetrieveAPIView):
     queryset =Commerce.objects.all()
     def get(self, request):
         user = request.user
-        commerce = get_object_or_404(Commerce,user_id = user["id"])
+        commerce = Commerce.objects.filter(user_id =user["id"])
         serializer = CommerceSerializer(commerce,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -202,9 +201,6 @@ class DeleteCommerceView(generics.DestroyAPIView):
         commerce.delete()
         return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
         
-     
-    
-    
 
 
 

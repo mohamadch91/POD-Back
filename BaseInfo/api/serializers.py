@@ -39,3 +39,9 @@ class SaleMethodSerializer(serializers.ModelSerializer):
     class Meta:
         model = SaleMethod
         fields = '__all__'
+
+class DeliveryMethodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DeliveryMethod
+        fields = '__all__'

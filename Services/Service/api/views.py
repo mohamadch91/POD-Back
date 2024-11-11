@@ -69,7 +69,8 @@ class ServiceDetailView(generics.RetrieveAPIView):
             transfer_data={
                 "city":service.city_id,
                 "serviceBrand" : service.brand,
-                "serviceCategory" : service.category
+                "serviceCategory" : service.category,
+
             }
             datas= transfer(json.dumps(transfer_data),'base_info','service')
             images  = ServiceImages.objects.filter(service=i["id"] )
