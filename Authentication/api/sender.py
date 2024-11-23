@@ -2,6 +2,7 @@ from kavenegar import *
 import json
 
 def send_otp(otp):
+    print(otp.password)
     try:
         api = KavenegarAPI("444E6C6378534967385758394B41572B57434F7A4C644D664558485631704464")
         params = {
