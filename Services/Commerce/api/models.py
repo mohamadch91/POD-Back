@@ -19,7 +19,7 @@ class Commerce(models.Model):
     user_id =models.IntegerField(null =True,blank =True)
     day_price = models.IntegerField(null =True,blank =True)
     month_price = models.IntegerField(null =True,blank =True)
-    unit = models.CharField(null=True,blank=True)
+    unit = models.CharField(null=True,blank=True,max_length = 200)
     code = models.CharField(max_length = 200,null =True,blank =True)
     status = models.BooleanField(null =True,blank =True)
     logistic_price =models.IntegerField(null =True,blank =True)
