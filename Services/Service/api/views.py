@@ -162,7 +162,16 @@ class DeleteServiceView(generics.DestroyAPIView):
         return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
         
      
-    
+class ChangeStatusView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticatedM]
+
+    queryset =Service.objects.all()
+    def put(self, request):
+        id = request.data["id"]
+        service = get_object_or_404(Service,id=id)
+        service.status = request.data["status"]
+        service.save()
+        return Response({"message" : "status changed"},status=status.HTTP_200_OK)    
     
 
 

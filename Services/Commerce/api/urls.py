@@ -11,6 +11,7 @@ urlpatterns = [
     path('add/', AddCommerceView.as_view(), name='add commerce'),
     path('delete/', DeleteCommerceView.as_view(), name='delete commerce'),
     path('edit/', EditCommerceView.as_view(), name='edit  commerce'),
+    path('change-status/', ChangeStatusView.as_view(), name='change status of commerce'),
     path('admin/', admin.site.urls),
 
 

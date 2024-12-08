@@ -204,3 +204,12 @@ class DeleteCommerceView(generics.DestroyAPIView):
 
 
 
+class ChangeStatusView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticatedM]
+    queryset =Commerce.objects.all()
+    def put(self, request):
+        id = request.data["id"]
+        commerce = get_object_or_404(Commerce,id=id)
+        commerce.status = request.data["status"]
+        commerce.save()
+        return Response({"message" : "status changed"},status=status.HTTP_200_OK)

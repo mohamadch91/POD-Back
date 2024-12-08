@@ -11,7 +11,10 @@ urlpatterns = [
     path('serviceCategories/', ServiceCategoryView.as_view(), name='get all cities'),
     path('saleMethods/', SaleMethodsView.as_view(), name='get all cities'),
     path('deliveryMethods/', DeliveryMethodsView.as_view(), name='get all cities'),
-
+    path('commerceStatus/', CommerceStatusView.as_view(), name='get all cities'),
+    path('serviceStatus/', ServiceStatusView.as_view(), name='get all cities'),
+    path('activityTypes/', ActivityTypeView.as_view(), name='get all cities'),
+    path('businessVariety/', BusinessTypeView.as_view(), name='get all cities'),
 
     path('admin/', admin.site.urls),
 

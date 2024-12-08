@@ -22,7 +22,6 @@ class Service(models.Model):
     month_price = models.IntegerField(null =True,blank =True)
     unit = models.CharField(null=True,blank=True,max_length = 200)
     code = models.CharField(max_length = 200)
-    status = models.BooleanField(null =True,blank =True)
     logistic_price =models.IntegerField(null =True,blank =True)
     free_transport = models.BooleanField(null =True,blank =True)
     discount = models.IntegerField(null =True,blank =True)
@@ -32,9 +31,6 @@ class Service(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
-
-
-
 
 
 

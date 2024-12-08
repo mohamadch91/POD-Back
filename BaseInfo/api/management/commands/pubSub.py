@@ -65,7 +65,7 @@ def on_request(ch, method, props, body):
                                 final_response["delivery"] = None
 
                 
-                    
+                
             ch.basic_publish(exchange='',
                             routing_key=props.reply_to,
                             properties=pika.BasicProperties(correlation_id = \

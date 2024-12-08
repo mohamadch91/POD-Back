@@ -76,3 +76,37 @@ class DeliveryMethodsView(generics.ListAPIView):
         cities = DeliveryMethod.objects.all()
         serializer = DeliveryMethodSerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+class CommerceStatusView(generics.ListAPIView):
+    queryset =CommerceStatus.objects.all()
+ 
+    def get(self, request):
+        cities = CommerceStatus.objects.all()
+        serializer = CommerceStatusSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class ServiceStatusView(generics.ListAPIView):
+    queryset =ServiceStatus.objects.all()
+ 
+    def get(self, request):
+        cities = ServiceStatus.objects.all()
+        serializer = ServiceStatusSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class ActivityTypeView(generics.ListAPIView):
+    queryset =ActivityType.objects.all()
+ 
+    def get(self, request):
+        cities = ActivityType.objects.all()
+        serializer = ActivityTypeSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+class BusinessTypeView(generics.ListAPIView):
+    queryset =BusinessVariety.objects.all()
+ 
+    def get(self, request):
+        cities = BusinessVariety.objects.all()
+        serializer = BusinessVarietySerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

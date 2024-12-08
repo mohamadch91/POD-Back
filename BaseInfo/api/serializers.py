@@ -45,3 +45,28 @@ class DeliveryMethodSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeliveryMethod
         fields = '__all__'
+
+class CommerceStatusSerializer(serializers.ModelSerializer):
+    
+        class Meta:
+            model = CommerceStatus
+            fields = '__all__'
+
+class ServiceStatusSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = ServiceStatus
+                fields = '__all__'
+
+
+class ActivityTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ActivityType
+        fields = '__all__'
+
+class BusinessVarietySerializer(serializers.ModelSerializer):
+         
+        class Meta:
+            model = BusinessVariety
+            fields = '__all__'
+            

@@ -21,7 +21,6 @@ class Commerce(models.Model):
     month_price = models.IntegerField(null =True,blank =True)
     unit = models.CharField(null=True,blank=True,max_length = 200)
     code = models.CharField(max_length = 200,null =True,blank =True)
-    status = models.BooleanField(null =True,blank =True)
     logistic_price =models.IntegerField(null =True,blank =True)
     discount = models.IntegerField(null =True,blank =True)
     category = models.IntegerField(null =True,blank =True)
@@ -33,11 +32,11 @@ class Commerce(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
 
 
-
 class CommerceImages(models.Model):
     id = models.AutoField(primary_key=True) 
     image = models.ImageField(upload_to='images')
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
+
 
 class CommerceComments(models.Model):
     id = models.AutoField(primary_key=True) 
@@ -45,6 +44,7 @@ class CommerceComments(models.Model):
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+
 
 class CommerceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
