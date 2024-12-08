@@ -110,3 +110,12 @@ class BusinessTypeView(generics.ListAPIView):
         cities = BusinessVariety.objects.all()
         serializer = BusinessVarietySerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
+class OrderStatusView(generics.ListAPIView):
+    queryset =OrderStatus.objects.all()
+ 
+    def get(self, request):
+        cities = OrderStatus.objects.all()
+        serializer = OrderStatusSerializer(cities,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

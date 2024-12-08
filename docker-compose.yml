@@ -25,6 +25,7 @@ services:
     networks:
         - pod_net
     depends_on:
+      - db
       - rabbitmq
   
   commerce:
@@ -35,11 +36,10 @@ services:
       python manage.py runserver
     ports:
         - 8003:8000
-   
-    
     networks:
         - pod_net
     depends_on:
+      - db
       - rabbitmq
   service:
     image: service:latest
@@ -52,6 +52,33 @@ services:
     networks:
         - pod_net
     depends_on:
+      - db
+      - rabbitmq
+  log:
+    image: log:latest
+    build: ./logs
+    container_name: logs
+    command: > 
+      python manage.py runserver
+    ports:
+        - 8005:8000
+    networks:
+        - pod_net
+    depends_on:
+      - db
+      - rabbitmq
+  order:
+    image: log:latest
+    build: ./Services/Order
+    container_name: order
+    command: > 
+      python manage.py runserver
+    ports:
+        - 8006:8000
+    networks:
+        - pod_net
+    depends_on:
+      - db
       - rabbitmq
   nginx:
     image: nginx

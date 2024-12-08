@@ -69,4 +69,8 @@ class BusinessVarietySerializer(serializers.ModelSerializer):
         class Meta:
             model = BusinessVariety
             fields = '__all__'
-            
+
+class OrderStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderStatus
+        fields = '__all__'
