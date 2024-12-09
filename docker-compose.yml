@@ -1,4 +1,4 @@
-version: "3.2"
+version: '3.2'
 services:
 
   authentication:
@@ -6,80 +6,106 @@ services:
     build: ./Authentication
     container_name: authentication
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver  "
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8001:8000
+    env_file:
+      - ./.env
     networks:
         - pod_net
     depends_on:
-      - rabbitmq
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   baseInfo:
     image: baseinfo
     build: ./BaseInfo
     container_name: baseInfo
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver  "
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8002:8000
-    
+    env_file:
+      - .env
     networks:
         - pod_net
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   
   commerce:
     image: commerce:latest
     build: ./Services/Commerce
     container_name: commerce
     command: > 
-      python manage.py runserver
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8003:8000
+    env_file:
+      - .env
     networks:
         - pod_net
     depends_on:
-      - db
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+    
   service:
     image: service:latest
     build: ./Services/Service
     container_name: service
     command: > 
-      python manage.py runserver
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8004:8000
+    env_file:
+      - .env
     networks:
         - pod_net
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   log:
     image: log:latest
     build: ./logs
     container_name: logs
     command: > 
-      python manage.py runserver
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8005:8000
     networks:
         - pod_net
+    env_file:
+      - .env
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   order:
-    image: log:latest
+    image: order:latest
     build: ./Services/Order
     container_name: order
     command: > 
-      python manage.py runserver
+      sh -c "./rabbit.sh && python manage.py runserver"
     ports:
         - 8006:8000
     networks:
         - pod_net
+    env_file:
+      - .env
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   nginx:
     image: nginx:latest
     build: ./configs
@@ -95,19 +121,28 @@ services:
         - pod_net
     depends_on:
       - rabbitmq
+      - db
+      - authentication
+      - baseInfo
+      - commerce
+      - service
+      - log
+      - order
+
     
   rabbitmq:
     image: rabbitmq:3.12.13-management-alpine
     container_name: 'rabbitmq'
-    environment:
-      - RABBITMQ_DEFAULT_USER=rabbitmq
-      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    env_file:
+      - ./.env
     ports:
         - 5672:5672
         - 15672:15672
-    volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
         - pod_net
   db_admin:
@@ -118,7 +153,7 @@ services:
     volumes:
       - pg_admin_data:/var/lib/pgadmin/data/
     env_file:
-      - ./.env
+      - .env
     depends_on:
       - db
     networks:
@@ -128,18 +163,18 @@ services:
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - ./databases/init.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+      - ./database/init.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     env_file:
       - .env
     environment:
-        POSTGRES_MULTIPLE_DATABASES: "{{ AUTH_DATABASE_NAME }}, {{ BASE_INFO_DATABASE_NAME }}, {{ COMMERCE_DATABASE_NAME }}, {{ SERVICE_DATABASE_NAME }}, {{ ORDER_DATABASE_NAME }}"
+        POSTGRES_MULTIPLE_DATABASES: "$AUTH_DATABASE_NAME,  $BASE_INFO_DATABASE_NAME, $COMMERCE_DATABASE_NAME,  $SERVICE_DATABASE_NAME,  $ORDER_DATABASE_NAME, $LOGS_DATABASE_NAME"
 
     networks:
         - pod_net
     ports:
       - 5432:5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -147,8 +182,6 @@ services:
 networks:
   pod_net:
     driver: bridge
-    external: true
 volumes:
   postgres_data:
-
   pg_admin_data:
