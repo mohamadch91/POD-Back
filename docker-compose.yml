@@ -134,9 +134,10 @@ services:
     environment:
         POSTGRES_MULTIPLE_DATABASES: "{{ AUTH_DATABASE_NAME }}, {{ BASE_INFO_DATABASE_NAME }}, {{ COMMERCE_DATABASE_NAME }}, {{ SERVICE_DATABASE_NAME }}, {{ ORDER_DATABASE_NAME }}"
 
-
     networks:
-        - baham_net
+        - pod_net
+    ports:
+      - 5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s

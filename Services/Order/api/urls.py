@@ -6,6 +6,13 @@ from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import *
 urlpatterns = [
 
+    path('admin/', admin.site.urls),
+    path('list/', OrderListView.as_view(), name='get all orders'),
+    path('detail/', OrderDetailView.as_view(), name='get detail of one order'),
+    path('user-active/', UserOrderView.as_view(), name='get user orders'),
+    path('add/', AddOrderView.as_view(), name='add order'),
+    path('change-status/', ChangeStatusView.as_view(), name='change status of order'),
+    
 
 ]
 urlpatterns += staticfiles_urlpatterns()
