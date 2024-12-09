@@ -81,7 +81,7 @@ services:
       - db
       - rabbitmq
   nginx:
-    image: nginx
+    image: nginx:latest
     build: ./configs
     container_name: nginx
     volumes:
@@ -147,6 +147,7 @@ services:
 networks:
   pod_net:
     driver: bridge
+    external: true
 volumes:
   postgres_data:
 
