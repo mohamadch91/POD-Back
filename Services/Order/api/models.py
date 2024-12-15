@@ -8,7 +8,7 @@ class Order(models.Model):
     user_id = models.IntegerField()
     products_data =models.JSONField()
     amount = models.IntegerField()
-    status = models.IntegerField()
+    status = models.IntegerField(default=0,null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     

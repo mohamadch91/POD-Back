@@ -30,14 +30,18 @@ class UpdateProfileView(APIView):
         phone=request.data["phone"]
         if(type=="real"):
             user = RealUser.objects.get_or_create(phone=phone)
-            ser=UpdateRealUserSerializer(user[0],data=request.data)
+            ser=UpdateRealUserSerializer(user[0],data=request.data,partial=True)
             if(ser.is_valid()):
                 ser.save()
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)
             return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
         if(type=="legal"):
-            user = LegalUser.objects.get_or_create(phone=phone)
-            ser=UpdateLegalUserSerializer(user[0],data=request.data)
+            try:
+                user = get_object_or_404(User,phone=phone)
+                user.delete()
+            except:
+                print("deleted")
+            ser=UpdateLegalUserSerializer(data=request.data)
             if(ser.is_valid()):
                 ser.save()
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)

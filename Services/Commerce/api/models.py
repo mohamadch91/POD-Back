@@ -27,7 +27,7 @@ class Commerce(models.Model):
     brand = models.IntegerField(null =True,blank =True)
     available_count =models.IntegerField(null =True,blank =True)
     free_transport = models.BooleanField(null =True,blank =True)
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=0,null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 

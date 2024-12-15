@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from .permissions import IsAuthenticatedM
 import copy
 
+import json
 
 class OrderListView(generics.ListAPIView):
     queryset = Order.objects.all()
@@ -45,7 +46,10 @@ class AddOrderView(APIView):
     permission_classes = [IsAuthenticatedM]
     def post(self, request):
         data = copy.deepcopy(request.data)
-        data['user_id'] = request.user.id
+        print(request.user)
+        user,token = request.user
+        user= json.loads(user)
+        data['user_id'] = user['id']
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
