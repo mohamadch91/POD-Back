@@ -6,9 +6,7 @@ class Province(models.Model):
 
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
-
 class City(models.Model):
-
     id = models.AutoField(primary_key=True) 
     province = models.ForeignKey(Province,on_delete=models.DO_NOTHING)
     value = models.CharField(max_length=100)

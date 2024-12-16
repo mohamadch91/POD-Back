@@ -36,12 +36,13 @@ class UpdateProfileView(APIView):
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)
             return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
         if(type=="legal"):
-            try:
-                user = get_object_or_404(User,phone=phone)
-                user.delete()
-            except:
-                print("deleted")
-            ser=UpdateLegalUserSerializer(data=request.data)
+            user = get_object_or_404(User,phone=phone)
+            user_ser= UpdateUserSerializer(user,data=request.data,partial=True)
+            if(user_ser.is_valid()):
+                user_ser.save()
+            else:
+                return Response(user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+            ser=UpdateLegalUserSerializer(user,data=request.data,partial=True)
             if(ser.is_valid()):
                 ser.save()
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)

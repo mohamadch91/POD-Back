@@ -119,3 +119,5 @@ class OrderStatusView(generics.ListAPIView):
         cities = OrderStatus.objects.all()
         serializer = OrderStatusSerializer(cities,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+

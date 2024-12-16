@@ -57,18 +57,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LegalUser
+        model = User
         fields = ['pk','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture']
 
 class UpdateLegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
+        fields = ['companyName','companyID','companyTitle']
 
 class UpdateRealUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealUser
-        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','gender','first_name','last_name']
+        fields = ['gender','first_name','last_name']
 
 
 class requestOTPSerializer(serializers.Serializer):
