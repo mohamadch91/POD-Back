@@ -28,6 +28,7 @@ urlpatterns = [
     path('serviceStatusAdmin/', ServiceStatusAdminView.as_view(), name='get all cities'),
     path('activityTypesAdmin/', ActivityTypeAdminView.as_view(), name='get all cities'),
     path('businessVarietyAdmin/', BusinessTypeAdminView.as_view(), name='get all cities'),
+    path('orderStatusAdmin/', OrderStatusAdminView.as_view(), name='get all cities'),
 
 
 

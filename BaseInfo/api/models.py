@@ -38,10 +38,14 @@ class DeliveryMethod(models.Model):
 class CommerceStatus(models.Model):
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
+    start = models.BooleanField()
+    end = models.BooleanField()
 
 class ServiceStatus(models.Model):
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
+    start = models.BooleanField()
+    end = models.BooleanField()
 
 class ActivityType(models.Model):
     id = models.AutoField(primary_key=True) 
@@ -54,3 +58,5 @@ class BusinessVariety(models.Model):
 class OrderStatus(models.Model):
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
+    start = models.BooleanField()
+    end = models.BooleanField()

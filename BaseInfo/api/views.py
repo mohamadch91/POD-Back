@@ -407,3 +407,30 @@ class BusinessTypeAdminView(APIView):
                 return Response(status=status.HTTP_204_NO_CONTENT)
             
 
+class OrderStatusAdminView(APIView):
+    
+        def get(self, request):
+            orderStatuses = OrderStatus.objects.all()
+            serializer = OrderStatusSerializer(orderStatuses,many=True)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        def post(self, request):
+            serializer = OrderStatusSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+        def put(self, request):
+            orderStatus = get_object_or_404(OrderStatus, id=request.data["id"])
+            serializer = OrderStatusSerializer(orderStatus, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+        def delete(self, request):
+            id = request.GET.get('id')
+            orderStatus = get_object_or_404(OrderStatus, id = id)
+            orderStatus.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
