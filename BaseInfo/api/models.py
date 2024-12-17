@@ -44,8 +44,8 @@ class CommerceStatus(models.Model):
 class ServiceStatus(models.Model):
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
-    start = models.BooleanField()
-    end = models.BooleanField()
+    start = models.BooleanField(null=True,blank=True)
+    end = models.BooleanField(null=True,blank=True)
 
 class ActivityType(models.Model):
     id = models.AutoField(primary_key=True) 
@@ -58,5 +58,5 @@ class BusinessVariety(models.Model):
 class OrderStatus(models.Model):
     id = models.AutoField(primary_key=True) 
     value = models.CharField(max_length=100)
-    start = models.BooleanField()
-    end = models.BooleanField()
+    start = models.BooleanField(null=True,blank=True)
+    end = models.BooleanField(null=True,blank=True)
