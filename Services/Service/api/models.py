@@ -31,6 +31,8 @@ class Service(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
+    fair_price = models.BooleanField(default=True,null =True,blank =True)
+    valid_seller = models.BooleanField(default=True,null =True,blank =True)
 
 
 
