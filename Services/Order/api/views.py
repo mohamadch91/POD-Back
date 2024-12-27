@@ -15,14 +15,14 @@ import copy
 
 import json
 
-class OrderListView(generics.ListAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+class OrderViewAdmin(APIView):
     permission_classes = [IsAuthenticatedM]
+    def get(self, request):
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+    
 
-    def get_queryset(self):
-        queryset = Order.objects.filter(user_id=self.request.user.id)
-        return queryset
     
 
 class OrderDetailView(APIView):
