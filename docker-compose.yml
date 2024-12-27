@@ -106,6 +106,23 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+  content:
+    image: content:latest
+    build: ./content
+    container_name: content
+    command: > 
+      sh -c "./rabbit.sh && python manage.py runserver"
+    ports:
+        - 8007:8000
+    networks:
+        - pod_net
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
   nginx:
     image: nginx:latest
     build: ./configs
