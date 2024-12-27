@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import *
 from .serializers import RegisterSerializer
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -214,33 +214,20 @@ class LegalUserView(APIView):
         serializer = LegalUserSerializer(user)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
+class UserAdminView(APIView):
+    permission_classes = (IsAdminUser)
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
 
 
-# class UseripView(APIView):
-#     permission_classes=(IsAuthenticated,)
-#     def get(self,request):
-#         id=request.query_params.get('id')
-#         if(id is None):
-#             ip=userIp.objects.all()
-#         else:
-#             ip=userIp.objects.filter(user=id)
-#         serializer = userIpSerializer(ip,many=True)
-#         new_data=copy.deepcopy(serializer.data)
-#         for i in new_data:
-#             if(i["user"] is not None):
-#                 user=get_object_or_404(User,id=i["user"])
-#                 i["user_phone"]=user.phone
-#                 i["user_name"]=user.phone
-#                 if(user.first_name is not None):
-#                     i["user_name"]=user.first_name
-#                 if (user.last_name is not None):
-#                     i["user_name"]+=user.last_name
-                
-#         return Response(data=new_data,status=status.HTTP_200_OK)
-#     def post(self,request):
-#         x=userIp.objects.filter(user=request.data["user"],ip=request.data["ip"]).delete()
-#         serializer = userIpSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserStatusView(APIView):
+    permission_classes = (IsAdminUser)
+
+    def post(self, request):
+        user = get_object_or_404(User,pk=request.data["id"])
+        user.status = request.data["status"]
+        user.save()
+        return Response(status=status.HTTP_202_ACCEPTED)

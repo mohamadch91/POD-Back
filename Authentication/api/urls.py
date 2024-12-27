@@ -17,6 +17,8 @@ urlpatterns = [
     path('user/', UserView.as_view(), name='admin_login'),
     path('legal/', LegalUserView.as_view(), name='profile'),
     path('token/', TokenObtainPairView.as_view(), name='profile'),
+    path('user-admin/', UserAdminView.as_view(), name='profile'),
+    path('user/status/', UserStatusView.as_view(), name='profile'),
 
 
     # path('currupted/', CurruptedView.as_view(), name='currupted'),

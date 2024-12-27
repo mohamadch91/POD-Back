@@ -60,6 +60,11 @@ class User(AbstractUser):
     Province = models.IntegerField(null=True,blank=True)
     postalCode =models.CharField(max_length = 50,null=True,blank=True)
     address =models.CharField (max_length =500,null=True,blank=True)
+    status = models.IntegerField(default=0,null=True,blank=True)
+    # status 0 is for defualt ,
+    # status 1 is for pending,
+    # status 2 is for accepted,
+    # status 3 is for rejected,
     USERNAME_FIELD='phone'
     objects = CustomUserManager()
     def __str__(self):
