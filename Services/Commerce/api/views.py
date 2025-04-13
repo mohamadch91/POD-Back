@@ -83,7 +83,7 @@ class CommerceListView(generics.ListAPIView):
                 "id":i["id"],
                 "name":i["name"],
                 "description":i["description"],
-                "month_price":i["month_price"],
+                "price":i["price"],
                 "image":img,
                 "votes" : float(format(sum_votes, ".2f"))
             }
