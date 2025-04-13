@@ -105,7 +105,6 @@ class CommerceDetailView(generics.RetrieveAPIView):
             commerce = get_object_or_404(Commerce,id = id)
             i = CommerceSerializer(commerce).data
             transfer_data={
-                "city":commerce.city_id,
                 "commerceBrand" : commerce.brand,
                 "commerceCategory" : commerce.category
             }
@@ -125,7 +124,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
                 sum_votes /= len(votes)
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
-            final_response["city_id"] = datas["city"]
+            # final_response["city_id"] = datas["city"]
             final_response["brand"] = datas["brand"]
             final_response["category"] = datas["category"]
             final_response["images"] = img_copy
