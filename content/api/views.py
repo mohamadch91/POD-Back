@@ -177,6 +177,12 @@ class NewsCategoryView(APIView):
         serializer = NewsCategorySerializer(news_categories, many=True)
         return Response(serializer.data)
 
+class BannerCategoryView(APIView):
+    def get(self, request):
+        banner_categories = BannerCategory.objects.all()
+        serializer = BannerCategorySerializer(banner_categories, many=True)
+        return Response(serializer.data)
+
 
 class NewsView(APIView):
     def get(self, request):
