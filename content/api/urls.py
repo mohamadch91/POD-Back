@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/news', NewsAdminView.as_view(), name='news'),
     path('admin/banner', BannerAdminView.as_view(), name='banner'),
     path('admin/banner-category', BannerCategoryAdminView.as_view(), name='banner_category'),
+    path('news-category/', NewsCategoryView.as_view(), name='news_category'),
     path('news/', NewsView.as_view(), name='news'),
     path('banner/', BannerView.as_view(), name='banner'),   
 

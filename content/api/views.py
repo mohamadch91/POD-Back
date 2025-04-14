@@ -171,6 +171,12 @@ class BannerAdminView(APIView):
         return Response("deleted",status=status.HTTP_202_ACCEPTED)
 
 
+class NewsCategoryView(APIView):
+    def get(self, request):
+        news_categories = NewsCategory.objects.all()
+        serializer = NewsCategorySerializer(news_categories, many=True)
+        return Response(serializer.data)
+
 
 class NewsView(APIView):
     def get(self, request):
