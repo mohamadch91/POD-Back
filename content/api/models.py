@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 
@@ -16,6 +16,7 @@ class News(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0)
+    tag= ArrayField(models.CharField(max_length=200), blank=True, null=True)
     # status 0 is for defualt ,
     # status 1 is for pending,
     # status 2 is for accepted,
