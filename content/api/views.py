@@ -192,15 +192,27 @@ class NewsView(APIView):
         page_size = request.GET.get("page_size")
         if(category != None):
             news = news.filter(category=category)
+        count = len(news)
         if(page != None and page_size != None):
             page = int(page)
             page_size = int(page_size)
             start = (page)*page_size
             end = (page+1)*page_size
             news = news[start:end]
-
+        
         serializer = NewsSerializer(news, many=True)
-        return Response(serializer.data)
+        images = NewsImages.objects.filter(news=news)
+        images_serializer = NewsImagesSerializer(images,many=True)
+        final_response = []
+        for ser in serializer.data:
+            temp = copy.copy(ser)
+            temp["image"] = '/content/media/' + ser["image"]
+            images= []
+            for x  in images_serializer.data:
+                images.append('/content/media/' + x["image"])
+            final_response.append(temp)
+
+        return Response({"data":final_response,"count" : count},status=status.HTTP_200_OK)
     
 
 class BannerView(APIView):
