@@ -86,17 +86,34 @@ class BannerCategoryAdminView(APIView):
 
 class NewsAdminView(APIView):
     def get(self, request):
-        id = request.GET.get('id')
-        if(id == None):
-            news = News.objects.all()
-            serializer = NewsSerializer(news, many=True)
-            return Response(serializer.data)
-        news = get_object_or_404(News,id=id)
-        serializer = NewsSerializer(news)
+        news = News.objects.all()
+        page = request.GET.get("page")
+        category = request.GET.get("category")
+        page_size = request.GET.get("page_size")
+        if(category != None):
+            news = news.filter(category=category)
+        count = len(news)
+        if(page != None and page_size != None):
+            page = int(page)
+            page_size = int(page_size)
+            start = (page)*page_size
+            end = (page+1)*page_size
+            news = news[start:end]
+        
+        serializer = NewsSerializer(news, many=True)
         images = NewsImages.objects.filter(news=news)
         images_serializer = NewsImagesSerializer(images,many=True)
-        return Response({"news":serializer.data,"images":images_serializer.data},status=status.HTTP_200_OK)
+        final_response = []
+        for ser in serializer.data:
+            temp = copy.copy(ser)
+            temp["image"] = '/content/media/' + ser["image"]
+            images= []
+            for x  in images_serializer.data:
+                images.append('/content/media/' + x["image"])
+            final_response.append(temp)
 
+        return Response({"data":final_response,"count" : count},status=status.HTTP_200_OK)
+    
     def post(self, request):
         serializer = NewsSerializer(data=request.data)
         if serializer.is_valid():
