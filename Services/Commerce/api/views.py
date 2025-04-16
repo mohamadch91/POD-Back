@@ -200,8 +200,6 @@ class DeleteCommerceView(generics.DestroyAPIView):
         return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
         
 
-
-
 class ChangeStatusView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticatedM]
     queryset =Commerce.objects.all()
@@ -211,3 +209,51 @@ class ChangeStatusView(generics.UpdateAPIView):
         commerce.status = request.data["status"]
         commerce.save()
         return Response({"message" : "status changed"},status=status.HTTP_200_OK)
+
+
+class NegotiateCommerceView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticatedM]
+    serializer_class = CommerceNegotiateSerializer
+    queryset =CommerceNegotiate.objects.all()
+    def post(self, request):
+        user,_ = request.user
+        user = json.loads(user)
+        temp = copy.deepcopy(request.data)
+        temp["user_id"] = user["id"]
+        serializer = CommerceNegotiateSerializer(data = temp)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+class NegotiateCommerceAdminView(APIView):
+    permission_classes = [IsAuthenticatedM]
+    def get(self, request):
+        id = request.GET.get("id")
+        if(id):
+            negotiate = get_object_or_404(CommerceNegotiate,id = id)
+            serializer = CommerceNegotiateSerializer(negotiate).data
+            return Response(serializer,status=status.HTTP_200_OK)
+        negotiate = CommerceNegotiate.objects.all()
+        serializer = CommerceNegotiateSerializer(negotiate,many=True).data
+        return Response(serializer,status=status.HTTP_200_OK)
+
+    def put (self,request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        negotiate = get_object_or_404(CommerceNegotiate,id=id)
+        serializer = CommerceNegotiateSerializer(negotiate,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request):
+        id = request.GET.get('id')
+        if(id == None):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        negotiate = get_object_or_404(CommerceNegotiate,id=id)
+        negotiate.delete()
+        return Response("deleted",status=status.HTTP_202_ACCEPTED)

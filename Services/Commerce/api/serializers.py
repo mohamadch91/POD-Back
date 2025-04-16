@@ -31,3 +31,7 @@ class CommerceVotesSerializer(serializers.ModelSerializer):
         model = CommerceVotes
         fields = '__all__'
        
+class CommerceNegotiateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommerceNegotiate
+        fields = '__all__'
