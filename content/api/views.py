@@ -187,6 +187,18 @@ class BannerCategoryView(APIView):
 class NewsView(APIView):
     def get(self, request):
         news = News.objects.filter(status=2)
+        page = request.GET.get("page")
+        category = request.GET.get("category")
+        page_size = request.GET.get("page_size")
+        if(category != None):
+            news = news.filter(category=category)
+        if(page != None and page_size != None):
+            page = int(page)
+            page_size = int(page_size)
+            start = (page)*page_size
+            end = (page+1)*page_size
+            news = news[start:end]
+
         serializer = NewsSerializer(news, many=True)
         return Response(serializer.data)
     
