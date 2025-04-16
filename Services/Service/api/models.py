@@ -53,7 +53,7 @@ class ServiceVotes(models.Model):
 
 class ServiceNegotiate(models.Model):
     id = models.AutoField(primary_key=True) 
-    commerce = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
+    service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
     phone = models.CharField(max_length=11)
     name = models.CharField(max_length=100)
     price = models.IntegerField(null=True,blank=True)
