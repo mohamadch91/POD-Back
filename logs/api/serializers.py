@@ -21,3 +21,10 @@ class PermiumRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = PermiumRequest
         fields = '__all__'
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = '__all__'
+

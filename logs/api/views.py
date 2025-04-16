@@ -89,3 +89,38 @@ class ConsultationRequestAdminView(APIView):
             consultation_request = get_object_or_404(ConsultationRequest,id=id)
             consultation_request.delete()
             return Response("deleted",status=status.HTTP_202_ACCEPTED)
+
+class ContactUsView(APIView):
+
+    def post(self, request):
+        serializer = ContactUsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ContactUsAdminView(APIView):
+    def get(self, request):
+        contact_us = ContactUs.objects.all()
+        serializer = ContactUsSerializer(contact_us, many=True)
+        return Response(serializer.data)
+    
+    def put (self,request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        contact_us = get_object_or_404(ContactUs,id=id)
+        serializer = ContactUsSerializer(contact_us,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request):
+        id = request.GET.get('id')
+        if(id == None):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        contact_us = get_object_or_404(ContactUs,id=id)
+        contact_us.delete()
+        return Response("deleted",status=status.HTTP_202_ACCEPTED)

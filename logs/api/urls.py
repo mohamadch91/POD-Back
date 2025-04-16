@@ -9,6 +9,8 @@ urlpatterns = [
     path('consultation/', ConsultationRequestView.as_view(), name='get all commerce'),
     path('admin/permium/', PermiumRequestAdminView.as_view(), name='get all commerce'),
     path('admin/consultation/', ConsultationRequestAdminView.as_view(), name='get all commerce'),
+    path('contact-us/', ContactUsView.as_view(), name='get all commerce'),
+    path('admin/contact-us//', ContactUsAdminView.as_view(), name='get all commerce'),
     
 
     path('admin/', admin.site.urls),
