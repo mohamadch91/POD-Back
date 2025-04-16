@@ -101,7 +101,7 @@ class NewsAdminView(APIView):
             news = news[start:end]
         
         serializer = NewsSerializer(news, many=True)
-        images = NewsImages.objects.filter(news=news)
+        images = NewsImages.objects.filter(news=news.values_list("id"))
         images_serializer = NewsImagesSerializer(images,many=True)
         final_response = []
         for ser in serializer.data:
@@ -218,7 +218,7 @@ class NewsView(APIView):
             news = news[start:end]
         
         serializer = NewsSerializer(news, many=True)
-        images = NewsImages.objects.filter(news=news)
+        images = NewsImages.objects.filter(news=news.values_list("id"))
         images_serializer = NewsImagesSerializer(images,many=True)
         final_response = []
         for ser in serializer.data:
