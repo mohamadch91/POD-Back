@@ -50,3 +50,13 @@ class ServiceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
     votes = models.IntegerField()
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
+
+class ServiceNegotiate(models.Model):
+    id = models.AutoField(primary_key=True) 
+    commerce = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
+    phone = models.CharField(max_length=11)
+    name = models.CharField(max_length=100)
+    price = models.IntegerField(null=True,blank=True)
+    user_id = models.IntegerField(null=True,blank=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)

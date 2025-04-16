@@ -32,3 +32,8 @@ class ServiceVotesSerializer(serializers.ModelSerializer):
         model = ServiceVotes
         fields = '__all__'
        
+
+class ServiceNegotiateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceNegotiate
+        fields = '__all__'
