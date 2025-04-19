@@ -86,6 +86,20 @@ class BannerCategoryAdminView(APIView):
 
 class NewsAdminView(APIView):
     def get(self, request):
+        id= request.GET.get('id')
+        if(id != None):
+            news = get_object_or_404(News,id=id)
+            serializer = NewsSerializer(news)
+            images = NewsImages.objects.filter(news=news)
+            final_response = []
+            temp = copy.copy(serializer.data)
+            temp["image"] = 'content' + serializer.data["image"]
+            images= []
+            for x  in images:
+                images.append('content/media/' + x.image)
+            temp["images"] = images
+            final_response.append(temp)
+            return Response(final_response,status=status.HTTP_200_OK)
         news = News.objects.all()
         page = request.GET.get("page")
         category = request.GET.get("category")
@@ -102,14 +116,13 @@ class NewsAdminView(APIView):
         
         serializer = NewsSerializer(news, many=True)
         images = NewsImages.objects.filter(news__in=news)
-        images_serializer = NewsImagesSerializer(images,many=True)
         final_response = []
         for ser in serializer.data:
             temp = copy.copy(ser)
-            temp["image"] = '/content/media/' + ser["image"]
+            temp["image"] = 'content' + ser["image"]
             images= []
-            for x  in images_serializer.data:
-                images.append('/content/media/' + x["image"])
+            for x  in images:
+                images.append('content/media/' + x.image)
             final_response.append(temp)
 
         return Response({"data":final_response,"count" : count},status=status.HTTP_200_OK)
@@ -210,7 +223,7 @@ class NewsView(APIView):
             images = NewsImages.objects.filter(news=news)
             final_response = []
             temp = copy.copy(serializer.data)
-            temp["image"] = 'content/media/' + serializer.data["image"]
+            temp["image"] = 'content' + serializer.data["image"]
             images= []
             for x  in images:
                 images.append('content/media/' + x.image)
