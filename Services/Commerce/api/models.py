@@ -51,6 +51,7 @@ class CommerceVotes(models.Model):
     votes = models.IntegerField()
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
 
+
 class CommerceNegotiate(models.Model):
     id = models.AutoField(primary_key=True) 
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
