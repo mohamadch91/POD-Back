@@ -13,6 +13,7 @@ urlpatterns = [
     path('banner-category/', BannerCategoryView.as_view(), name='banner_category'),
     path('news/', NewsView.as_view(), name='news'),
     path('banner/', BannerView.as_view(), name='banner'),   
+     path('admin/', admin.site.urls),
 
 
     
