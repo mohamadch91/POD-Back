@@ -14,7 +14,7 @@ services:
     networks:
         - pod_net
     volumes:
-      - ~/media/pod/auth/media/:/code/media/
+      - /var/www/pod/auth/media/:/code/media/
     depends_on:
       db:
         condition: service_healthy
@@ -29,7 +29,7 @@ services:
     ports:
         - 8002:8000
     volumes:
-      - ~/media/pod/base_info/media/:/code/media/
+      - /var/www/pod/base_info/media/:/code/media/
     env_file:
       - .env
     networks:
@@ -47,7 +47,7 @@ services:
     command: > 
       sh -c "./rabbit.sh && python manage.py runserver"
     volumes:
-      - ~/media/pod/commerce/media/:/code/media/
+      - /var/www/pod/commerce/media/:/code/media/
     ports:
         - 8003:8000
     env_file:
@@ -70,7 +70,7 @@ services:
     ports:
         - 8004:8000
     volumes:
-      - ~/media/pod/service/media/:/code/media/
+      - /var/www/pod/service/media/:/code/media/
     env_file:
       - .env
     networks:
@@ -91,7 +91,7 @@ services:
     networks:
         - pod_net
     volumes:
-      - ~/media/pod/log/media/:/code/media/
+      - /var/www/pod/log/media/:/code/media/
     env_file:
       - .env
     depends_on:
@@ -108,7 +108,7 @@ services:
     ports:
         - 8006:8000
     volumes:
-      - ~/media/pod/order/media/:/code/media/
+      - /var/www/pod/order/media/:/code/media/
     networks:
         - pod_net
     env_file:
@@ -127,7 +127,7 @@ services:
     ports:
         - 8007:8000
     volumes:
-      - ~/media/pod/content/media/:/code/media/
+      - /var/www/pod/content/media/:/code/media/
     networks:
         - pod_net
     env_file:
