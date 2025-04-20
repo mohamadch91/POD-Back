@@ -249,7 +249,7 @@ class NewsView(APIView):
         final_response = []
         for ser in serializer.data:
             temp = copy.copy(ser)
-            temp["image"] = 'content/media/' + ser["image"]
+            temp["image"] = 'content' + ser["image"]
             images= []
             for x  in images:
                 images.append('content/media/' + x.image)
