@@ -257,3 +257,57 @@ class NegotiateCommerceAdminView(APIView):
         negotiate = get_object_or_404(CommerceNegotiate,id=id)
         negotiate.delete()
         return Response("deleted",status=status.HTTP_202_ACCEPTED)
+    
+
+class CommerceCommentView(APIView):
+    permission_classes = [IsAuthenticatedM]
+    def get(self, request):
+        commerce_id = request.GET.get("commerce_id")
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        if(commerce_id == None):
+            return Response("need commerce id",status=status.HTTP_400_BAD_REQUEST)
+            
+        comment = CommerceComments.objects.filter(commerce=commerce_id)
+        total_cout = len(comment)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            comment = comment[page*page_size:page*page_size+page_size]
+        serializer = CommerceCommentsSerializer(comment,many=True).data
+        final_response ={
+            "total_count" : total_cout,
+            "data": serializer
+        }
+        
+
+        return Response(final_response,status=status.HTTP_200_OK)
+    def post(self, request):
+        
+        serializer = CommerceCommentsSerializer(data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+
+    
+class CommerceAdminCommentView(APIView):
+    def get(self,request):
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        comment = CommerceComments.objects.all()
+        total_cout = len(comment)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            comment = comment[page*page_size:page*page_size+page_size]
+        serializer = CommerceCommentsSerializer(comment,many=True).data
+        final_response ={
+            "total_count" : total_cout,
+            "data": serializer
+        }
+        
+
+        return Response(final_response,status=status.HTTP_200_OK)
