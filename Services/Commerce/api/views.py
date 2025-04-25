@@ -349,7 +349,7 @@ class CommerceCommentView(APIView):
             
         comment = CommerceComments.objects.filter(commerce=commerce_id)
         # remove comments which they are reply
-        comment = comment.exclude(reply__isnull=False)
+        comment = comment.exclude(reply=False)
         total_cout = len(comment)
         if(page and page_size):
             page = int(page)
@@ -358,10 +358,10 @@ class CommerceCommentView(APIView):
         serializer = CommerceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
-            if(i["reply"] != None):
-                reply = CommerceComments.objects.filter(reply = i["id"])
-                reply_data = CommerceCommentsSerializer(reply,many=True).data
-                i["reply"] = reply_data
+            
+            reply = CommerceComments.objects.filter(reply = i["id"])
+            reply_data = CommerceCommentsSerializer(reply,many=True).data
+            i["reply"] = reply_data
             final.append(i)
 
         final_response ={
