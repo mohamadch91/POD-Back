@@ -348,6 +348,8 @@ class CommerceCommentView(APIView):
             return Response("need commerce id",status=status.HTTP_400_BAD_REQUEST)
             
         comment = CommerceComments.objects.filter(commerce=commerce_id)
+        # remove comments which they are reply
+        comment = comment.exclude(reply__isnull=False)
         total_cout = len(comment)
         if(page and page_size):
             page = int(page)
@@ -358,10 +360,8 @@ class CommerceCommentView(APIView):
         for i in serializer:
             if(i["reply"] != None):
                 reply = CommerceComments.objects.filter(reply = i["id"])
-                if(len(reply)>0):
-                    reply = reply[0]
-                    reply_data = CommerceCommentsSerializer(reply).data
-                    i["reply"] = reply_data
+                reply_data = CommerceCommentsSerializer(reply,many=True).data
+                i["reply"] = reply_data
             final.append(i)
 
         final_response ={
@@ -397,6 +397,7 @@ class CommerceAdminCommentView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         comment = CommerceComments.objects.all()
+        comment = comment.exclude(reply__isnull=False)
         total_cout = len(comment)
         if(page and page_size):
             page = int(page)
@@ -407,10 +408,8 @@ class CommerceAdminCommentView(APIView):
         for i in serializer:
             if(i["reply"] != None):
                 reply = CommerceComments.objects.filter(reply = i["id"])
-                if(len(reply)>0):
-                    reply = reply[0]
-                    reply_data = CommerceCommentsSerializer(reply).data
-                    i["reply"] = reply_data
+                reply_data = CommerceCommentsSerializer(reply,many=True).data
+                i["reply"] = reply_data
             final.append(i)
 
         final_response ={
