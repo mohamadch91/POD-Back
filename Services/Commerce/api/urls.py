@@ -14,12 +14,10 @@ urlpatterns = [
     path('negotiate/', NegotiateCommerceView.as_view(), name='edit  commerce'),
     path('admin/negotiate/', NegotiateCommerceAdminView.as_view(), name='edit  commerce'),
     path('comment/', CommerceCommentView.as_view(), name='get all commerce'),
-    path('admin/comment', CommerceAdminCommentView.as_view(), name='get all commerce'),
-
-
-
-
+    path('admin/comment/', CommerceAdminCommentView.as_view(), name='get all commerce'),
     path('change-status/', ChangeStatusView.as_view(), name='change status of commerce'),
+    path('admin/commerce/question/', CommerceAdminQuestionView.as_view(), name='get all commerce'),
+    path('question/', CommerceQuestionView.as_view(), name='get all commerce'),
     path('admin/', admin.site.urls),
 
 

@@ -275,9 +275,18 @@ class CommerceCommentView(APIView):
             page_size = int(page_size)
             comment = comment[page*page_size:page*page_size+page_size]
         serializer = CommerceCommentsSerializer(comment,many=True).data
+        final =[]
+        for i in serializer:
+            if(i["reply"] != None):
+                reply = CommerceComments.objects.filter(id = i["reply"])
+                reply = reply[0]
+                reply_data = CommerceCommentsSerializer(reply).data
+                i["reply"] = reply_data
+            final.append(i)
+
         final_response ={
             "total_count" : total_cout,
-            "data": serializer
+            "data": final
         }
         
 
@@ -289,6 +298,16 @@ class CommerceCommentView(APIView):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        comment = get_object_or_404(CommerceComments,id=id)
+        serializer = CommerceCommentsSerializer(comment,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -304,10 +323,82 @@ class CommerceAdminCommentView(APIView):
             page_size = int(page_size)
             comment = comment[page*page_size:page*page_size+page_size]
         serializer = CommerceCommentsSerializer(comment,many=True).data
+        final =[]
+        for i in serializer:
+            if(i["reply"] != None):
+                reply = CommerceComments.objects.filter(id = i["reply"])
+                reply = reply[0]
+                reply_data = CommerceCommentsSerializer(reply).data
+                i["reply"] = reply_data
+            final.append(i)
+
+        final_response ={
+            "total_count" : total_cout,
+            "data": final
+        }
+       
+        
+
+        return Response(final_response,status=status.HTTP_200_OK)
+    
+
+class CommerceQuestionView(APIView):
+    permission_classes = [IsAuthenticatedM]
+    def get(self, request):
+        commerce_id = request.GET.get("commerce_id")
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        if(commerce_id == None):
+            return Response("need commerce id",status=status.HTTP_400_BAD_REQUEST)
+            
+        question = CommerceQuestions.objects.filter(commerce=commerce_id)
+        total_cout = len(question)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            question = question[page*page_size:page*page_size+page_size]
+        serializer = CommerceQuestionsSerializer(question,many=True).data
         final_response ={
             "total_count" : total_cout,
             "data": serializer
         }
         
 
+        return Response(final_response,status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = CommerceQuestionsSerializer(data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        question = get_object_or_404(CommerceQuestions,id=id)
+        serializer = CommerceQuestionsSerializer(question,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class CommerceAdminQuestionView(APIView):
+
+    def get(self,request):
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        question = CommerceQuestions.objects.all()
+        total_cout = len(question)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            question = question[page*page_size:page*page_size+page_size]
+        serializer = CommerceQuestionsSerializer(question,many=True).data
+        final_response ={
+            "total_count" : total_cout,
+            "data": serializer
+        }
+       
+        
         return Response(final_response,status=status.HTTP_200_OK)

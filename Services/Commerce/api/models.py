@@ -45,6 +45,18 @@ class CommerceComments(models.Model):
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    reply = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
+
+class CommerceQuestions(models.Model):
+    id = models.AutoField(primary_key=True) 
+    question = models.CharField(max_length = 200)
+    answer = models.CharField(max_length = 200,null=True,blank=True)
+    user_id = models.IntegerField(null=True,blank=True)
+    commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
+
 
 
 class CommerceVotes(models.Model):
