@@ -37,15 +37,29 @@ class Service(models.Model):
 
 
 class ServiceImages(models.Model):
+    id = models.AutoField(primary_key=True) 
     image = models.ImageField(upload_to='images',)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
 class ServiceComments(models.Model):
     id = models.AutoField(primary_key=True) 
     comment = models.CharField(max_length = 200)
+    user_id = models.IntegerField(null=True,blank=True)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    reply = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
 
+
+
+class ServiceQuestions(models.Model):
+    id = models.AutoField(primary_key=True) 
+    question = models.CharField(max_length = 200)
+    answer = models.CharField(max_length = 200,null=True,blank=True)
+    user_id = models.IntegerField(null=True,blank=True)
+    service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
 class ServiceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
     votes = models.IntegerField()

@@ -37,3 +37,8 @@ class ServiceNegotiateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceNegotiate
         fields = '__all__'
+
+class ServiceQuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceQuestions
+        fields = '__all__'
