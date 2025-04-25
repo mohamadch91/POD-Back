@@ -274,7 +274,7 @@ class ServiceCommentView(APIView):
             return Response("need service id",status=status.HTTP_400_BAD_REQUEST)
             
         comment = ServiceComments.objects.filter(service=service_id)
-        comment = comment.exclude(reply__isnull=False)
+        comment = comment.exclude(reply=None)
         total_cout = len(comment)
         if(page and page_size):
             page = int(page)
@@ -283,10 +283,9 @@ class ServiceCommentView(APIView):
         serializer = ServiceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
-            if(i["reply"] != None):
-                reply = ServiceComments.objects.filter(reply = i["id"])
-                reply_data = ServiceCommentsSerializer(reply,many=True).data
-                i["reply"] = reply_data
+            reply = ServiceComments.objects.filter(reply = i["id"])
+            reply_data = ServiceCommentsSerializer(reply,many=True).data
+            i["reply"] = reply_data
             final.append(i)
 
         final_response ={
