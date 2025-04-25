@@ -358,9 +358,10 @@ class CommerceCommentView(APIView):
         for i in serializer:
             if(i["reply"] != None):
                 reply = CommerceComments.objects.filter(reply = i["id"])
-                reply = reply[0]
-                reply_data = CommerceCommentsSerializer(reply,many = True).data
-                i["reply"] = reply_data
+                if(len(reply)>0):
+                    reply = reply[0]
+                    reply_data = CommerceCommentsSerializer(reply).data
+                    i["reply"] = reply_data
             final.append(i)
 
         final_response ={
@@ -400,15 +401,16 @@ class CommerceAdminCommentView(APIView):
         if(page and page_size):
             page = int(page)
             page_size = int(page_size)
-            comment = comment[page*page_size:page*page_size+page_size]
+            comment = comment[page*page_size:page_size*(page+1)]
         serializer = CommerceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
             if(i["reply"] != None):
                 reply = CommerceComments.objects.filter(reply = i["id"])
-                reply = reply[0]
-                reply_data = CommerceCommentsSerializer(reply).data
-                i["reply"] = reply_data
+                if(len(reply)>0):
+                    reply = reply[0]
+                    reply_data = CommerceCommentsSerializer(reply).data
+                    i["reply"] = reply_data
             final.append(i)
 
         final_response ={
