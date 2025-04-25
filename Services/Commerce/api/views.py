@@ -357,9 +357,9 @@ class CommerceCommentView(APIView):
         final =[]
         for i in serializer:
             if(i["reply"] != None):
-                reply = CommerceComments.objects.filter(id = i["reply"])
+                reply = CommerceComments.objects.filter(reply = i["id"])
                 reply = reply[0]
-                reply_data = CommerceCommentsSerializer(reply).data
+                reply_data = CommerceCommentsSerializer(reply,many = True).data
                 i["reply"] = reply_data
             final.append(i)
 
@@ -405,7 +405,7 @@ class CommerceAdminCommentView(APIView):
         final =[]
         for i in serializer:
             if(i["reply"] != None):
-                reply = CommerceComments.objects.filter(id = i["reply"])
+                reply = CommerceComments.objects.filter(reply = i["id"])
                 reply = reply[0]
                 reply_data = CommerceCommentsSerializer(reply).data
                 i["reply"] = reply_data

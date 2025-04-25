@@ -283,7 +283,7 @@ class ServiceCommentView(APIView):
         final =[]
         for i in serializer:
             if(i["reply"] != None):
-                reply = ServiceComments.objects.filter(id = i["reply"])
+                reply = ServiceComments.objects.filter(reply = i["id"])
                 reply = reply[0]
                 reply_data = ServiceCommentsSerializer(reply).data
                 i["reply"] = reply_data
@@ -331,7 +331,7 @@ class ServiceAdminCommentView(APIView):
         final =[]
         for i in serializer:
             if(i["reply"] != None):
-                reply = ServiceComments.objects.filter(id = i["reply"])
+                reply = ServiceComments.objects.filter(reply = i["id"])
                 reply = reply[0]
                 reply_data = ServiceCommentsSerializer(reply).data
                 i["reply"] = reply_data
