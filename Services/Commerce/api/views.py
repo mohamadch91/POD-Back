@@ -503,9 +503,15 @@ class CommerceAdminQuestionView(APIView):
             page_size = int(page_size)
             question = question[page*page_size:page*page_size+page_size]
         serializer = CommerceQuestionsSerializer(question,many=True).data
+        final_answer = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = transfer(user_id,'user_data')
+            i["user"] = user
+            final_answer.append(i)
         final_response ={
             "total_count" : total_cout,
-            "data": serializer
+            "data": final_answer
         }
        
         
