@@ -50,6 +50,7 @@ class CommerceComments(models.Model):
 class CommerceQuestions(models.Model):
     id = models.AutoField(primary_key=True) 
     question = models.CharField(max_length = 200)
+    title = models.CharField(max_length = 200,null=True,blank=True)
     answer = models.CharField(max_length = 200,null=True,blank=True)
     user_id = models.IntegerField(null=True,blank=True)
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
