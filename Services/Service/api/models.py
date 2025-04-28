@@ -54,6 +54,7 @@ class ServiceComments(models.Model):
 class ServiceQuestions(models.Model):
     id = models.AutoField(primary_key=True) 
     question = models.CharField(max_length = 200)
+    title = models.CharField(max_length = 200,null=True,blank=True)
     answer = models.CharField(max_length = 200,null=True,blank=True)
     user_id = models.IntegerField(null=True,blank=True)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
@@ -62,7 +63,7 @@ class ServiceQuestions(models.Model):
     
 class ServiceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
-    votes = models.IntegerField()
+    votes = models.FloatField()
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
 
 class ServiceNegotiate(models.Model):

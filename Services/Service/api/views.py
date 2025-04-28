@@ -285,7 +285,14 @@ class ServiceCommentView(APIView):
         for i in serializer:
             reply = ServiceComments.objects.filter(reply = i["id"])
             reply_data = ServiceCommentsSerializer(reply,many=True).data
+            for j in reply_data:
+                user_id= j["user_id"]
+                user = transfer(user_id,'user_data')
+                j["user"] = user
             i["reply"] = reply_data
+            user_id= i["user_id"]
+            user = transfer(user_id,'user_data')
+            i["user"] = user
             final.append(i)
 
         final_response ={
@@ -333,7 +340,14 @@ class ServiceAdminCommentView(APIView):
         
             reply = ServiceComments.objects.filter(reply = i["id"])
             reply_data = ServiceCommentsSerializer(reply,many=True).data
+            for j in reply_data:
+                user_id= j["user_id"]
+                user = transfer(user_id,'user_data')
+                j["user"] = user
             i["reply"] = reply_data
+            user_id= i["user_id"]
+            user = transfer(user_id,'user_data')
+            i["user"] = user
             final.append(i)
 
         final_response ={
@@ -362,9 +376,15 @@ class ServiceQuestionView(APIView):
             page_size = int(page_size)
             question = question[page*page_size:page*page_size+page_size]
         serializer = ServiceQuestionsSerializer(question,many=True).data
+        final_answer = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = transfer(user_id,'user_data')
+            i["user"] = user
+            final_answer.append(i)
         final_response ={
             "total_count" : total_cout,
-            "data": serializer
+            "data": final_answer
         }
         
 
@@ -399,9 +419,15 @@ class ServiceAdminQuestionView(APIView):
             page_size = int(page_size)
             question = question[page*page_size:page*page_size+page_size]
         serializer = ServiceQuestionsSerializer(question,many=True).data
+        final_answer = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = transfer(user_id,'user_data')
+            i["user"] = user
+            final_answer.append(i)
         final_response ={
             "total_count" : total_cout,
-            "data": serializer
+            "data": final_answer
         }
        
         
