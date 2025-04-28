@@ -61,7 +61,7 @@ class CommerceQuestions(models.Model):
 
 class CommerceVotes(models.Model):
     id = models.AutoField(primary_key=True) 
-    votes = models.IntegerField()
+    votes = models.FloatField()
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
 
 
