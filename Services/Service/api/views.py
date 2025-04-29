@@ -307,6 +307,17 @@ class ServiceCommentView(APIView):
         serializer = ServiceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
+            vote = request.data["vote"]
+            service_id = request.data["service"]
+            if(vote):
+                body = {
+                    "commerce": request.data["commerce"],
+                    "votes" : vote
+                }
+                vote_serializer = ServiceVotesSerializer(data = body)
+                if(vote_serializer.is_valid()):
+                    vote_serializer.save()
+
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
