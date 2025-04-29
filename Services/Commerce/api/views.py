@@ -362,11 +362,11 @@ class CommerceCommentView(APIView):
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(user_id,'user_data')
+                user = transfer(json.dumps(user_id),'user_data')
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(user_id,'user_data')
+            user = transfer(json.dumps(user_id),'user_data')
             i["user"] = user
             final.append(i)
 
@@ -426,11 +426,11 @@ class CommerceAdminCommentView(APIView):
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(user_id,'user_data')
+                user = transfer(json.dumps(user_id),'user_data')
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(user_id,'user_data')
+            user = transfer(json.dumps(user_id),'user_data')
             i["user"] = user
             final.append(i)
 
@@ -463,7 +463,7 @@ class CommerceQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(user_id,'user_data')
+            user = transfer(json.dumps(user_id),'user_data')
             i["user"] = user
             final_answer.append(i)
         final_response ={
@@ -506,7 +506,7 @@ class CommerceAdminQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(user_id,'user_data')
+            user = transfer(json.dumps(user_id),'user_data')
             i["user"] = user
             final_answer.append(i)
         final_response ={
