@@ -38,8 +38,10 @@ def on_user_detail_request(ch, method, props, body):
                 user= get_object_or_404(User,pk =user_id)
                 if(isinstance(user, LegalUser)):
                     serializer = LegalUserSerializer(user)
-                else:
+                elif(isinstance(user, RealUser)):
                         serializer =RealUserSerializer(user)
+                else:
+                    serializer = UserSerializer(user)
                 
                 final_response = json.dumps(serializer.data)
             except Exception as e:
