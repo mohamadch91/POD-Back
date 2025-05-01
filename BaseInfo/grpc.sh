@@ -11,7 +11,7 @@ python3 manage.py loaddata api/fixtures/city.json
 python3 manage.py loaddata api/fixtures/sale_method.json
 python3 manage.py loaddata api/fixtures/delivery_method.json
 
-python3 manage.py pubSub > a.txt  2>&1 &
 echo -ne '\n'
 echo -ne '\n'
 
+# python3 -m grpc_tools.protoc --proto_path=./protos --python_out=./ --grpc_python_out=./ ./protos/base_info.proto

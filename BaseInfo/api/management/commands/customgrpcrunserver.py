@@ -5,7 +5,7 @@ class Command(GrpcRunserverCommand):
     requires_system_checks = []
     # change port
     # set address here 
-    address = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
+    address = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
     def handle(self, *args, **options):
         self.address = self.address
         self.development_mode = options['development_mode']
