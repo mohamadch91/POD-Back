@@ -18,6 +18,11 @@ from django.urls import path,include
 from . import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import *
+import base_info_pb2_grpc
+from api.services import BaseInfoService
 urlpatterns = [
     path('baseInfo/',include('api.urls'))
 ]
+
+def grpc_handlers(server):
+    base_info_pb2_grpc.add_BaseInfoControllerServicer_to_server(BaseInfoService.as_servicer(), server)

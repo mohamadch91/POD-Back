@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x0e\x61uthentication\"]\n\x04User\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05phone\x18\x02 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x03 \x01(\t\x12\x12\n\nfirst_name\x18\x04 \x01(\t\x12\x11\n\tlast_name\x18\x05 \x01(\t\"$\n\x15\x41uthenticationRequest\x12\x0b\n\x03jwt\x18\x01 \x01(\t\"\x1c\n\x0eGetUserRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\xa4\x01\n\x0eUserController\x12O\n\x0e\x41uthentication\x12%.authentication.AuthenticationRequest\x1a\x14.authentication.User\"\x00\x12\x41\n\x07GetUser\x12\x1e.authentication.GetUserRequest\x1a\x14.authentication.User\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x0e\x61uthentication\"s\n\x04User\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05phone\x18\x02 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x03 \x01(\t\x12\x12\n\nfirst_name\x18\x04 \x01(\t\x12\x11\n\tlast_name\x18\x05 \x01(\t\x12\x14\n\x0cis_superuser\x18\x06 \x01(\x08\"$\n\x15\x41uthenticationRequest\x12\x0b\n\x03jwt\x18\x01 \x01(\t\"\x1c\n\x0eGetUserRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x32\xa4\x01\n\x0eUserController\x12O\n\x0e\x41uthentication\x12%.authentication.AuthenticationRequest\x1a\x14.authentication.User\"\x00\x12\x41\n\x07GetUser\x12\x1e.authentication.GetUserRequest\x1a\x14.authentication.User\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,11 +32,11 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_USER']._serialized_start=30
-  _globals['_USER']._serialized_end=123
-  _globals['_AUTHENTICATIONREQUEST']._serialized_start=125
-  _globals['_AUTHENTICATIONREQUEST']._serialized_end=161
-  _globals['_GETUSERREQUEST']._serialized_start=163
-  _globals['_GETUSERREQUEST']._serialized_end=191
-  _globals['_USERCONTROLLER']._serialized_start=194
-  _globals['_USERCONTROLLER']._serialized_end=358
+  _globals['_USER']._serialized_end=145
+  _globals['_AUTHENTICATIONREQUEST']._serialized_start=147
+  _globals['_AUTHENTICATIONREQUEST']._serialized_end=183
+  _globals['_GETUSERREQUEST']._serialized_start=185
+  _globals['_GETUSERREQUEST']._serialized_end=213
+  _globals['_USERCONTROLLER']._serialized_start=216
+  _globals['_USERCONTROLLER']._serialized_end=380
 # @@protoc_insertion_point(module_scope)

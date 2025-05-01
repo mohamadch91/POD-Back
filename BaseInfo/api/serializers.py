@@ -1,8 +1,10 @@
 
 from rest_framework import serializers
 from .models import *
+from django_grpc_framework import proto_serializers
+import base_info_pb2
+from google.protobuf.json_format import MessageToDict, ParseDict
 
-  
 
 class ProvinceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,3 +76,27 @@ class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderStatus
         fields = '__all__'
+
+
+class BaseInfoProtoSerializer(proto_serializers.ProtoSerializer):
+    key = serializers.CharField()
+    value = serializers.CharField()
+    class Meta:
+        proto_class = base_info_pb2.BaseInfoRequest
+        fields = ['name', 'id']
+    def message_to_data(self, message):
+        """Protobuf message -> Dict of python primitive datatypes.
+        """
+        return MessageToDict(message)
+
+
+class BaseInfoRequestProtoSerializer(proto_serializers.ProtoSerializer):
+    baseInfo =serializers.ListField(child=BaseInfoProtoSerializer())
+    class Meta:
+        proto_class = base_info_pb2.GetBaseInfoResponse
+        fields = '__all__'
+    def message_to_data(self, message):
+        """Protobuf message -> Dict of python primitive datatypes.
+        """
+        return MessageToDict(message)
+       

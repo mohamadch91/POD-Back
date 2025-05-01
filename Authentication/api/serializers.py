@@ -104,16 +104,16 @@ class UserProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:
         model = User
         proto_class = user_pb2.User
-        fields = ['id','phone']
+        fields = ['id','phone','is_superuser']
 
 class LegallUserProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:
         model = LegalUser
         proto_class = user_pb2.User
-        fields = ['id','phone','companyName','companyID','companyTitle']
+        fields = ['id','phone','companyName','companyID','companyTitle','is_superuser']
 
 class RealUserProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:
         model = RealUser
         proto_class = user_pb2.User
-        fields = ['id','phone','first_name','last_name']
+        fields = ['id','phone','first_name','last_name','is_superuser']

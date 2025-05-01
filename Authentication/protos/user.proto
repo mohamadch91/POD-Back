@@ -14,6 +14,7 @@ message User {
     string companyName = 3;
     string first_name = 4;
     string last_name = 5;
+    bool is_superuser = 6;
 }
 
 

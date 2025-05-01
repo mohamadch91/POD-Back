@@ -3,24 +3,30 @@ syntax = "proto3";
 package authentication;
 
 
-service UserController {
-    rpc Authentication(AuthenticationRequest) returns (User){}
-    rpc GetUser(GetUserRequest) returns (User){};
-}
-
-message User {
-    int32 id = 1;
-    string phone = 2;
-    string companyName = 3;
-    string first_name = 4;
-    string last_name = 5;
+service BaseInfoController {
+    rpc GetInfo(GetBaseInfoRequest) returns (GetBaseInfoResponse){}
+ 
 }
 
 
-message AuthenticationRequest {
-    string jwt = 1;
+message GetBaseInfoRequest{
+    repeated BaseInfoRequest baseInfo = 1;
+
+
+}
+message BaseInfoRequest {
+    string name = 1;
+    int32 id = 2;
+
 }
 
-message GetUserRequest{
-    int32 id = 1;
+message GetBaseInfoResponse{
+    repeated BaseInfoResponse baseInfo = 1;
+
 }
+
+message BaseInfoResponse{
+    string key = 1;
+    string value = 2;
+}
+
