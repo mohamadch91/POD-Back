@@ -23,6 +23,8 @@ from rest_framework import permissions
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import *
+from api.services import UserService
+import user_pb2_grpc
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/',include('api.urls')),
@@ -34,3 +36,6 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+def grpc_handlers(server):
+    user_pb2_grpc.add_UserControllerServicer_to_server(UserService.as_servicer(), server)

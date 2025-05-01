@@ -25,9 +25,4 @@ urlpatterns = [
     # path('login_to_user/', loginUserView.as_view(), name='l user'),
     # path('user_ip/', UseripView.as_view(), name='l user'),
 
-
-    
-    
-
-
 ]

@@ -7,7 +7,8 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
 from django.contrib.auth.hashers import make_password
-
+from django_grpc_framework import proto_serializers
+import user_pb2
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,11 +100,20 @@ class WalletSerializer(serializers.ModelSerializer):
         model =Wallet
         fields = '__all__'
 
-# class VerifyOtpResponseSuccesSerializer(serializers.Serializer):
-#       login_data = ObtainTokenSerializer,
-#       user_data = UserSerializer
+class UserProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = User
+        proto_class = user_pb2.User
+        fields = ['id','phone']
 
-# class userIpSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = userIp
-#         fields = '__all__'
+class LegallUserProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = LegalUser
+        proto_class = user_pb2.User
+        fields = ['id','phone','companyName','companyID','companyTitle']
+
+class RealUserProtoSerializer(proto_serializers.ModelProtoSerializer):
+    class Meta:
+        model = RealUser
+        proto_class = user_pb2.User
+        fields = ['id','phone','first_name','last_name']

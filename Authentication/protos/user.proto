@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package authentication;
+
+
+service UserController {
+    rpc Authentication(AuthenticationRequest) returns (User){}
+    rpc GetUser(GetUserRequest) returns (User){};
+}
+
+message User {
+    int32 id = 1;
+    string phone = 2;
+    string companyName = 3;
+    string first_name = 4;
+    string last_name = 5;
+}
+
+
+message AuthenticationRequest {
+    string jwt = 1;
+}
+
+message GetUserRequest{
+    int32 id = 1;
+}
