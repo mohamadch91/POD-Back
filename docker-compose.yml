@@ -6,7 +6,7 @@ services:
     build: ./Authentication
     container_name: authentication
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8001:8000
     env_file:
@@ -18,14 +18,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+
   baseInfo:
     image: baseinfo
     build: ./BaseInfo
     container_name: baseInfo
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8002:8000
     volumes:
@@ -37,15 +36,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-  
+
   commerce:
     image: commerce:latest
     build: ./Services/Commerce
     container_name: commerce
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     volumes:
       - ./media/pod/commerce/media/:/code/media/
     ports:
@@ -55,8 +52,7 @@ services:
     networks:
         - pod_net
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+
       db:
         condition: service_healthy
 
@@ -66,7 +62,7 @@ services:
     build: ./Services/Service
     container_name: service
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8004:8000
     volumes:
@@ -78,14 +74,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+
   log:
     image: log:latest
     build: ./logs
     container_name: logs
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8005:8000
     networks:
@@ -97,14 +92,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+
   order:
     image: order:latest
     build: ./Services/Order
     container_name: order
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8006:8000
     volumes:
@@ -116,14 +110,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+
   content:
     image: content:latest
     build: ./content
     container_name: content
     command: > 
-      sh -c "./rabbit.sh && python manage.py runserver"
+      sh -c "./grpc.sh && python manage.py runserver"
     ports:
         - 8007:8000
     volumes:
@@ -135,8 +128,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+
   nginx:
     image: nginx:latest
     build: ./configs
@@ -151,7 +143,6 @@ services:
     networks:
         - pod_net
     depends_on:
-      - rabbitmq
       - db
       - authentication
       - baseInfo
@@ -161,21 +152,7 @@ services:
       - order
 
     
-  rabbitmq:
-    image: rabbitmq:3.12.13-management-alpine
-    container_name: 'rabbitmq'
-    env_file:
-      - ./.env
-    ports:
-        - 5672:5672
-        - 15672:15672
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-        - pod_net
+
   db_admin:
     container_name: pgAdmin
     image: dpage/pgadmin4:latest
