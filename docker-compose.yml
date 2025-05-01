@@ -18,6 +18,21 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  authentication-grpc:
+    image: authentication:latest
+    build: ./Authentication
+    container_name: authentication-grpc
+    command: > 
+      sh -c "python manage.py customgrpcrunserver"
+    ports:
+        - 50051:50051
+    env_file:
+      - ./.env
+    networks:
+        - pod_net
+    depends_on:
+      db:
+        condition: service_healthy
 
   baseInfo:
     image: baseinfo
@@ -36,7 +51,21 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
+  baseInfo-grpc:
+    image: baseinfo
+    build: ./BaseInfo
+    container_name: baseInfo-grpc
+    command: > 
+      sh -c "python3 manage.py customgrpcrunserver"
+    ports:
+        - 50052:50052
+    env_file:
+      - .env
+    networks:
+        - pod_net
+    depends_on:
+      db:
+        condition: service_healthy
   commerce:
     image: commerce:latest
     build: ./Services/Commerce
