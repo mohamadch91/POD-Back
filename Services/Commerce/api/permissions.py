@@ -2,7 +2,6 @@ from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .publish import transfer
 def authenitcate (request):
-        print("here")
         jwt_auth = JWTAuthentication()
         header = jwt_auth.get_header(request=request)
         if(header):

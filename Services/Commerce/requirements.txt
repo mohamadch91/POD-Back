@@ -19,3 +19,6 @@ pika==1.3.2
 django-filter==23.3
 gunicorn==23.0.0
 psycopg2-binary==2.9.6
+djangogrpcframework==0.2.1
+grpcio==1.71.0
+grpcio-tools==1.71.0
