@@ -174,7 +174,7 @@ class UserServiceView(generics.RetrieveAPIView):
     queryset =Service.objects.all()
     def get(self, request):
         user = request.user
-        service = get_object_or_404(Service,user_id = user["id"])
+        service = get_object_or_404(Service,user_id = user.id)
         serializer = ServiceSerializer(service,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -183,11 +183,10 @@ class AddServiceView(generics.CreateAPIView):
 
     queryset =Service.objects.all()
     def post(self, request):
-        user,_ = request.user
-        user = json.loads(user)
+        user= request.user
         temp = copy.deepcopy(request.data)
         images = request.FILES.getlist('images')
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = ServiceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()

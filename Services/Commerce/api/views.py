@@ -231,7 +231,7 @@ class UserCommerceView(generics.RetrieveAPIView):
     queryset =Commerce.objects.all()
     def get(self, request):
         user = request.user
-        commerce = Commerce.objects.filter(user_id =user["id"])
+        commerce = Commerce.objects.filter(user_id =user.id)
         serializer = CommerceSerializer(commerce,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
@@ -242,10 +242,9 @@ class AddCommerceView(generics.CreateAPIView):
     queryset =Commerce.objects.all()
     def post(self, request):
         user,_ = request.user
-        user = json.loads(user)
         temp = copy.deepcopy(request.data)
         images = request.FILES.getlist('images')
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
@@ -308,7 +307,7 @@ class NegotiateCommerceView(generics.CreateAPIView):
     def post(self, request):
         user = request.user
         temp = copy.deepcopy(request.data)
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = CommerceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
