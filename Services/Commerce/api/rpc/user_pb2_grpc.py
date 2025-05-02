@@ -3,7 +3,8 @@
 import grpc
 import warnings
 
-import rpc.user_pb2 as user__pb2
+
+from user_pb2 import AuthenticationRequest, User,GetUserRequest
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -36,13 +37,13 @@ class UserControllerStub(object):
         """
         self.Authentication = channel.unary_unary(
                 '/authentication.UserController/Authentication',
-                request_serializer=user__pb2.AuthenticationRequest.SerializeToString,
-                response_deserializer=user__pb2.User.FromString,
+                request_serializer=AuthenticationRequest.SerializeToString,
+                response_deserializer=User.FromString,
                 _registered_method=True)
         self.GetUser = channel.unary_unary(
                 '/authentication.UserController/GetUser',
-                request_serializer=user__pb2.GetUserRequest.SerializeToString,
-                response_deserializer=user__pb2.User.FromString,
+                request_serializer=GetUserRequest.SerializeToString,
+                response_deserializer=User.FromString,
                 _registered_method=True)
 
 
@@ -66,13 +67,13 @@ def add_UserControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Authentication': grpc.unary_unary_rpc_method_handler(
                     servicer.Authentication,
-                    request_deserializer=user__pb2.AuthenticationRequest.FromString,
-                    response_serializer=user__pb2.User.SerializeToString,
+                    request_deserializer=AuthenticationRequest.FromString,
+                    response_serializer=User.SerializeToString,
             ),
             'GetUser': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUser,
-                    request_deserializer=user__pb2.GetUserRequest.FromString,
-                    response_serializer=user__pb2.User.SerializeToString,
+                    request_deserializer=GetUserRequest.FromString,
+                    response_serializer=User.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -100,8 +101,8 @@ class UserController(object):
             request,
             target,
             '/authentication.UserController/Authentication',
-            user__pb2.AuthenticationRequest.SerializeToString,
-            user__pb2.User.FromString,
+            AuthenticationRequest.SerializeToString,
+            User.FromString,
             options,
             channel_credentials,
             insecure,
@@ -127,8 +128,8 @@ class UserController(object):
             request,
             target,
             '/authentication.UserController/GetUser',
-            user__pb2.GetUserRequest.SerializeToString,
-            user__pb2.User.FromString,
+            GetUserRequest.SerializeToString,
+            User.FromString,
             options,
             channel_credentials,
             insecure,

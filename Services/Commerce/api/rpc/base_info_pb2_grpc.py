@@ -3,7 +3,8 @@
 import grpc
 import warnings
 
-import rpc.base_info_pb2 as base__info__pb2
+from .base_info_pb2 import GetBaseInfoRequest, GetBaseInfoResponse
+
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -36,8 +37,8 @@ class BaseInfoControllerStub(object):
         """
         self.GetInfo = channel.unary_unary(
                 '/authentication.BaseInfoController/GetInfo',
-                request_serializer=base__info__pb2.GetBaseInfoRequest.SerializeToString,
-                response_deserializer=base__info__pb2.GetBaseInfoResponse.FromString,
+                request_serializer=GetBaseInfoRequest.SerializeToString,
+                response_deserializer=GetBaseInfoResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +56,8 @@ def add_BaseInfoControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetInfo,
-                    request_deserializer=base__info__pb2.GetBaseInfoRequest.FromString,
-                    response_serializer=base__info__pb2.GetBaseInfoResponse.SerializeToString,
+                    request_deserializer=GetBaseInfoRequest.FromString,
+                    response_serializer=GetBaseInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +85,8 @@ class BaseInfoController(object):
             request,
             target,
             '/authentication.BaseInfoController/GetInfo',
-            base__info__pb2.GetBaseInfoRequest.SerializeToString,
-            base__info__pb2.GetBaseInfoResponse.FromString,
+            GetBaseInfoRequest.SerializeToString,
+            GetBaseInfoResponse.FromString,
             options,
             channel_credentials,
             insecure,
