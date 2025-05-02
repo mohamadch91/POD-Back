@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import grpc 
-from .rpc import base_info_pb2_grpc,base_info_pb2,user_pb2,user_pb2_grpc
+from .rpc import user_pb2,user_pb2_grpc
 import os
 import json
 AUTH_ADDRESS = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
@@ -22,21 +22,15 @@ def get_user(id):
         request = user_pb2.GetUserRequest(id=id)
         try:
             response = stub.GetUser(request)
-            return json.dumps(response)
+            user= {}
+            user['id'] = response.id
+            user['phone'] = response.phone
+            user['companyName'] = response.companyName
+            user['first_name'] = response.first_name
+            user['last_name'] = response.last_name
+
+
         except Exception as e:
             print(f"Error: {e}")
             return None
 
-def get_info(data):
-    with grpc.insecure_channel(BASE_INFO_ADDRESS) as channel:
-        stub = base_info_pb2_grpc.BaseInfoControllerStub(channel)
-        request =[]
-        for i in data:
-            request.append(base_info_pb2.BaseInfoRequest(name=i,id=data[i]))
-        final_request = base_info_pb2.GetBaseInfoRequest(baseInfo=request)
-        try:
-            response = stub.GetInfo(final_request)
-            return response
-        except Exception as e:
-            print(f"Error: {e}")
-            return None

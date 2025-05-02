@@ -22,7 +22,14 @@ def get_user(id):
         request = user_pb2.GetUserRequest(id=id)
         try:
             response = stub.GetUser(request)
-            return json.dumps(response)
+            user= {}
+            user['id'] = response.id
+            user['phone'] = response.phone
+            user['companyName'] = response.companyName
+            user['first_name'] = response.first_name
+            user['last_name'] = response.last_name
+
+
         except Exception as e:
             print(f"Error: {e}")
             return None
