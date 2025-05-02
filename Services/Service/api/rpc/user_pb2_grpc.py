@@ -4,7 +4,7 @@ import grpc
 import warnings
 
 
-from user_pb2 import AuthenticationRequest, User,GetUserRequest
+from .user_pb2 import AuthenticationRequest, User,GetUserRequest
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
