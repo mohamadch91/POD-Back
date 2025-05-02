@@ -9,17 +9,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .permissions import transfer,IsAuthenticatedM
+from .permissions import IsAuthenticated,IsAdminUser
 import copy
 import math
 from django.http import QueryDict
 from django.db.models import Case, When
 from django.db.models import Sum
 import json
+from .publish import get_user,get_info
  
 
 class CommerceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.filter(status=1)
@@ -98,7 +99,7 @@ class CommerceListView(generics.ListAPIView):
     
 
 class CommerceListAdminView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAdminUser]
     queryset =Commerce.objects.all()
     def get(self, request):
         commerce = Commerce.objects.all()
@@ -176,7 +177,7 @@ class CommerceListAdminView(generics.ListAPIView):
         return Response(final_response,status=status.HTTP_200_OK)
 
 class CommerceDetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Commerce.objects.all()
     def get(self, request):
@@ -189,7 +190,8 @@ class CommerceDetailView(generics.RetrieveAPIView):
                 "commerceBrand" : commerce.brand,
                 "commerceCategory" : commerce.category
             }
-            datas= transfer(json.dumps(transfer_data),'base_info')
+            datas= get_info(transfer_data)
+            
             images  = CommerceImages.objects.filter(commerce=i["id"] )
             image_data = CommerceImagesSerializer(images,many=True).data
             img_copy = copy.deepcopy(image_data)
@@ -205,8 +207,14 @@ class CommerceDetailView(generics.RetrieveAPIView):
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
             # final_response["city_id"] = datas["city"]
-            final_response["brand"] = datas["brand"]
-            final_response["category"] = datas["category"]
+            if(datas.baseInfo):
+                datas = datas.baseInfo
+                for j in datas:
+                    if(j.key == "brand"):
+                        final_response["brand"] = j.value
+                    if(j.key == "category"):
+                        final_response["category"] = j.value
+                
             final_response["images"] = img_copy
             final_response["votes"] = sum_votes
 
@@ -215,7 +223,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
     
 
 class UserCommerceView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Commerce.objects.all()
     def get(self, request):
@@ -225,7 +233,7 @@ class UserCommerceView(generics.RetrieveAPIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class AddCommerceView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommerceSerializer
 
     queryset =Commerce.objects.all()
@@ -254,7 +262,7 @@ class AddCommerceView(generics.CreateAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class EditCommerceView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommerceSerializer
     queryset =Commerce.objects.all()
     def put(self, request):
@@ -270,7 +278,7 @@ class EditCommerceView(generics.UpdateAPIView):
      
 
 class DeleteCommerceView(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Commerce.objects.all()
     def delete(self, request):
@@ -280,7 +288,7 @@ class DeleteCommerceView(generics.DestroyAPIView):
         
 
 class ChangeStatusView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAdminUser]
     queryset =Commerce.objects.all()
     def put(self, request):
         id = request.data["id"]
@@ -291,7 +299,7 @@ class ChangeStatusView(generics.UpdateAPIView):
 
 
 class NegotiateCommerceView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommerceNegotiateSerializer
     queryset =CommerceNegotiate.objects.all()
     def post(self, request):
@@ -307,7 +315,7 @@ class NegotiateCommerceView(generics.CreateAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 class NegotiateCommerceAdminView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAdminUser]
     def get(self, request):
         id = request.GET.get("id")
         if(id):
@@ -339,7 +347,7 @@ class NegotiateCommerceAdminView(APIView):
     
 
 class CommerceCommentView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         commerce_id = request.GET.get("commerce_id")
         page= request.GET.get("page")
@@ -362,11 +370,11 @@ class CommerceCommentView(APIView):
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(json.dumps(user_id),'user_data')
+                user = get_user(user_id)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final.append(i)
 
@@ -409,6 +417,7 @@ class CommerceCommentView(APIView):
 
     
 class CommerceAdminCommentView(APIView):
+    permission_classes = [IsAdminUser]
     def get(self,request):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
@@ -426,11 +435,11 @@ class CommerceAdminCommentView(APIView):
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(json.dumps(user_id),'user_data')
+                user = get_user(user_id)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final.append(i)
 
@@ -445,7 +454,7 @@ class CommerceAdminCommentView(APIView):
     
 
 class CommerceQuestionView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         commerce_id = request.GET.get("commerce_id")
         page= request.GET.get("page")
@@ -463,7 +472,7 @@ class CommerceQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final_answer.append(i)
         final_response ={
@@ -492,6 +501,7 @@ class CommerceQuestionView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class CommerceAdminQuestionView(APIView):
+    permission_classes = [IsAdminUser]
 
     def get(self,request):
         page= request.GET.get("page")
@@ -506,7 +516,11 @@ class CommerceAdminQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
+            if(user):
+                user = user.user
+            else:
+                user = None
             i["user"] = user
             final_answer.append(i)
         final_response ={

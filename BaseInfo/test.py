@@ -38,7 +38,7 @@ with grpc.insecure_channel('localhost:50052') as channel:
     
 
     response = stub.GetInfo(base_info_pb2.GetBaseInfoRequest(baseInfo=[request]))
-    print(response)
+    print(response.baseInfo)
   
 
     
