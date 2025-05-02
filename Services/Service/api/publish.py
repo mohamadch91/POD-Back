@@ -28,6 +28,7 @@ def get_user(id):
             user['companyName'] = response.companyName
             user['first_name'] = response.first_name
             user['last_name'] = response.last_name
+            return user
 
 
         except Exception as e:
