@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import grpc 
-from rpc import base_info_pb2_grpc,base_info_pb2,user_pb2,user_pb2_grpc
+from .rpc import base_info_pb2_grpc,base_info_pb2,user_pb2,user_pb2_grpc
 import os
 AUTH_ADDRESS = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
 BASE_INFO_ADDRESS = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
