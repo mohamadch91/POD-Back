@@ -328,10 +328,9 @@ class ServiceCommentView(APIView):
         if(serializer.is_valid()):
             serializer.save()
             vote = request.data["vote"]
-            service_id = request.data["service"]
             if(vote):
                 body = {
-                    "commerce": request.data["commerce"],
+                    "service": request.data["service"],
                     "votes" : vote
                 }
                 vote_serializer = ServiceVotesSerializer(data = body)
