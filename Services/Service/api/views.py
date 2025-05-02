@@ -247,13 +247,11 @@ class ChangeStatusView(generics.UpdateAPIView):
 
 class NegotiateServiceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-
     queryset =Service.objects.all()
     def post(self, request):
         user = request.user
-        print(user)
         temp = copy.deepcopy(request.data)
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = ServiceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
