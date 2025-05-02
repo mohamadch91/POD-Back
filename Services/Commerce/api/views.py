@@ -374,6 +374,7 @@ class CommerceCommentView(APIView):
             for j in reply_data:
                 user_id= j["user_id"]
                 user = get_user(user_id)
+                print(user)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]

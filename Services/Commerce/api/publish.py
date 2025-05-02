@@ -21,6 +21,7 @@ def get_user(id):
         request = user_pb2.GetUserRequest(id=id)
         try:
             response = stub.GetUser(request)
+            print(response)
             return json.dump(response)
         except Exception as e:
             print(f"Error: {e}")
