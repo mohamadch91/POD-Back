@@ -18,7 +18,7 @@ class IsAuthenticated(permissions.BasePermission):
 
 
     def has_permission(self, request, view):
-        user = authenitcate(request)
+        user,_ = authenitcate(request)
         # user=None
         if( user):
             request.user = user
