@@ -3,6 +3,7 @@
 import grpc 
 from .rpc import user_pb2,user_pb2_grpc
 import os
+import json
 AUTH_ADDRESS = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
 BASE_INFO_ADDRESS = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
 
@@ -21,7 +22,7 @@ def get_user(id):
         request = user_pb2.GetUserRequest(id=id)
         try:
             response = stub.GetUser(request)
-            return response
+            return json.dump(response)
         except Exception as e:
             print(f"Error: {e}")
             return None
