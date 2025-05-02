@@ -10,13 +10,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .permissions import IsAuthenticatedM
+from .permissions import IsAuthenticated,IsAdminUser
 import copy
 from django.db.models import Case, When,Sum
-from . publish import transfer
+from .publish import get_info,get_user
 import json
 class ServiceListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     queryset =Service.objects.all()
     def get(self, request):
         service = Service.objects.filter(status = 1)
@@ -46,7 +46,7 @@ class ServiceListView(generics.ListAPIView):
               
                 "serviceCategory" : i["category"]
             }
-            datas= transfer(json.dumps(transfer_data),'base_info')
+            datas= get_info(transfer_data)
             data ={
                 "id":i["id"],
                 "name":i["name"],
@@ -55,8 +55,14 @@ class ServiceListView(generics.ListAPIView):
                 "image":img,
                 "available" : i["available_count"],
                 "sold" : 2455,
-                "category" : datas["category"]
+                "category" : None
             }
+            if(datas.baseInfo):
+                datas = datas.baseInfo
+                for j in datas:
+                    if(j.key == "category"):
+                        data["category"] = j.value
+
             answer.append(data)
        
         return Response(answer,status=status.HTTP_200_OK)
@@ -64,7 +70,7 @@ class ServiceListView(generics.ListAPIView):
 
 
 class ServiceListAdminView(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAdminUser]
     queryset =Service.objects.all()
     def get(self, request):
         service = Service.objects.all()
@@ -91,7 +97,7 @@ class ServiceListAdminView(generics.ListAPIView):
               
                 "serviceCategory" : i["category"]
             }
-            datas= transfer(json.dumps(transfer_data),'base_info')
+            datas= get_info(transfer_data)
             data ={
                 "id":i["id"],
                 "name":i["name"],
@@ -100,15 +106,21 @@ class ServiceListAdminView(generics.ListAPIView):
                 "image":img,
                 "available" : i["available_count"],
                 "sold" : 2455,
-                "category" : datas["category"]
+                "category" : None
             }
+            if(datas.baseInfo):
+                datas = datas.baseInfo
+                for j in datas:
+                    if(j.key == "category"):
+                        data["category"] = j.value
+
             answer.append(data)
        
         return Response(answer,status=status.HTTP_200_OK)
     
 
 class ServiceDetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def get(self, request):
@@ -122,7 +134,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
                 "serviceCategory" : service.category,
 
             }
-            datas= transfer(json.dumps(transfer_data),'base_info','service')
+            datas= get_info(transfer_data)
             images  = ServiceImages.objects.filter(service=i["id"] )
             image_data = ServiceImagesSerializer(images,many=True).data
           
@@ -135,10 +147,18 @@ class ServiceDetailView(generics.RetrieveAPIView):
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
             final_response["city_id"] = datas["city"]
-            final_response["brand"] = datas["brand"]
-            final_response["category"] = datas["category"]
+            final_response["brand"] = None
+            final_response["category"] = None
             final_response["images"] = image_data
             final_response["votes"] = sum_votes
+            if(datas.baseInfo):
+                datas = datas.baseInfo
+                for j in datas:
+                    if(j.key == "category"):
+                        final_response["category"] = j.value
+                    if(j.key == "brand"):
+                        final_response["brand"] = j.value
+
             
             return Response(final_response,status=status.HTTP_200_OK)
         return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
@@ -146,7 +166,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
     
 
 class UserServiceView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def get(self, request):
@@ -156,7 +176,7 @@ class UserServiceView(generics.RetrieveAPIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class AddServiceView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def post(self, request):
@@ -184,7 +204,7 @@ class AddServiceView(generics.CreateAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class EditServiceView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def put(self, request):
@@ -200,7 +220,7 @@ class EditServiceView(generics.UpdateAPIView):
      
 
 class DeleteServiceView(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def delete(self, request):
@@ -211,7 +231,7 @@ class DeleteServiceView(generics.DestroyAPIView):
         
      
 class ChangeStatusView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def put(self, request):
@@ -223,7 +243,7 @@ class ChangeStatusView(generics.UpdateAPIView):
     
 
 class NegotiateServiceView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
     def post(self, request):
@@ -239,7 +259,7 @@ class NegotiateServiceView(generics.CreateAPIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class NegotiateServiceAdminView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAdminUser]
     def get(self, request):
         negotiate = ServiceNegotiate.objects.all()
         serializer = ServiceNegotiateSerializer(negotiate,many=True)
@@ -265,7 +285,7 @@ class NegotiateServiceAdminView(APIView):
 
 
 class ServiceCommentView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         service_id = request.GET.get("service_id")
         page= request.GET.get("page")
@@ -287,11 +307,11 @@ class ServiceCommentView(APIView):
             reply_data = ServiceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(json.dumps(user_id),'user_data')
+                user = get_user(user_id)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final.append(i)
 
@@ -335,6 +355,7 @@ class ServiceCommentView(APIView):
 
     
 class ServiceAdminCommentView(APIView):
+    permission_classes = [IsAdminUser]
     def get(self,request):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
@@ -353,11 +374,11 @@ class ServiceAdminCommentView(APIView):
             reply_data = ServiceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
-                user = transfer(json.dumps(user_id),'user_data')
+                user = get_user(user_id)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final.append(i)
 
@@ -372,7 +393,7 @@ class ServiceAdminCommentView(APIView):
     
 
 class ServiceQuestionView(APIView):
-    permission_classes = [IsAuthenticatedM]
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         service_id = request.GET.get("service_id")
         page= request.GET.get("page")
@@ -390,7 +411,7 @@ class ServiceQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final_answer.append(i)
         final_response ={
@@ -419,6 +440,7 @@ class ServiceQuestionView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class ServiceAdminQuestionView(APIView):
+    permission_classes = [IsAdminUser]
 
     def get(self,request):
         page= request.GET.get("page")
@@ -433,7 +455,7 @@ class ServiceAdminQuestionView(APIView):
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
-            user = transfer(json.dumps(user_id),'user_data')
+            user = get_user(user_id)
             i["user"] = user
             final_answer.append(i)
         final_response ={

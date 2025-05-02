@@ -207,6 +207,11 @@ class CommerceDetailView(generics.RetrieveAPIView):
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
             # final_response["city_id"] = datas["city"]
+            
+            final_response["images"] = img_copy
+            final_response["votes"] = sum_votes
+            final_response["brand"] = None
+            final_response["category"] = None
             if(datas.baseInfo):
                 datas = datas.baseInfo
                 for j in datas:
@@ -215,8 +220,6 @@ class CommerceDetailView(generics.RetrieveAPIView):
                     if(j.key == "category"):
                         final_response["category"] = j.value
                 
-            final_response["images"] = img_copy
-            final_response["votes"] = sum_votes
 
             return Response(final_response,status=status.HTTP_200_OK)
         return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
