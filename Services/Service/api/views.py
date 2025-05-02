@@ -250,10 +250,9 @@ class NegotiateServiceView(generics.CreateAPIView):
 
     queryset =Service.objects.all()
     def post(self, request):
-        user,_ = request.user
-        user = json.loads(user)
+        user = request.user
         temp = copy.deepcopy(request.data)
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = ServiceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()

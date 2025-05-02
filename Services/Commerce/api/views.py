@@ -306,10 +306,9 @@ class NegotiateCommerceView(generics.CreateAPIView):
     serializer_class = CommerceNegotiateSerializer
     queryset =CommerceNegotiate.objects.all()
     def post(self, request):
-        user,_ = request.user
-        user = json.loads(user)
+        user = request.user
         temp = copy.deepcopy(request.data)
-        temp["user_id"] = user["id"]
+        temp["user_id"] = user.id
         serializer = CommerceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
