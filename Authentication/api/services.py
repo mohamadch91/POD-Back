@@ -47,9 +47,11 @@ class UserService(Service):
                 serializer = UserProtoSerializer(user)
             return serializer.message
         except Exception as e:
+            print(e)
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details('User not found')
-            return empty_pb2.Empty()
+            context.abort()
+
     
 
                 
