@@ -22,7 +22,7 @@ def get_user(id):
         try:
             response = stub.GetUser(request)
             print(response)
-            return json.dump(response)
+            return json.dumps(response)
         except Exception as e:
             print(f"Error: {e}")
             return None
