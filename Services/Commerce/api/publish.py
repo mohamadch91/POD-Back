@@ -9,7 +9,7 @@ BASE_INFO_ADDRESS = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
 def authenticate(jwt):
     with grpc.insecure_channel(AUTH_ADDRESS) as channel:
         stub = user_pb2_grpc.UserControllerStub(channel)
-        request = user_pb2.AuthenticateRequest(token=jwt)
+        request = user_pb2.AuthenticationRequest(token=jwt)
         response = stub.Authentication(request)
         return response
 
