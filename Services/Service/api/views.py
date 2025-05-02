@@ -146,7 +146,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
                 sum_votes /= len(votes)
             sum_votes =float(format(sum_votes, ".2f"))
             final_response =copy.deepcopy(i)
-            final_response["city_id"] = datas["city"]
+            final_response["city_id"] = None
             final_response["brand"] = None
             final_response["category"] = None
             final_response["images"] = image_data
@@ -158,6 +158,9 @@ class ServiceDetailView(generics.RetrieveAPIView):
                         final_response["category"] = j.value
                     if(j.key == "brand"):
                         final_response["brand"] = j.value
+                    if (j.key == "city"):
+                        final_response["city"] = j.value
+
 
             
             return Response(final_response,status=status.HTTP_200_OK)
