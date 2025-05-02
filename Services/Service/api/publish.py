@@ -19,8 +19,12 @@ def get_user(id):
     with grpc.insecure_channel(AUTH_ADDRESS) as channel:
         stub = user_pb2_grpc.UserControllerStub(channel)
         request = user_pb2.GetUserRequest(id=id)
-        response = stub.GetUser(request)
-        return response
+        try:
+            response = stub.GetUser(request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
 
 def get_info(data):
     with grpc.insecure_channel(BASE_INFO_ADDRESS) as channel:
@@ -29,5 +33,9 @@ def get_info(data):
         for i in data:
             request.append(base_info_pb2.BaseInfoRequest(name=i,id=data[i]))
         final_request = base_info_pb2.GetBaseInfoRequest(baseInfo=request)
-        response = stub.GetInfo(final_request)
-        return response
+        try:
+            response = stub.GetInfo(final_request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None

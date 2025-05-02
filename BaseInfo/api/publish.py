@@ -19,6 +19,10 @@ def get_user(id):
     with grpc.insecure_channel(AUTH_ADDRESS) as channel:
         stub = user_pb2_grpc.UserControllerStub(channel)
         request = user_pb2.GetUserRequest(id=id)
-        response = stub.GetUser(request)
-        return response
+        try:
+            response = stub.GetUser(request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
 
