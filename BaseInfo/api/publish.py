@@ -11,8 +11,12 @@ def authenticate(jwt):
     with grpc.insecure_channel(AUTH_ADDRESS) as channel:
         stub = user_pb2_grpc.UserControllerStub(channel)
         request = user_pb2.AuthenticationRequest(jwt=jwt)
-        response = stub.Authentication(request)
-        return response
+        try:
+            response = stub.Authentication(request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
 
     
 

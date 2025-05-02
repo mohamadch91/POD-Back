@@ -30,6 +30,7 @@ class UserService(Service):
         except:
             context.set_code(grpc.StatusCode.UNAUTHENTICATED)
             context.set_details('Invalid token')
+            context.abort()
             return empty_pb2.Empty()
     def GetUser(self, request, context):
         """
