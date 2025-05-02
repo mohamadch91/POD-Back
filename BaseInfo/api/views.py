@@ -8,7 +8,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import *
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -16,7 +15,7 @@ from rest_framework import status
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from django.shortcuts import get_object_or_404
 from itertools import chain
-
+from .permissions import IsAuthenticated,IsAdminUser
 
 class ProvinceView(generics.ListAPIView):
     queryset =Province.objects.all()
@@ -122,6 +121,7 @@ class OrderStatusView(generics.ListAPIView):
     
 
 class CommerceBrandsAdminView(APIView):
+    permission_classes = [IsAdminUser]
 
 
     def get(self, request):
@@ -151,6 +151,8 @@ class CommerceBrandsAdminView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CommerceCategoryAdminView(APIView):
+    permission_classes = [IsAdminUser]
+
 
 
     def get(self, request):
@@ -180,6 +182,8 @@ class CommerceCategoryAdminView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class ServiceBrandsAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
     
         def get(self, request):
             serviceBrands = ServiceBrands.objects.all()
@@ -208,6 +212,8 @@ class ServiceBrandsAdminView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ServiceCategoryAdminView(APIView):
+            permission_classes = [IsAdminUser]
+            
         
             def get(self, request):
                 serviceCategories = ServiceCategory.objects.all()
@@ -237,6 +243,8 @@ class ServiceCategoryAdminView(APIView):
             
 
 class SaleMethodsAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
         
         def get(self, request):
             saleMethods = SaleMethod.objects.all()
@@ -266,6 +274,8 @@ class SaleMethodsAdminView(APIView):
         
 
 class DeliveryMethodsAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
     
         def get(self, request):
             deliveryMethods = DeliveryMethod.objects.all()
@@ -294,6 +304,8 @@ class DeliveryMethodsAdminView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CommerceStatusAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
     
         def get(self, request):
             commerceStatus = CommerceStatus.objects.all()
@@ -322,6 +334,8 @@ class CommerceStatusAdminView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
     
 class ServiceStatusAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
 
         def get(self, request):
             serviceStatus = ServiceStatus.objects.all()
@@ -350,6 +364,8 @@ class ServiceStatusAdminView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ActivityTypeAdminView(APIView):
+        permission_classes = [IsAdminUser]
+        
     
         def get(self, request):
             activityTypes = ActivityType.objects.all()
@@ -379,6 +395,8 @@ class ActivityTypeAdminView(APIView):
 
 
 class BusinessTypeAdminView(APIView):
+            permission_classes = [IsAdminUser]
+            
         
             def get(self, request):
                 businessTypes = BusinessVariety.objects.all()
@@ -408,7 +426,8 @@ class BusinessTypeAdminView(APIView):
             
 
 class OrderStatusAdminView(APIView):
-    
+        permission_classes = [IsAdminUser]
+
         def get(self, request):
             orderStatuses = OrderStatus.objects.all()
             serializer = OrderStatusSerializer(orderStatuses,many=True)
