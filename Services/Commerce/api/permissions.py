@@ -35,7 +35,7 @@ class IsAdminUser(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        user = authenitcate(request)
+        user,_ = authenitcate(request)
         if(user and user.is_superuser):
             request.user = user
             return True
