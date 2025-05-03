@@ -10,9 +10,9 @@ def authenitcate (request):
                 response = authenticate(token)
                 if response:
                     return response , token
-                return None
-            return None
-        return None
+                return None,None
+            return None,None
+        return None,None
 
 class IsAuthenticated(permissions.BasePermission):
 
