@@ -242,7 +242,7 @@ class AddCommerceView(generics.CreateAPIView):
 
     queryset =Commerce.objects.all()
     def post(self, request):
-        user,_ = request.user
+        user = request.user
         temp = copy.deepcopy(request.data)
         images = request.FILES.getlist('images')
         temp["user_id"] = user.id
