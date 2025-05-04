@@ -519,10 +519,6 @@ class CommerceAdminQuestionView(APIView):
         for i in serializer:
             user_id= i["user_id"]
             user = get_user(user_id)
-            if(user):
-                user = user
-            else:
-                user = None
             i["user"] = user
             final_answer.append(i)
         final_response ={
