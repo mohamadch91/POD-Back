@@ -520,7 +520,7 @@ class CommerceAdminQuestionView(APIView):
             user_id= i["user_id"]
             user = get_user(user_id)
             if(user):
-                user = user.user
+                user = user
             else:
                 user = None
             i["user"] = user

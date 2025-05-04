@@ -215,7 +215,7 @@ class LegalUserView(APIView):
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
 class UserAdminView(APIView):
-    permission_classes = (IsAdminUser)
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
         users = User.objects.all()
@@ -224,7 +224,7 @@ class UserAdminView(APIView):
 
 
 class UserStatusView(APIView):
-    permission_classes = (IsAdminUser)
+    permission_classes = [IsAdminUser]
 
     def post(self, request):
         user = get_object_or_404(User,pk=request.data["id"])
