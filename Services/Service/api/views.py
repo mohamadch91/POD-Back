@@ -106,7 +106,9 @@ class ServiceListAdminView(generics.ListAPIView):
                 "image":img,
                 "available" : i["available_count"],
                 "sold" : 2455,
-                "category" : None
+                "category" : None,
+                "status":i["status"],
+
             }
             if(datas.baseInfo):
                 datas = datas.baseInfo

@@ -167,6 +167,7 @@ class CommerceListAdminView(generics.ListAPIView):
                 "description":i["description"],
                 "price":i["price"],
                 "image":img,
+                "status":i["status"],
                 "votes" : float(format(sum_votes, ".2f"))
             }
             answer.append(data)
