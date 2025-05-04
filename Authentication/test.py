@@ -1,26 +1,14 @@
-#!/usr/bin/env python
 
+import json
 import grpc 
-from .rpc import user_pb2,user_pb2_grpc
+import user_pb2,user_pb2_grpc
 import os
+import json
 AUTH_ADDRESS = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
 BASE_INFO_ADDRESS = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
 
-def authenticate(jwt):
-    with grpc.insecure_channel(AUTH_ADDRESS) as channel:
-        stub = user_pb2_grpc.UserControllerStub(channel)
-        request = user_pb2.AuthenticationRequest(jwt=jwt)
-        try:
-            response = stub.Authentication(request)
-            return response
-        except Exception as e:
-            print(f"Error: {e}")
-            return None
-
-    
-
 def get_user(id):
-    with grpc.insecure_channel(AUTH_ADDRESS) as channel:
+    with grpc.insecure_channel('localhost:50051') as channel:
         stub = user_pb2_grpc.UserControllerStub(channel)
         request = user_pb2.GetUserRequest(id=id)
         try:
@@ -38,3 +26,5 @@ def get_user(id):
             print(f"Error: {e}")
             return None
 
+
+print(get_user(2))

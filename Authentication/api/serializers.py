@@ -27,14 +27,12 @@ class LegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
         fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
-    def validate_password(self, value: str) -> str:
-        """
-        Hash value passed by user.
-
-        :param value: password of a user
-        :return: a hashed version of the password
-        """
-        return make_password(value)   
+class RegisterLegalUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LegalUser
+        fields = ['user_ptr_id','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle','is_active','is_superuser','is_staff']
+  
+  
 
 class RealUserSerializer(serializers.ModelSerializer):
     class Meta:

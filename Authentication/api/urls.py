@@ -1,7 +1,10 @@
 from django.urls import path
 from .views import *
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView,TokenVerifyView
-
+from django.contrib import admin
+from authentication import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import *
 
 urlpatterns = [
   
@@ -19,6 +22,7 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='profile'),
     path('user-admin/', UserAdminView.as_view(), name='profile'),
     path('user/status/', UserStatusView.as_view(), name='profile'),
+    path('admin/', admin.site.urls),
 
 
     # path('currupted/', CurruptedView.as_view(), name='currupted'),
@@ -26,3 +30,5 @@ urlpatterns = [
     # path('user_ip/', UseripView.as_view(), name='l user'),
 
 ]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

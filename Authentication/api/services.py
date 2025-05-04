@@ -40,12 +40,16 @@ class UserService(Service):
         user_id = request.id
         try:
             user= get_object_or_404(User,pk =user_id)
-            if(isinstance(user, LegalUser)):
+            try:
+                user= get_object_or_404(LegalUser,phone =user.phone)
                 serializer = LegallUserProtoSerializer(user)
-            elif(isinstance(user, RealUser)):
-                    serializer =RealUserProtoSerializer(user)
-            else:
-                serializer = UserProtoSerializer(user)
+            except:
+                try:
+                    user= get_object_or_404(RealUser,phone =user.phone)
+                    serializer = RealUserProtoSerializer(user)
+                except:
+                    serializer = UserProtoSerializer(user)
+            
             return serializer.message
         except Exception as e:
             context.set_code(grpc.StatusCode.NOT_FOUND)

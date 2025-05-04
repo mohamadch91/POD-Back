@@ -19,6 +19,8 @@ from django.shortcuts import get_object_or_404
 from itertools import chain
 import copy
 from .tests import *
+from django.db import connection
+
 
 class UpdateProfileView(APIView):
     permission_classes=(IsAuthenticated,)
@@ -36,18 +38,48 @@ class UpdateProfileView(APIView):
                 return Response(ser.data,status=status.HTTP_202_ACCEPTED)
             return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
         if(type=="legal"):
-            user = get_object_or_404(User,phone=phone)
-            user_ser= UpdateUserSerializer(user,data=request.data,partial=True)
-            if(user_ser.is_valid()):
-                user_ser.save()
-            else:
-                return Response(user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
-            ser=UpdateLegalUserSerializer(user,data=request.data,partial=True)
-            if(ser.is_valid()):
-                ser.save()
-                return Response(ser.data,status=status.HTTP_202_ACCEPTED)
-            return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
-       
+            data= {}
+         
+            try:
+                legal_user = get_object_or_404(LegalUser,user_ptr_id=request.data["pk"])
+                legal_user_ser=LegalUserSerializer(legal_user,data=request.data,partial=True)
+                if(legal_user_ser.is_valid()):
+                    legal_user_ser.save()
+                    return Response(legal_user_ser.data,status=status.HTTP_202_ACCEPTED)
+
+                else:
+                    return Response(legal_user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+            except:
+                # assign user to a legal user and create legal user
+                user = get_object_or_404(User,phone=phone)
+                user_ser= UpdateUserSerializer(user,data=request.data,partial=True)
+                if(user_ser.is_valid()):
+                    user_ser.save()
+                    data = user_ser.data
+                else:
+                    return Response(user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+                
+                # do with cursor 
+                try:
+                    legal_data ={
+              
+                    "companyName":request.data["companyName"],
+                    "companyID":request.data["companyID"],
+                    "companyTitle":request.data["companyTitle"],
+               
+                }
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO public.api_legaluser ("user_ptr_id", "companyName", "companyID", "companyTitle")
+                            VALUES (%s, %s, %s, %s)
+                        """, [user.pk, request.data["companyName"], request.data["companyID"], request.data["companyTitle"]])
+                    data = data | legal_data
+                    return Response(data,status=status.HTTP_202_ACCEPTED)
+                except Exception as e:
+                    print("Error inserting data:", e)
+                    return Response({"error": "Failed to insert data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+
         return Response("type not found",status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -202,7 +234,19 @@ class UserView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = UserSerializer(user)
+        user= get_object_or_404(User,phone =user)
+        try:
+            user= get_object_or_404(LegalUser,phone =user.phone)
+            serializer = LegalUserSerializer(user)
+        except:
+            try:
+                user= get_object_or_404(RealUser,phone =user.phone)
+                serializer = RealUserSerializer(user)
+            except:
+                serializer = UserSerializer(user)
+        
+        
+        
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
 class LegalUserView(APIView):

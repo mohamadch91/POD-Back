@@ -50,6 +50,7 @@ class User(AbstractUser):
     # password = None
     first_name = None
     last_name =None
+    email = None
     phone = models.CharField( max_length = 13, unique = True)
     birth = models.DateField(blank=True,null=True)
     national_code=models.CharField(max_length=10,blank=True,null=True,unique=True)
