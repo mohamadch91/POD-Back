@@ -57,11 +57,12 @@ class ServiceListView(generics.ListAPIView):
                 "sold" : 2455,
                 "category" : None
             }
-            if(datas.baseInfo):
-                datas = datas.baseInfo
-                for j in datas:
-                    if(j.key == "category"):
-                        data["category"] = j.value
+            if(datas):
+                if(datas.baseInfo):
+                    datas = datas.baseInfo
+                    for j in datas:
+                        if(j.key == "category"):
+                            data["category"] = j.value
 
             answer.append(data)
        
@@ -110,11 +111,12 @@ class ServiceListAdminView(generics.ListAPIView):
                 "status":i["status"],
 
             }
-            if(datas.baseInfo):
-                datas = datas.baseInfo
-                for j in datas:
-                    if(j.key == "category"):
-                        data["category"] = j.value
+            if(datas):
+                if(datas.baseInfo):
+                    datas = datas.baseInfo
+                    for j in datas:
+                        if(j.key == "category"):
+                            data["category"] = j.value
 
             answer.append(data)
        
@@ -153,15 +155,16 @@ class ServiceDetailView(generics.RetrieveAPIView):
             final_response["category"] = None
             final_response["images"] = image_data
             final_response["votes"] = sum_votes
-            if(datas.baseInfo):
-                datas = datas.baseInfo
-                for j in datas:
-                    if(j.key == "category"):
-                        final_response["category"] = j.value
-                    if(j.key == "brand"):
-                        final_response["brand"] = j.value
-                    if (j.key == "city"):
-                        final_response["city"] = j.value
+            if(datas):
+                if(datas.baseInfo):
+                    datas = datas.baseInfo
+                    for j in datas:
+                        if(j.key == "category"):
+                            final_response["category"] = j.value
+                        if(j.key == "brand"):
+                            final_response["brand"] = j.value
+                        if (j.key == "city"):
+                            final_response["city"] = j.value
 
 
             

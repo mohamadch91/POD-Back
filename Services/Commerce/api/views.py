@@ -213,13 +213,15 @@ class CommerceDetailView(generics.RetrieveAPIView):
             final_response["votes"] = sum_votes
             final_response["brand"] = None
             final_response["category"] = None
-            if(datas.baseInfo):
-                datas = datas.baseInfo
-                for j in datas:
-                    if(j.key == "brand"):
-                        final_response["brand"] = j.value
-                    if(j.key == "category"):
-                        final_response["category"] = j.value
+
+            if(datas):
+                if(datas.baseInfo):
+                    datas = datas.baseInfo
+                    for j in datas:
+                        if(j.key == "brand"):
+                            final_response["brand"] = j.value
+                        if(j.key == "category"):
+                            final_response["category"] = j.value
                 
 
             return Response(final_response,status=status.HTTP_200_OK)
