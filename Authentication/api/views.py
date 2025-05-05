@@ -168,6 +168,74 @@ class OTPViewLogin(APIView):
             'access': str(refresh.access_token),
             'created':created
         }).data
+
+
+class OTPViewLoginAdmin(APIView):
+
+    def get(self, request):
+        serializer = RequestOTPSerializer(data=request.query_params)
+        # user=get_object_or_404(User,phone=request.query_params.get('receiver'))
+        if serializer.is_valid():
+            data = serializer.validated_data
+            otp = OTPRequest.objects.generate(data)
+            return Response(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+  
+    def post(self, request):
+        serializer = VerifyOtpRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            if OTPRequest.objects.is_valid(data['receiver'], data['request_id'], data['password']):
+                login_data =self._handle_login(data)
+                if(login_data == None):
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+                 
+                user_data= get_object_or_404(User,phone=data['receiver'])
+                ser = UserSerializer(user_data)
+                try:
+                    user_data= get_object_or_404(LegalUser,phone =user_data.phone)
+                    ser = LegalUserSerializer(user_data)
+                except:
+                    try:
+                        user_data= get_object_or_404(RealUser,phone =user_data.phone)
+                        ser = RealUserSerializer(user_data)
+                    except:
+                        ser = UserSerializer(user_data)
+                
+                wallet = get_object_or_404(Wallet,user = user_data.pk) 
+
+                w_ser= WalletSerializer(wallet,many = False)   
+                res ={
+                    "login_data" : login_data,
+                    "user_data" : ser.data,
+                    "wallet_data" :w_ser.data 
+                }
+                return Response(res, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+
+    def _handle_login(self, otp):
+        
+        query = User.objects.filter(phone=otp['receiver'])
+        if query.exists():
+            created = False
+            user = query.first()
+        else:
+            return None
+        refresh = RefreshToken.for_user(user)
+
+        return ObtainTokenSerializer({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'created':created
+        }).data
+
+
 class OTPViewRegister(APIView):
     def get(self, request):
         
