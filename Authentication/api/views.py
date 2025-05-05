@@ -120,6 +120,15 @@ class OTPViewLogin(APIView):
                 login_data =self._handle_login(data)
                 user_data= get_object_or_404(User,phone=data['receiver'])
                 ser = UserSerializer(user_data)
+                try:
+                    user_data= get_object_or_404(LegalUser,phone =user_data.phone)
+                    ser = LegalUserSerializer(user_data)
+                except:
+                    try:
+                        user_data= get_object_or_404(RealUser,phone =user_data.phone)
+                        ser = RealUserSerializer(user_data)
+                    except:
+                        ser = UserSerializer(user_data)
                 
                 wallet = get_object_or_404(Wallet,user = user_data.pk) 
 
