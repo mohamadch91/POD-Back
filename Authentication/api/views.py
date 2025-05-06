@@ -20,6 +20,7 @@ from itertools import chain
 import copy
 from .tests import *
 from django.db import connection
+from .customResponse import CustomResponse,CustomMessage
 
 
 class UpdateProfileView(APIView):
@@ -27,7 +28,7 @@ class UpdateProfileView(APIView):
    
     def put (self,request):
         if('type' not in request.data or 'type' =='' ):
-            return Response("neeed type",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(data="نیاز به وارد کرد تایپ هست"))
         type=request.data["type"]
         phone=request.data["phone"]
         if(type=="real"):
@@ -35,8 +36,8 @@ class UpdateProfileView(APIView):
             ser=UpdateRealUserSerializer(user[0],data=request.data,partial=True)
             if(ser.is_valid()):
                 ser.save()
-                return Response(ser.data,status=status.HTTP_202_ACCEPTED)
-            return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
+                return CustomResponse(ser.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
+            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,ser._errors).message)
         if(type=="legal"):
             data= {}
          
@@ -45,10 +46,10 @@ class UpdateProfileView(APIView):
                 legal_user_ser=LegalUserSerializer(legal_user,data=request.data,partial=True)
                 if(legal_user_ser.is_valid()):
                     legal_user_ser.save()
-                    return Response(legal_user_ser.data,status=status.HTTP_202_ACCEPTED)
+                    return  CustomResponse(legal_user_ser.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
 
                 else:
-                    return Response(legal_user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+                    return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,legal_user_ser._errors))
             except:
                 # assign user to a legal user and create legal user
                 user = get_object_or_404(User,phone=phone)
@@ -57,7 +58,7 @@ class UpdateProfileView(APIView):
                     user_ser.save()
                     data = user_ser.data
                 else:
-                    return Response(user_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+                    return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,user_ser._errors))
                 
                 # do with cursor 
                 try:
@@ -82,13 +83,13 @@ class UpdateProfileView(APIView):
                             VALUES (%s, %s, %s, %s)
                         """, [user.pk, legal_data["companyName"], legal_data["companyID"], legal_data["companyTitle"]])
                     data = data | legal_data
-                    return Response(data,status=status.HTTP_202_ACCEPTED)
+                    return CustomResponse(data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری"))
                 except Exception as e:
                     print("Error inserting data:", e)
-                    return Response({"error": "Failed to insert data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return CustomResponse(None, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,"خطا در  ورودی"))
             
 
-        return Response("type not found",status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,"نیاز مند تایپ"))
 
 
 
@@ -101,9 +102,9 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return CustomResponse(None,status=status.HTTP_205_RESET_CONTENT,message=CustomMessage(data="خروج موفقیت آمیز بود"))
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)    
+            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(data="خروج ناموفق"))    
 
 
 
@@ -115,10 +116,10 @@ class OTPViewLogin(APIView):
         if serializer.is_valid():
             data = serializer.validated_data
             otp = OTPRequest.objects.generate(data)
-            return Response(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK)
+            return CustomResponse(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST, message=CustomMessage(3,serializer._errors) )
   
     def post(self, request):
         serializer = VerifyOtpRequestSerializer(data=request.data)
@@ -146,12 +147,12 @@ class OTPViewLogin(APIView):
                     "user_data" : ser.data,
                     "wallet_data" :w_ser.data 
                 }
-                return Response(res, status=status.HTTP_200_OK)
+                return CustomResponse(res, status=status.HTTP_200_OK,message=CustomMessage(1))
             else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return CustomResponse(None,status=status.HTTP_401_UNAUTHORIZED,message=CustomMessage(data="نام کاربری و یا رمز عبور اشتباه است"))
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors,message=CustomMessage(3,serializer._errors))
 
     def _handle_login(self, otp):
         
@@ -186,10 +187,10 @@ class OTPViewLoginAdmin(APIView):
         if serializer.is_valid():
             data = serializer.validated_data
             otp = OTPRequest.objects.generate(data)
-            return Response(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK)
+            return CustomResponse(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors,message=CustomMessage(3,serializer._errors))
   
     def post(self, request):
         serializer = VerifyOtpRequestSerializer(data=request.data)
@@ -198,7 +199,7 @@ class OTPViewLoginAdmin(APIView):
             if OTPRequest.objects.is_valid(data['receiver'], data['request_id'], data['password']):
                 login_data =self._handle_login(data)
                 if(login_data == None):
-                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+                    return CustomResponse(None,status=status.HTTP_401_UNAUTHORIZED,message=CustomMessage(data="نام کاربری و یا رمز عبور اشتباه است"))
                  
                 user_data= get_object_or_404(User,phone=data['receiver'])
                 ser = UserSerializer(user_data)
@@ -220,12 +221,12 @@ class OTPViewLoginAdmin(APIView):
                     "user_data" : ser.data,
                     "wallet_data" :w_ser.data 
                 }
-                return Response(res, status=status.HTTP_200_OK)
+                return CustomResponse(res, status=status.HTTP_200_OK,message=CustomMessage(1))
             else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return CustomResponse(None,status=status.HTTP_401_UNAUTHORIZED,message=CustomMessage(data="نام کاربری و یا رمزعبور اشتباه است"))
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
 
     def _handle_login(self, otp):
         
@@ -251,10 +252,10 @@ class OTPViewRegister(APIView):
         if serializer.is_valid():
             data = serializer.validated_data
             otp = OTPRequest.objects.generate(data)
-            return Response(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK)
+            return CustomResponse(data=RequestOTPResponseSerializer(otp).data,status=status.HTTP_200_OK)
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
     def post(self, request):
         serializer = VerifyOtpRequestSerializer(data=request.data)
         if serializer.is_valid():
@@ -262,7 +263,7 @@ class OTPViewRegister(APIView):
             if OTPRequest.objects.is_valid(data['receiver'], data['request_id'], data['password']):
                 login_data =self._handle_login(data,request)
                 if(login_data == False):
-                    return Response({"message":"phone already exists"},status=status.HTTP_400_BAD_REQUEST)
+                    return CustomResponse({"message":"phone already exists"},status=status.HTTP_400_BAD_REQUEST)
                 user_data= get_object_or_404(User,phone=data['receiver'])
                 body ={
                     "amount" : 0,
@@ -272,7 +273,7 @@ class OTPViewRegister(APIView):
                 if(w_ser.is_valid()):
                     w_ser.save()
                 else:
-                    return Response(w_ser.errors,status = status.HTTP_400_BAD_REQUEST)
+                    return CustomResponse(w_ser.errors,status = status.HTTP_400_BAD_REQUEST)
                 
                 ser = UserSerializer(user_data)
                 # print(ser.data)
@@ -281,13 +282,13 @@ class OTPViewRegister(APIView):
                     "user_data" : ser.data,
                     "wallet_data" :w_ser.data
                 }
-                return Response(res, status=status.HTTP_200_OK)
+                return CustomResponse(res, status=status.HTTP_200_OK)
             
             else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return CustomResponse(status=status.HTTP_401_UNAUTHORIZED)
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+            return CustomResponse(status=status.HTTP_400_BAD_REQUEST, data = serializer.errors)
 
     def _handle_login(self, otp,request):
 
@@ -311,7 +312,7 @@ class deleteUser(APIView):
     def post(self,request):
         user=get_object_or_404(User,pk=request.data["id"])
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return CustomResponse(None,status=status.HTTP_204_NO_CONTENT,message=CustomMessage(7,"کاربر"))
 
 
 class UserView(APIView):
@@ -332,7 +333,7 @@ class UserView(APIView):
         
         
         
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class LegalUserView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -341,7 +342,7 @@ class LegalUserView(APIView):
         user = request.user
         user= get_object_or_404(LegalUser,phone =user)
         serializer = LegalUserSerializer(user)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class UserAdminView(APIView):
     permission_classes = [IsAdminUser]
@@ -349,7 +350,7 @@ class UserAdminView(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 
 class UserStatusView(APIView):
@@ -359,4 +360,4 @@ class UserStatusView(APIView):
         user = get_object_or_404(User,pk=request.data["id"])
         user.status = request.data["status"]
         user.save()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        return CustomResponse(None,status=status.HTTP_202_ACCEPTED,message=CustomMessage(data="وضعیت کاربر با موفقیت تغییر کرد"))
