@@ -443,7 +443,24 @@ class ServiceAdminCommentView(APIView):
             "data": final
         }
         return Response(final_response,status=status.HTTP_200_OK)
+    def post(self, request):
+        
+        serializer = ServiceCommentsSerializer(data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            vote = request.data["vote"]
+            if(vote):
+                body = {
+                    "service": request.data["service"],
+                    "votes" : vote
+                }
+                vote_serializer = ServiceVotesSerializer(data = body)
+                if(vote_serializer.is_valid()):
+                    vote_serializer.save()
 
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
             return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
