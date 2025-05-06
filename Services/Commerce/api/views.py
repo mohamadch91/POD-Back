@@ -457,7 +457,7 @@ class CommerceCommentView(APIView):
         serializer = CommerceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if(vote in request.data):
+            if("vote" in request.data):
                 vote= request.data["vote"]
                 if(vote):
                     body = {
@@ -525,7 +525,7 @@ class CommerceAdminCommentView(APIView):
         serializer = CommerceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if(vote in request.data):
+            if("vote" in request.data):
                 vote= request.data["vote"]
                 if(vote):
                     body = {

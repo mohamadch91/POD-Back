@@ -380,7 +380,7 @@ class ServiceCommentView(APIView):
         serializer = ServiceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if(vote in request.data):
+            if("vote" in request.data):
                 vote = request.data["vote"]
                 if(vote):
                     body = {
@@ -449,7 +449,7 @@ class ServiceAdminCommentView(APIView):
         serializer = ServiceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if(vote in request.data):
+            if("vote" in request.data):
                 vote = request.data["vote"]
                 if(vote):
                     body = {
