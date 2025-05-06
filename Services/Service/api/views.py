@@ -433,6 +433,16 @@ class ServiceAdminCommentView(APIView):
             return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
+    def delete(self,request):
+        id = request.GET.get('id')
+        if(id == None):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        comment = get_object_or_404(ServiceComments,id=id)
+        comment.delete()
+        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+
+
+    
         
 
     
@@ -490,7 +500,11 @@ class ServiceAdminQuestionView(APIView):
     def get(self,request):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
-        question = ServiceQuestions.objects.all()
+        service_id=request.GET.get("service_id")
+        if service_id:
+            question = ServiceQuestions.objects.filter(service=service_id)
+        else:
+            question = ServiceQuestions.objects.all()
         total_cout = len(question)
         if(page and page_size):
             page = int(page)
@@ -508,5 +522,29 @@ class ServiceAdminQuestionView(APIView):
             "data": final_answer
         }
        
-        
         return Response(final_response,status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = ServiceQuestionsSerializer(data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        question = get_object_or_404(ServiceQuestions,id=id)
+        serializer = ServiceQuestionsSerializer(question,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request):
+        id = request.GET.get('id')
+        if(id == None):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        question = get_object_or_404(ServiceQuestions,id=id)
+        question.delete()
+        return Response("deleted",status=status.HTTP_202_ACCEPTED)
