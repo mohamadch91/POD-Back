@@ -62,17 +62,25 @@ class UpdateProfileView(APIView):
                 # do with cursor 
                 try:
                     legal_data ={
-              
-                    "companyName":request.data["companyName"],
-                    "companyID":request.data["companyID"],
-                    "companyTitle":request.data["companyTitle"],
-               
-                }
+                    }
+                    if( "companyID" in request.data):
+                        legal_data["companyID"] = request.data["companyID"]
+                    else:
+                        legal_data["companyID"] = None
+                    if( "companyName" in request.data):
+                        legal_data["companyName"] = request.data["companyName"]
+                    else:
+                        legal_data["companyName"] = ""
+                    if( "companyTitle" in request.data):
+                        legal_data["companyTitle"] = request.data["companyTitle"]
+                    else:
+                        legal_data["companyTitle"] = ""
+
                     with connection.cursor() as cursor:
                         cursor.execute("""
                             INSERT INTO public.api_legaluser ("user_ptr_id", "companyName", "companyID", "companyTitle")
                             VALUES (%s, %s, %s, %s)
-                        """, [user.pk, request.data["companyName"], request.data["companyID"], request.data["companyTitle"]])
+                        """, [user.pk, legal_data["companyName"], legal_data["companyID"], legal_data["companyTitle"]])
                     data = data | legal_data
                     return Response(data,status=status.HTTP_202_ACCEPTED)
                 except Exception as e:
