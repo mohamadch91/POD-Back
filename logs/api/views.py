@@ -1,19 +1,9 @@
-from django.shortcuts import render
-
 # Create your views here.
 from .serializers import *
 from .models import *
-from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-import copy
-import math
-from django.http import QueryDict
-from django.db.models import Case, When
-from django.db.models import Sum
-import json
 from .customResponse import CustomResponse,CustomMessage
 
 class PermiumRequestView(APIView):

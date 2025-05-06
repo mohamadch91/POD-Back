@@ -1,23 +1,18 @@
 
-from django.shortcuts import render
 
-# Create your views here.
 from .serializers import *
 from .models import *
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .permissions import IsAuthenticated,IsAdminUser
 import copy
-import math
-from django.http import QueryDict
 from django.db.models import Case, When
 from django.db.models import Sum
 import json
 from .publish import get_user,get_info
- 
+from .customResponse import CustomResponse,CustomMessage 
 
 class CommerceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -95,7 +90,7 @@ class CommerceListView(generics.ListAPIView):
             "total_count" : total_count,
             "list" : answer
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 class CommerceListAdminView(generics.ListAPIView):
@@ -175,7 +170,7 @@ class CommerceListAdminView(generics.ListAPIView):
             "total_count" : total_count,
             "list" : answer
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 
 
@@ -199,23 +194,23 @@ class CommerceActionsAdminView(APIView):
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
-                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         id = request.data["id"]
         commerce = get_object_or_404(Commerce,id=id)
         serializer = CommerceSerializer(commerce,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def delete(self, request):
         commerce=  get_object_or_404(Commerce,id=request.data["id"])
         commerce.delete()
-        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+        return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="بازرگانی"))
   
 
 
@@ -266,8 +261,8 @@ class CommerceDetailView(generics.RetrieveAPIView):
                             final_response["category"] = j.value
                 
 
-            return Response(final_response,status=status.HTTP_200_OK)
-        return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
+        return CustomResponse({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="بازرگانی"))
 
     
 
@@ -279,7 +274,7 @@ class UserCommerceView(generics.RetrieveAPIView):
         user = request.user
         commerce = Commerce.objects.filter(user_id =user.id)
         serializer = CommerceSerializer(commerce,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddCommerceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -304,10 +299,10 @@ class AddCommerceView(generics.CreateAPIView):
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
-                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
 class EditCommerceView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
@@ -319,9 +314,9 @@ class EditCommerceView(generics.UpdateAPIView):
         serializer = CommerceSerializer(commerce,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
         
 class DeleteCommerceView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -330,7 +325,7 @@ class DeleteCommerceView(generics.DestroyAPIView):
     def delete(self, request):
         commerce=  get_object_or_404(Commerce,id=request.data["id"])
         commerce.delete()
-        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+        return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="بازرگانی"))
         
 
 class ChangeStatusView(generics.UpdateAPIView):
@@ -341,7 +336,7 @@ class ChangeStatusView(generics.UpdateAPIView):
         commerce = get_object_or_404(Commerce,id=id)
         commerce.status = request.data["status"]
         commerce.save()
-        return Response({"message" : "status changed"},status=status.HTTP_200_OK)
+        return CustomResponse({"message" : "status changed"},status=status.HTTP_200_OK,message=CustomMessage(data="وضعیت بازرگانی با موفیقت تغییر کرد"))
 
 
 class NegotiateCommerceView(generics.CreateAPIView):
@@ -355,9 +350,9 @@ class NegotiateCommerceView(generics.CreateAPIView):
         serializer = CommerceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="درخواست مذاکره بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
 class NegotiateCommerceAdminView(APIView):
     permission_classes = [IsAdminUser]
@@ -366,7 +361,7 @@ class NegotiateCommerceAdminView(APIView):
         if(id):
             negotiate = get_object_or_404(CommerceNegotiate,id = id)
             serializer = CommerceNegotiateSerializer(negotiate).data
-            return Response(serializer,status=status.HTTP_200_OK)
+            return CustomResponse(serializer,status=status.HTTP_200_OK,message=CustomMessage(1))
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         commerce_id=request.GET.get("commerce_id")
@@ -390,27 +385,27 @@ class NegotiateCommerceAdminView(APIView):
             "total_count" : total_count,
             "data": final
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST)
         id=request.data["id"]
         negotiate = get_object_or_404(CommerceNegotiate,id=id)
         serializer = CommerceNegotiateSerializer(negotiate,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="درخواست مذاکره بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(data="نیازمند id "))
         negotiate = get_object_or_404(CommerceNegotiate,id=id)
         negotiate.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="درخواست مذاکره بازرگانی"))
     
 
 class CommerceCommentView(APIView):
@@ -420,7 +415,7 @@ class CommerceCommentView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         if(commerce_id == None):
-            return Response("need commerce id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("need commerce id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
             
         comment = CommerceComments.objects.filter(commerce=commerce_id)
         # remove comments which they are reply
@@ -451,7 +446,7 @@ class CommerceCommentView(APIView):
         }
         
 
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         
         serializer = CommerceCommentsSerializer(data = request.data)
@@ -468,19 +463,26 @@ class CommerceCommentView(APIView):
                     if(vote_serializer.is_valid()):
                         vote_serializer.save()
 
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="نظر بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         comment = get_object_or_404(CommerceComments,id=id)
         serializer = CommerceCommentsSerializer(comment,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="نظر بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
+    def delete(self,request):
+        id = request.GET.get('id')
+        if(id == None):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        comment = get_object_or_404(CommerceComments,id=id)
+        comment.delete()
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="نظر بازرگانی"))
     
 
     
@@ -519,7 +521,7 @@ class CommerceAdminCommentView(APIView):
             "total_count" : total_cout,
             "data": final
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         
         serializer = CommerceCommentsSerializer(data = request.data)
@@ -536,28 +538,28 @@ class CommerceAdminCommentView(APIView):
                     if(vote_serializer.is_valid()):
                         vote_serializer.save()
 
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="نظر بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST)
         id=request.data["id"]
         comment = get_object_or_404(CommerceComments,id=id)
         serializer = CommerceCommentsSerializer(comment,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="نظر بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         comment = get_object_or_404(CommerceComments,id=id)
         comment.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="نظر بازرگانی"))
     
 
        
@@ -572,7 +574,7 @@ class CommerceQuestionView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         if(commerce_id == None):
-            return Response("need commerce id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("need commerce id",status=status.HTTP_400_BAD_REQUEST)
             
         question = CommerceQuestions.objects.filter(commerce=commerce_id)
         total_cout = len(question)
@@ -593,24 +595,24 @@ class CommerceQuestionView(APIView):
         }
         
 
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         serializer = CommerceQuestionsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سوال بازرگانی"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         question = get_object_or_404(CommerceQuestions,id=id)
         serializer = CommerceQuestionsSerializer(question,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
 class CommerceAdminQuestionView(APIView):
     permission_classes = [IsAdminUser]
@@ -639,33 +641,33 @@ class CommerceAdminQuestionView(APIView):
             "total_count" : total_cout,
             "data": final_answer
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     
     def post(self, request):
         serializer = CommerceQuestionsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سوال بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         question = get_object_or_404(CommerceQuestions,id=id)
         serializer = CommerceQuestionsSerializer(question,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         question = get_object_or_404(CommerceQuestions,id=id)
         question.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="سوال بازرگانی"))
 
        
         

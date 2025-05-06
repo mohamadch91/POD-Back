@@ -6,7 +6,7 @@ class CustomResponse(Response):
     attribute to the response data.
     """
     def __init__(self, data=None, status=None,message = None, **kwargs):
-        data = {'status_code': status, 'data': data,'messages' : message}
+        data = {'status_code': status, 'data': data,'messages' : message.message}
         super().__init__(data=data,status=status, **kwargs)
 
 class CustomMessage():
