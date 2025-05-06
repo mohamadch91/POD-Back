@@ -33,6 +33,7 @@ class Service(models.Model):
     status = models.IntegerField(default=0)
     fair_price = models.BooleanField(default=True,null =True,blank =True)
     valid_seller = models.BooleanField(default=True,null =True,blank =True)
+    is_active=models.BooleanField(default=True,null=True,blank=True)
 
 
 

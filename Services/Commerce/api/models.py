@@ -30,6 +30,7 @@ class Commerce(models.Model):
     valid_seller = models.BooleanField(default=True,null =True,blank =True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    is_active=models.BooleanField(default=True,null=True,blank=True)
 
 
 class CommerceImages(models.Model):
