@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import *
 from django_grpc_framework import proto_serializers
 import base_info_pb2
-from google.protobuf.json_format import MessageToDict, ParseDict
+from google.protobuf.json_format import MessageToDict
 
 
 class ProvinceSerializer(serializers.ModelSerializer):

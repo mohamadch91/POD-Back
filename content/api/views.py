@@ -3,17 +3,11 @@ from django.shortcuts import render
 # Create your views here.
 from .serializers import *
 from .models import *
-from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 import copy
-import math
-from django.http import QueryDict
-from django.db.models import Case, When
-from django.db.models import Sum
-import json
+from .customResponse import CustomResponse,CustomMessage
 
 
 
@@ -21,66 +15,66 @@ class NewsCategoryAdminView(APIView):
     def get(self, request):
         news_categories = NewsCategory.objects.all()
         serializer = NewsCategorySerializer(news_categories, many=True)
-        return Response(serializer.data)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
     def post(self, request):
         serializer = NewsCategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data, status=status.HTTP_201_CREATED,message=CustomMessage(5,"خبر"))
+        return CustomResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
     
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         id=request.data["id"]
         news_category = get_object_or_404(NewsCategory,id=id)
         serializer = NewsCategorySerializer(news_category,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"خبر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         news_category = get_object_or_404(NewsCategory,id=id)
         news_category.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(7,"خبر"))
 
 
 class BannerCategoryAdminView(APIView):
     def get(self, request):
         banner_categories = BannerCategory.objects.all()
         serializer = BannerCategorySerializer(banner_categories, many=True)
-        return Response(serializer.data)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
     def post(self, request):
         serializer = BannerCategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data, status=status.HTTP_201_CREATED,message=CustomMessage(5,"بنر"))
+        return CustomResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
     
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         id=request.data["id"]
         banner_category = get_object_or_404(BannerCategory,id=id)
         serializer = BannerCategorySerializer(banner_category,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"بنر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         banner_category = get_object_or_404(BannerCategory,id=id)
         banner_category.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(7,"بنر"))
 
 
 
@@ -99,7 +93,7 @@ class NewsAdminView(APIView):
                 images.append('content/media/' + x.image)
             temp["images"] = images
             final_response.append(temp)
-            return Response(final_response,status=status.HTTP_200_OK)
+            return CustomResponse(final_response,status=status.HTTP_200_OK)
         news = News.objects.all()
         page = request.GET.get("page")
         category = request.GET.get("category")
@@ -125,7 +119,7 @@ class NewsAdminView(APIView):
                 images.append('content/media/' + x.image)
             final_response.append(temp)
 
-        return Response({"data":final_response,"count" : count},status=status.HTTP_200_OK)
+        return CustomResponse({"data":final_response,"count" : count},status=status.HTTP_200_OK,message=CustomMessage(1))
     
     def post(self, request):
         serializer = NewsSerializer(data=request.data)
@@ -137,28 +131,28 @@ class NewsAdminView(APIView):
                 if image_serializer.is_valid():
                     image_serializer.save()
                 else:
-                    return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return CustomResponse(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,image_serializer._errors))
+            return CustomResponse(serializer.data, status=status.HTTP_201_CREATED,message=CustomMessage(5,"خبر"))
+        return CustomResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
     
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         id=request.data["id"]
         news = get_object_or_404(News,id=id)
         serializer = NewsSerializer(news,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"خبر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         news = get_object_or_404(News,id=id)
         news.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(7,"خبر"))
     
 
 
@@ -169,49 +163,49 @@ class BannerAdminView(APIView):
         if(id == None):
             banners = Banner.objects.all()
             serializer = BannerSerializer(banners, many=True)
-            return Response(serializer.data)
+            return CustomResponse(serializer.data)
         banner = get_object_or_404(Banner,id=id)
         serializer = BannerSerializer(banner)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
     
     def post(self, request):
         serializer = BannerSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data, status=status.HTTP_201_CREATED,message=CustomMessage(5,"بنر"))
+        return CustomResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         id=request.data["id"]
         banner = get_object_or_404(Banner,id=id)
         serializer = BannerSerializer(banner,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"بنر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,data="نیاز به id است"))
         banner = get_object_or_404(Banner,id=id)
         banner.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(7,"بنر"))
 
 
 class NewsCategoryView(APIView):
     def get(self, request):
         news_categories = NewsCategory.objects.all()
         serializer = NewsCategorySerializer(news_categories, many=True)
-        return Response(serializer.data)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class BannerCategoryView(APIView):
     def get(self, request):
         banner_categories = BannerCategory.objects.all()
         serializer = BannerCategorySerializer(banner_categories, many=True)
-        return Response(serializer.data)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 
 class NewsView(APIView):
@@ -229,7 +223,7 @@ class NewsView(APIView):
                 images.append('content/media/' + x.image)
             temp["images"] = images
             final_response.append(temp)
-            return Response(final_response,status=status.HTTP_200_OK)
+            return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
         news = News.objects.filter(status=2)
         page = request.GET.get("page")
         category = request.GET.get("category")
@@ -255,13 +249,13 @@ class NewsView(APIView):
                 images.append('content/media/' + x.image)
             final_response.append(temp)
 
-        return Response({"data":final_response,"count" : count},status=status.HTTP_200_OK)
+        return CustomResponse({"data":final_response,"count" : count},status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 class BannerView(APIView):
     def get(self, request):
         banners = Banner.objects.filter(status=2)
         serializer = BannerSerializer(banners, many=True)
-        return Response(serializer.data)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
