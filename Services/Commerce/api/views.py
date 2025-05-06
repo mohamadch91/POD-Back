@@ -457,15 +457,16 @@ class CommerceCommentView(APIView):
         serializer = CommerceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            vote= request.data["vote"]
-            if(vote):
-                body = {
-                    "commerce": request.data["commerce"],
-                    "votes" : vote
-                }
-                vote_serializer = CommerceVotesSerializer(data = body)
-                if(vote_serializer.is_valid()):
-                    vote_serializer.save()
+            if(vote in request.data):
+                vote= request.data["vote"]
+                if(vote):
+                    body = {
+                        "commerce": request.data["commerce"],
+                        "votes" : vote
+                    }
+                    vote_serializer = CommerceVotesSerializer(data = body)
+                    if(vote_serializer.is_valid()):
+                        vote_serializer.save()
 
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
@@ -524,15 +525,16 @@ class CommerceAdminCommentView(APIView):
         serializer = CommerceCommentsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            vote= request.data["vote"]
-            if(vote):
-                body = {
-                    "commerce": request.data["commerce"],
-                    "votes" : vote
-                }
-                vote_serializer = CommerceVotesSerializer(data = body)
-                if(vote_serializer.is_valid()):
-                    vote_serializer.save()
+            if(vote in request.data):
+                vote= request.data["vote"]
+                if(vote):
+                    body = {
+                        "commerce": request.data["commerce"],
+                        "votes" : vote
+                    }
+                    vote_serializer = CommerceVotesSerializer(data = body)
+                    if(vote_serializer.is_valid()):
+                        vote_serializer.save()
 
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
