@@ -266,9 +266,35 @@ class NegotiateServiceView(generics.CreateAPIView):
 class NegotiateServiceAdminView(APIView):
     permission_classes = [IsAdminUser]
     def get(self, request):
-        negotiate = ServiceNegotiate.objects.all()
-        serializer = ServiceNegotiateSerializer(negotiate,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        id = request.GET.get("id")
+        if(id):
+            negotiate = get_object_or_404(ServiceNegotiate,id = id)
+            serializer = ServiceNegotiateSerializer(negotiate).data
+            return Response(serializer,status=status.HTTP_200_OK)
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        service_id=request.GET.get("service_id")
+        if service_id:
+            negotiate = ServiceNegotiate.objects.filter(service=service_id)
+        else:
+            negotiate = ServiceNegotiate.objects.all()
+        total_count = len(negotiate)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            negotiate = negotiate[page*page_size:page*page_size+page_size]
+        serializer = ServiceNegotiateSerializer(negotiate,many=True).data
+        final = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = get_user(user_id)
+            i["user"] = user
+            final.append(i)
+        final_response ={
+            "total_count" : total_count,
+            "data": final
+        }
+        return Response(final_response,status=status.HTTP_200_OK)
     
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
@@ -363,7 +389,11 @@ class ServiceAdminCommentView(APIView):
     def get(self,request):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
-        comment = ServiceComments.objects.all()
+        service_id=request.GET.get("service_id")
+        if service_id:
+            comment = ServiceComments.objects.filter(service=service_id)
+        else:
+            comment = ServiceComments.objects.all()
         comment = comment.filter(reply=None)
         total_cout = len(comment)
         if(page and page_size):
@@ -390,10 +420,21 @@ class ServiceAdminCommentView(APIView):
             "total_count" : total_cout,
             "data": final
         }
-       
+        return Response(final_response,status=status.HTTP_200_OK)
+
+    def put(self, request):
+        if('id' not in request.data or 'id' =='' ):
+            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+        id=request.data["id"]
+        comment = get_object_or_404(ServiceComments,id=id)
+        serializer = ServiceCommentsSerializer(comment,data=request.data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
         
 
-        return Response(final_response,status=status.HTTP_200_OK)
     
 
 class ServiceQuestionView(APIView):
