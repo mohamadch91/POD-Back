@@ -7,6 +7,8 @@ from django.contrib.staticfiles.urls import *
 urlpatterns = [
     path('list/', ServiceListView.as_view(), name='get all service'),
     path('admin/list/', ServiceListAdminView.as_view(), name='get all service'),
+    path('admin/actions/', ServiceActionsAdminView.as_view(), name='get all commerce'),
+
     path('detail/', ServiceDetailView.as_view(), name='get detail of one service'),
     path('user-active/', UserServiceView.as_view(), name='get user services'),
     path('add/', AddServiceView.as_view(), name='add service'),
@@ -19,7 +21,6 @@ urlpatterns = [
     path('question/', ServiceQuestionView.as_view(), name='get all Service'),
     path('comment/', ServiceCommentView.as_view(), name='get all Service'),
     path('admin/comment/', ServiceAdminCommentView.as_view(), name='get all Service'),
-
     path('admin/', admin.site.urls),
 
 ]

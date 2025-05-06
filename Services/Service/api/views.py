@@ -123,6 +123,49 @@ class ServiceListAdminView(generics.ListAPIView):
         return Response(answer,status=status.HTTP_200_OK)
     
 
+
+class ServiceActionsAdminView(APIView):
+    permission_classes = [IsAdminUser]
+    def post(self, request):
+        user= request.user
+        temp = copy.deepcopy(request.data)
+        images = request.FILES.getlist('images')
+        temp["user_id"] = user.id
+        serializer = ServiceSerializer(data = temp)
+        if(serializer.is_valid()):
+            serializer.save()
+            id = serializer.data["id"]
+            for i in images:
+                body ={
+                    "service": id,
+                    "image" : i
+                }
+                image_ser = ServiceImagesSerializer (data =body)
+                if (image_ser.is_valid()):
+                    image_ser.save()
+                else:
+                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        id = request.data["id"]
+        service = get_object_or_404(Service,id=id)
+        serializer = ServiceSerializer(service,data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+    def delete(self, request):
+        service=  get_object_or_404(Service,request.data["id"])
+        service.delete()
+        
+        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+    
+
+
+   
 class ServiceDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -187,29 +230,8 @@ class AddServiceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     queryset =Service.objects.all()
-    def post(self, request):
-        user= request.user
-        temp = copy.deepcopy(request.data)
-        images = request.FILES.getlist('images')
-        temp["user_id"] = user.id
-        serializer = ServiceSerializer(data = temp)
-        if(serializer.is_valid()):
-            serializer.save()
-            id = serializer.data["id"]
-            for i in images:
-                body ={
-                    "service": id,
-                    "image" : i
-                }
-                image_ser = ServiceImagesSerializer (data =body)
-                if (image_ser.is_valid()):
-                    image_ser.save()
-                else:
-                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
+    
+    
 class EditServiceView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 

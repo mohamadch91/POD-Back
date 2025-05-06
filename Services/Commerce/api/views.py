@@ -177,12 +177,54 @@ class CommerceListAdminView(generics.ListAPIView):
         }
         return Response(final_response,status=status.HTTP_200_OK)
 
+
+
+class CommerceActionsAdminView(APIView):
+    permission_classes = [IsAdminUser]
+    def post(self, request):
+        user = request.user
+        temp = copy.deepcopy(request.data)
+        images = request.FILES.getlist('images')
+        temp["user_id"] = user.id
+        serializer = CommerceSerializer(data = temp)
+        if(serializer.is_valid()):
+            serializer.save()
+            id = serializer.data["id"]
+            for i in images:
+                body ={
+                    "commerce": id,
+                    "image" : i
+                }
+                image_ser = CommerceImagesSerializer (data =body)
+                if (image_ser.is_valid()):
+                    image_ser.save()
+                else:
+                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        id = request.data["id"]
+        commerce = get_object_or_404(Commerce,id=id)
+        serializer = CommerceSerializer(commerce,data = request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+    def delete(self, request):
+        commerce=  get_object_or_404(Commerce,id=request.data["id"])
+        commerce.delete()
+        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+  
+
+
+
 class CommerceDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     queryset =Commerce.objects.all()
     def get(self, request):
-        print("request")
         id =request.GET.get("id")
         if(id):
             commerce = get_object_or_404(Commerce,id = id)
@@ -226,6 +268,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
 
             return Response(final_response,status=status.HTTP_200_OK)
         return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
+
     
 
 class UserCommerceView(generics.RetrieveAPIView):
@@ -280,8 +323,6 @@ class EditCommerceView(generics.UpdateAPIView):
         
         return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
         
-     
-
 class DeleteCommerceView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
