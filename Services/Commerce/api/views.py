@@ -326,15 +326,31 @@ class NegotiateCommerceAdminView(APIView):
             negotiate = get_object_or_404(CommerceNegotiate,id = id)
             serializer = CommerceNegotiateSerializer(negotiate).data
             return Response(serializer,status=status.HTTP_200_OK)
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
         commerce_id=request.GET.get("commerce_id")
         if(commerce_id):
             negotiate = CommerceNegotiate.objects.filter(commerce = commerce_id)
-            serializer = CommerceNegotiateSerializer(negotiate,many=True).data
-            return Response(serializer,status=status.HTTP_200_OK)
-        
-        negotiate = CommerceNegotiate.objects.all()
+        else:
+            negotiate = CommerceNegotiate.objects.all()
+        total_count = len(negotiate)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            negotiate = negotiate[page*page_size:page*page_size+page_size]
         serializer = CommerceNegotiateSerializer(negotiate,many=True).data
-        return Response(serializer,status=status.HTTP_200_OK)
+        final = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = get_user(user_id)
+            i["user"] = user
+            final.append(i)
+        final_response ={
+            "total_count" : total_count,
+            "data": final
+        }
+        return Response(final_response,status=status.HTTP_200_OK)
+
 
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
@@ -381,7 +397,6 @@ class CommerceCommentView(APIView):
             for j in reply_data:
                 user_id= j["user_id"]
                 user = get_user(user_id)
-                print(user)
                 j["user"] = user
             i["reply"] = reply_data
             user_id= i["user_id"]
