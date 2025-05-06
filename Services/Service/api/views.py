@@ -1,20 +1,15 @@
-import http
-from re import L
-from django.shortcuts import render
 
 # Create your views here.
 from .serializers import *
 from .models import *
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .permissions import IsAuthenticated,IsAdminUser
 import copy
-from django.db.models import Case, When,Sum
 from .publish import get_info,get_user
-import json
+from .customResponse import CustomResponse,CustomMessage
 class ServiceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset =Service.objects.all()
@@ -66,7 +61,7 @@ class ServiceListView(generics.ListAPIView):
 
             answer.append(data)
        
-        return Response(answer,status=status.HTTP_200_OK)
+        return CustomResponse(answer,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 
@@ -120,7 +115,7 @@ class ServiceListAdminView(generics.ListAPIView):
 
             answer.append(data)
        
-        return Response(answer,status=status.HTTP_200_OK)
+        return CustomResponse(answer,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 
@@ -144,24 +139,24 @@ class ServiceActionsAdminView(APIView):
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
-                    return Response(image_ser.errors,status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سرویس"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         id = request.data["id"]
         service = get_object_or_404(Service,id=id)
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
-        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def delete(self, request):
         service=  get_object_or_404(Service,request.data["id"])
         service.delete()
         
-        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+        return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="سرویس"))
     
 
 
@@ -211,8 +206,8 @@ class ServiceDetailView(generics.RetrieveAPIView):
 
 
             
-            return Response(final_response,status=status.HTTP_200_OK)
-        return Response({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
+        return CustomResponse({"message" :"need id"},status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="سرویس"))
     
     
 
@@ -224,13 +219,32 @@ class UserServiceView(generics.RetrieveAPIView):
         user = request.user
         service = get_object_or_404(Service,user_id = user.id)
         serializer = ServiceSerializer(service,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddServiceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-
     queryset =Service.objects.all()
-    
+    def post(self, request):
+        user= request.user
+        temp = copy.deepcopy(request.data)
+        images = request.FILES.getlist('images')
+        temp["user_id"] = user.id
+        serializer = ServiceSerializer(data = temp)
+        if(serializer.is_valid()):
+            serializer.save()
+            id = serializer.data["id"]
+            for i in images:
+                body ={
+                    "service": id,
+                    "image" : i
+                }
+                image_ser = ServiceImagesSerializer (data =body)
+                if (image_ser.is_valid()):
+                    image_ser.save()
+                else:
+                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سرویس"))
+
     
 class EditServiceView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
@@ -242,9 +256,9 @@ class EditServiceView(generics.UpdateAPIView):
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
-        return Response(serializer.errors,status=status.HTTP_202_ACCEPTED)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
         
      
 
@@ -256,7 +270,7 @@ class DeleteServiceView(generics.DestroyAPIView):
         service=  get_object_or_404(Service,request.data["id"])
         service.delete()
         
-        return Response({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT)
+        return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="سرویس"))
         
      
 class ChangeStatusView(generics.UpdateAPIView):
@@ -268,7 +282,7 @@ class ChangeStatusView(generics.UpdateAPIView):
         service = get_object_or_404(Service,id=id)
         service.status = request.data["status"]
         service.save()
-        return Response({"message" : "status changed"},status=status.HTTP_200_OK)    
+        return CustomResponse({"message" : "status changed"},status=status.HTTP_200_OK,message=CustomMessage(data="تغییر وضعیت موفیقت آمیز بود"))    
     
 
 class NegotiateServiceView(generics.CreateAPIView):
@@ -281,9 +295,9 @@ class NegotiateServiceView(generics.CreateAPIView):
         serializer = ServiceNegotiateSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="درخواست مذاکره"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
 class NegotiateServiceAdminView(APIView):
     permission_classes = [IsAdminUser]
@@ -292,7 +306,7 @@ class NegotiateServiceAdminView(APIView):
         if(id):
             negotiate = get_object_or_404(ServiceNegotiate,id = id)
             serializer = ServiceNegotiateSerializer(negotiate).data
-            return Response(serializer,status=status.HTTP_200_OK)
+            return CustomResponse(serializer,status=status.HTTP_200_OK,message=CustomMessage(1))
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         service_id=request.GET.get("service_id")
@@ -316,25 +330,25 @@ class NegotiateServiceAdminView(APIView):
             "total_count" : total_count,
             "data": final
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     
     def put (self,request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         negotiate = get_object_or_404(ServiceNegotiate,id=id)
         serializer = ServiceNegotiateSerializer(negotiate,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="درخواست مذاکره"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         negotiate = get_object_or_404(ServiceNegotiate,id=id)
         negotiate.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="درخواست مذاکره"))
 
 
 class ServiceCommentView(APIView):
@@ -344,7 +358,7 @@ class ServiceCommentView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         if(service_id == None):
-            return Response("need service id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("need service id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
             
         comment = ServiceComments.objects.filter(service=service_id)
         comment = comment.filter(reply=None)
@@ -374,7 +388,7 @@ class ServiceCommentView(APIView):
         }
         
 
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         
         serializer = ServiceCommentsSerializer(data = request.data)
@@ -391,19 +405,19 @@ class ServiceCommentView(APIView):
                     if(vote_serializer.is_valid()):
                         vote_serializer.save()
 
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="نظر"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         comment = get_object_or_404(ServiceComments,id=id)
         serializer = ServiceCommentsSerializer(comment,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="نظر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
 
     
@@ -443,7 +457,7 @@ class ServiceAdminCommentView(APIView):
             "total_count" : total_cout,
             "data": final
         }
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         
         serializer = ServiceCommentsSerializer(data = request.data)
@@ -460,27 +474,27 @@ class ServiceAdminCommentView(APIView):
                     if(vote_serializer.is_valid()):
                         vote_serializer.save()
 
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="نظر"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         comment = get_object_or_404(ServiceComments,id=id)
         serializer = ServiceCommentsSerializer(comment,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="نظر"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         comment = get_object_or_404(ServiceComments,id=id)
         comment.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="نظر"))
 
 
     
@@ -495,7 +509,7 @@ class ServiceQuestionView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         if(service_id == None):
-            return Response("need service id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("need service id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
             
         question = ServiceQuestions.objects.filter(service=service_id)
         total_cout = len(question)
@@ -516,24 +530,24 @@ class ServiceQuestionView(APIView):
         }
         
 
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         serializer = ServiceQuestionsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سوال"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         question = get_object_or_404(ServiceQuestions,id=id)
         serializer = ServiceQuestionsSerializer(question,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
 class ServiceAdminQuestionView(APIView):
     permission_classes = [IsAdminUser]
@@ -563,29 +577,29 @@ class ServiceAdminQuestionView(APIView):
             "data": final_answer
         }
        
-        return Response(final_response,status=status.HTTP_200_OK)
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
     def post(self, request):
         serializer = ServiceQuestionsSerializer(data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سوال"))
         
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
     def put(self, request):
         if('id' not in request.data or 'id' =='' ):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         question = get_object_or_404(ServiceQuestions,id=id)
         serializer = ServiceQuestionsSerializer(question,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=serializer._errors))
 
     def delete(self,request):
         id = request.GET.get('id')
         if(id == None):
-            return Response("neeed id",status=status.HTTP_400_BAD_REQUEST)
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         question = get_object_or_404(ServiceQuestions,id=id)
         question.delete()
-        return Response("deleted",status=status.HTTP_202_ACCEPTED)
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="سوال"))
