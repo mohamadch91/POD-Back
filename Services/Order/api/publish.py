@@ -1,53 +1,54 @@
 #!/usr/bin/env python
-import pika
-import uuid
+
+import grpc 
+from .rpc import user_pb2,user_pb2_grpc,base_info_pb2,base_info_pb2_grpc
+import os
 import json
+AUTH_ADDRESS = os.environ.get('AUTH_GRPC_ADDRESS', '[::]:50051')
+BASE_INFO_ADDRESS = os.environ.get('BASE_INFO_GRPC_ADDRESS', '[::]:50052')
 
-class RpcClient(object):
+def authenticate(jwt):
+    with grpc.insecure_channel(AUTH_ADDRESS) as channel:
+        stub = user_pb2_grpc.UserControllerStub(channel)
+        request = user_pb2.AuthenticationRequest(jwt=jwt)
+        try:
+            response = stub.Authentication(request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
 
-    def __init__(self):
-        self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='rabbitmq',credentials=pika.PlainCredentials(username='rabbitmq',password='rabbitmq')))
-
-        self.channel = self.connection.channel(5)
-        self.response = None
-        self.corr_id = None
-        result = self.channel.queue_declare(queue='', exclusive=True)
-        self.callback_queue = result.method.queue
-        self.channel.basic_consume(
-            queue=self.callback_queue,
-            on_message_callback=self.on_response,
-            auto_ack=True)
-       
-
-    def on_response(self, ch, method, props, body):
-
-
-        if self.corr_id == props.correlation_id:
-            self.response = body
-            # ch.basic_ack(delivery_tag=method.delivery_tag)
-            
-        # else:    
-        #     ch.basic_ack(delivery_tag=0)
-
-    def call(self, queue,data):
-        self.response = None
-        self.channel.basic_publish(
-            exchange='',
-            routing_key=queue,
-            properties=pika.BasicProperties(
-                reply_to=self.callback_queue,
-                correlation_id=self.corr_id,
-            ),
-            body=data)
-        while self.response is None:
-            self.connection.process_data_events(time_limit=10)
-        return self.response
-
-
-def transfer(data,queue):
     
-    rpc = RpcClient()
-    response = rpc.call(queue=queue,data=data)
-    rpc.connection.close()
-    return(json.loads(response.decode('ascii')))
+
+def get_user(id):
+    with grpc.insecure_channel(AUTH_ADDRESS) as channel:
+        stub = user_pb2_grpc.UserControllerStub(channel)
+        request = user_pb2.GetUserRequest(id=id)
+        try:
+            response = stub.GetUser(request)
+            user= {}
+            user['id'] = response.id
+            user['phone'] = response.phone
+            user['companyName'] = response.companyName
+            user['first_name'] = response.first_name
+            user['last_name'] = response.last_name
+            return user
+
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+
+def get_info(data):
+    with grpc.insecure_channel(BASE_INFO_ADDRESS) as channel:
+        stub = base_info_pb2_grpc.BaseInfoControllerStub(channel)
+        request =[]
+        for i in data:
+            request.append(base_info_pb2.BaseInfoRequest(name=i,id=data[i]))
+        final_request = base_info_pb2.GetBaseInfoRequest(baseInfo=request)
+        try:
+            response = stub.GetInfo(final_request)
+            return response
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
