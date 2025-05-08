@@ -204,6 +204,39 @@ class CommerceActionsAdminView(APIView):
         serializer = CommerceSerializer(commerce,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
+            if("images" in request.data):
+                ids= []
+                for i in request.data["images"]:
+                    if(i["edited"] == True or i["edited"] == "true"):
+                        if("id" in i):
+                            ids.append(i["id"])
+                            body ={
+                                "commerce": id,
+                                "image" : i["image"],
+                                "id": i["id"]
+                            }
+                            image = get_object_or_404(CommerceImages,id=i["id"])
+                            image_ser = CommerceImagesSerializer (image,data=body,partial=True)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                        else:
+                            body ={
+                                "commerce": id,
+                                "image" : i["image"]
+                            }
+                            image_ser = CommerceImagesSerializer (data =body)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                                ids.append(image_ser.data["id"])
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    else:
+                        ids.append(i["id"])
+                images = CommerceImages.objects.filter(commerce=id).exclude(id__in=ids)
+                images.delete()
+            
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -232,9 +265,13 @@ class CommerceDetailView(generics.RetrieveAPIView):
             
             images  = CommerceImages.objects.filter(commerce=i["id"] )
             image_data = CommerceImagesSerializer(images,many=True).data
-            img_copy = copy.deepcopy(image_data)
-            for j in img_copy:
-                j["image"] = 'commerce'+j["image"] 
+            images_response= []
+            for j in image_data:
+                body ={
+                    "id":j["id"],
+                    "image":'commerce'+j["image"]
+                }
+                images_response.append(body)
            
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
@@ -246,7 +283,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
             final_response =copy.deepcopy(i)
             # final_response["city_id"] = datas["city"]
             
-            final_response["images"] = img_copy
+            final_response["images"] = images_response
             final_response["votes"] = sum_votes
             final_response["brand"] = None
             final_response["category"] = None
@@ -317,9 +354,42 @@ class EditCommerceView(generics.UpdateAPIView):
     def put(self, request):
         id = request.data["id"]
         commerce = get_object_or_404(Commerce,id=id)
-        serializer = CommerceSerializer(commerce,data = request.data)
+        serializer = CommerceSerializer(commerce,data = request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
+            if("images" in request.data):
+                ids= []
+                for i in request.data["images"]:
+                    if(i["edited"] == True or i["edited"] == "true"):
+                        if("id" in i):
+                            ids.append(i["id"])
+                            body ={
+                                "commerce": id,
+                                "image" : i["image"],
+                                "id": i["id"]
+                            }
+                            image = get_object_or_404(CommerceImages,id=i["id"])
+                            image_ser = CommerceImagesSerializer (image,data=body,partial=True)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                        else:
+                            body ={
+                                "commerce": id,
+                                "image" : i["image"]
+                            }
+                            image_ser = CommerceImagesSerializer (data =body)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                                ids.append(image_ser.data["id"])
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    else:
+                        ids.append(i["id"])
+                images = CommerceImages.objects.filter(commerce=id).exclude(id__in=ids)
+                images.delete()
+
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))

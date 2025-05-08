@@ -149,6 +149,38 @@ class ServiceActionsAdminView(APIView):
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
+            if("images" in request.data):
+                ids= []
+                for i in request.data["images"]:
+                    if(i["edited"] == True or i["edited"] == "true"):
+                        if("id" in i):
+                            ids.append(i["id"])
+                            body ={
+                                "service": id,
+                                "image" : i["image"],
+                                "id": i["id"]
+                            }
+                            image = get_object_or_404(ServiceImages,id=i["id"])
+                            image_ser = ServiceImagesSerializer (image,data=body,partial=True)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                        else:
+                            body ={
+                                "service": id,
+                                "image" : i["image"]
+                            }
+                            image_ser = ServiceImagesSerializer (data =body)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                                ids.append(image_ser.data["id"])
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    else:
+                        ids.append(i["id"])
+                images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
+                images.delete()
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -179,7 +211,15 @@ class ServiceDetailView(generics.RetrieveAPIView):
             datas= get_info(transfer_data)
             images  = ServiceImages.objects.filter(service=i["id"] )
             image_data = ServiceImagesSerializer(images,many=True).data
-          
+            images_response=[]
+            for j in image_data:
+                body ={
+                    "id":j["id"],
+                    "image":'service'+j["image"]
+                }
+                images_response.append(body)
+
+
             votes = ServiceVotes.objects.filter(service=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -191,7 +231,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
             final_response["city_id"] = None
             final_response["brand"] = None
             final_response["category"] = None
-            final_response["images"] = image_data
+            final_response["images"] = images_response
             final_response["votes"] = sum_votes
             if(datas):
                 if(datas.baseInfo):
@@ -265,6 +305,39 @@ class EditServiceView(generics.UpdateAPIView):
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
+            if("images" in request.data):
+                ids= []
+                for i in request.data["images"]:
+                    if(i["edited"] == True or i["edited"] == "true"):
+                        if("id" in i):
+                            ids.append(i["id"])
+                            body ={
+                                "service": id,
+                                "image" : i["image"],
+                                "id": i["id"]
+                            }
+                            image = get_object_or_404(ServiceImages,id=i["id"])
+                            image_ser = ServiceImagesSerializer (image,data=body,partial=True)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                        else:
+                            body ={
+                                "service": id,
+                                "image" : i["image"]
+                            }
+                            image_ser = ServiceImagesSerializer (data =body)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                                ids.append(image_ser.data["id"])
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    else:
+                        ids.append(i["id"])
+                images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
+                images.delete()
+            
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
