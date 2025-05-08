@@ -198,11 +198,20 @@ class ServiceDetailView(generics.RetrieveAPIView):
                     datas = datas.baseInfo
                     for j in datas:
                         if(j.key == "category"):
-                            final_response["category"] = j.value
+                            final_response["category"] = {
+                                "id": service.brand,
+                                "value": j.value
+                            }
                         if(j.key == "brand"):
-                            final_response["brand"] = j.value
+                            final_response["brand"] = {
+                                "id": service.brand,
+                                "value":j.value
+                            }
                         if (j.key == "city"):
-                            final_response["city"] = j.value
+                            final_response["city"] = {
+                                "id": service.city_id,
+                                "value": j.value
+                            }
 
 
             
