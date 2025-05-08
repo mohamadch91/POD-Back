@@ -256,9 +256,15 @@ class CommerceDetailView(generics.RetrieveAPIView):
                     datas = datas.baseInfo
                     for j in datas:
                         if(j.key == "brand"):
-                            final_response["brand"] = j.value
+                            final_response["brand"] = {
+                                "id": commerce.brand,
+                                "value": j.value
+                            }
                         if(j.key == "category"):
-                            final_response["category"] = j.value
+                            final_response["category"] = {
+                                "id": commerce.category,
+                                "value": j.value
+                            }
                 
 
             return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
