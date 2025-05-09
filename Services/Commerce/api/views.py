@@ -573,7 +573,7 @@ class CommerceAdminCommentView(APIView):
         else:       
             comment = CommerceComments.objects.all()
         comment = comment.filter(reply=None)
-        total_cout = len(comment)
+        total_count = len(comment)
         if(page and page_size):
             page = int(page)
             page_size = int(page_size)
@@ -594,7 +594,7 @@ class CommerceAdminCommentView(APIView):
             final.append(i)
 
         final_response ={
-            "total_count" : total_cout,
+            "total_count" : total_count,
             "data": final
         }
         return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
