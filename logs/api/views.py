@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .customResponse import CustomResponse,CustomMessage
-
+from . permissions import IsAdminUser
 class PermiumRequestView(APIView):
 
     def post(self, request):
@@ -28,7 +28,7 @@ class ConsultationRequestView(APIView):
 
 
 class PermiumRequestAdminView(APIView):
-
+    permission_classes= [IsAdminUser]
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
@@ -67,7 +67,7 @@ class PermiumRequestAdminView(APIView):
     
 
 class ConsultationRequestAdminView(APIView):
-    
+        permission_classes= [IsAdminUser]
         def get(self, request):
             page = request.GET.get("page")
             page_size=request.GET.get("page_size")
@@ -114,6 +114,7 @@ class ContactUsView(APIView):
     
 
 class ContactUsAdminView(APIView):
+    permission_classes= [IsAdminUser]
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")

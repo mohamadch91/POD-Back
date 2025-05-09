@@ -6,14 +6,26 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 import copy
 from .customResponse import CustomResponse,CustomMessage
-
+from .permissions import IsAdminUser
 
 
 class NewsCategoryAdminView(APIView):
+    permission_classes= [IsAdminUser]
     def get(self, request):
+        page = request.GET.get("page")
+        page_size=request.GET.get("page_size")
         news_categories = NewsCategory.objects.all()
+        total_count = len(news_categories)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            news_categories = news_categories[page*page_size:page_size*(page+1)]
         serializer = NewsCategorySerializer(news_categories, many=True)
-        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+        final_response= {
+             "total_count" : total_count,
+            "data": serializer.data
+        }
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
     def post(self, request):
         serializer = NewsCategorySerializer(data=request.data)
@@ -43,6 +55,8 @@ class NewsCategoryAdminView(APIView):
 
 
 class BannerCategoryAdminView(APIView):
+    permission_classes= [IsAdminUser]
+
     def get(self, request):
         banner_categories = BannerCategory.objects.all()
         serializer = BannerCategorySerializer(banner_categories, many=True)
@@ -75,8 +89,8 @@ class BannerCategoryAdminView(APIView):
         return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(7,"بنر"))
 
 
-
 class NewsAdminView(APIView):
+    permission_classes= [IsAdminUser]
     def get(self, request):
         id= request.GET.get('id')
         if(id != None):
@@ -188,7 +202,7 @@ class NewsAdminView(APIView):
 
 
 class BannerAdminView(APIView):
-
+    permission_classes= [IsAdminUser]
     def get(self, request):
         id = request.GET.get('id')
         if(id == None):
@@ -228,9 +242,20 @@ class BannerAdminView(APIView):
 
 class NewsCategoryView(APIView):
     def get(self, request):
+        page = request.GET.get("page")
+        page_size=request.GET.get("page_size")
         news_categories = NewsCategory.objects.all()
+        total_count = len(news_categories)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            news_categories = news_categories[page*page_size:page_size*(page+1)]
         serializer = NewsCategorySerializer(news_categories, many=True)
-        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+        final_response= {
+             "total_count" : total_count,
+            "data": serializer.data
+        }
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class BannerCategoryView(APIView):
     def get(self, request):
