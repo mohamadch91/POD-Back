@@ -348,7 +348,7 @@ class AddCommerceView(generics.CreateAPIView):
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
 
 class EditCommerceView(generics.UpdateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommerceSerializer
     queryset =Commerce.objects.all()
     def put(self, request):
