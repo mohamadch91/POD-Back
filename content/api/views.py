@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 import copy
-from .customResponse import CustomResponse,CustomMessage
+from .customResponse import CustomResponse,CustomMessage,convert_form_to_list
 from .permissions import IsAdminUser
 
 
@@ -155,18 +155,19 @@ class NewsAdminView(APIView):
         serializer = NewsSerializer(news,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
-            if("images" in request.data):
+            new_data= convert_form_to_list(request.data)
+            if("images" in new_data):
                 ids= []
-                for i in request.data["images"]:
+                for i in new_data["images"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
-                            ids.append(i["id"])
+                            ids.append(int(i["id"]))
                             body ={
                                 "news": id,
                                 "image" : i["image"],
-                                "id": i["id"]
+                                "id": int(i["id"])
                             }
-                            image = get_object_or_404(NewsImages,id=i["id"])
+                            image = get_object_or_404(NewsImages,id=int(i["id"]))
                             image_ser = NewsImagesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
@@ -184,7 +185,7 @@ class NewsAdminView(APIView):
                             else:
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
-                        ids.append(i["id"])
+                        ids.append(int(i["id"]))
                 images = NewsImages.objects.filter(news=id).exclude(id__in=ids)
                 images.delete()
             

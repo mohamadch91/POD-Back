@@ -63,3 +63,33 @@ def message_generator (field_fa,type):
         return field_fa +" اجباری است "
     
    
+
+def convert_form_to_list(form):
+    new_form = {}
+    main_keys = set()
+    for key in form:
+        if("]." in key):
+            main_key = key.split("[")[0]
+            main_keys.add(main_key)
+            sub_key = key.split(".")[1]
+            new_key = key.split("]")[0].split("[")[1]
+            if(main_key not in new_form):
+                new_form[main_key] = {}
+            if(new_key not in new_form[main_key]):
+                new_form[main_key][new_key] = []
+            new_form[main_key][new_key].append({sub_key: form[key]})
+        else:
+            new_form[key] = form[key]
+    for main_key in main_keys:
+        main_array=[]
+        for key in new_form[main_key]:
+            temp_array=new_form[main_key][key]
+            data={}
+            for i in temp_array:
+                for k in i:
+                    data[k] = i[k]
+            main_array.append(data)
+        new_form[main_key] = main_array
+
+    return new_form
+        

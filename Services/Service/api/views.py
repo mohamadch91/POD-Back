@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from .permissions import IsAuthenticated,IsAdminUser
 import copy
 from .publish import get_info,get_user
-from .customResponse import CustomResponse,CustomMessage
+from .customResponse import CustomResponse,CustomMessage,convert_form_to_list
 class ServiceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset =Service.objects.all()
@@ -149,18 +149,19 @@ class ServiceActionsAdminView(APIView):
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if("images" in request.data):
+            new_data= convert_form_to_list(request.data)
+            if("images" in new_data):
                 ids= []
-                for i in request.data["images"]:
+                for i in new_data["images"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
-                            ids.append(i["id"])
+                            ids.append(int(i["id"]))
                             body ={
                                 "service": id,
                                 "image" : i["image"],
-                                "id": i["id"]
+                                "id": int(i["id"])
                             }
-                            image = get_object_or_404(ServiceImages,id=i["id"])
+                            image = get_object_or_404(ServiceImages,id=int(i["id"]))
                             image_ser = ServiceImagesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
@@ -178,9 +179,10 @@ class ServiceActionsAdminView(APIView):
                             else:
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
-                        ids.append(i["id"])
+                        ids.append(int(i["id"]))
                 images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
                 images.delete()
+            
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -305,18 +307,19 @@ class EditServiceView(generics.UpdateAPIView):
         serializer = ServiceSerializer(service,data = request.data)
         if(serializer.is_valid()):
             serializer.save()
-            if("images" in request.data):
+            new_data= convert_form_to_list(request.data)
+            if("images" in new_data):
                 ids= []
-                for i in request.data["images"]:
+                for i in new_data["images"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
-                            ids.append(i["id"])
+                            ids.append(int(i["id"]))
                             body ={
                                 "service": id,
                                 "image" : i["image"],
-                                "id": i["id"]
+                                "id": int(i["id"])
                             }
-                            image = get_object_or_404(ServiceImages,id=i["id"])
+                            image = get_object_or_404(ServiceImages,id=int(i["id"]))
                             image_ser = ServiceImagesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
@@ -334,7 +337,7 @@ class EditServiceView(generics.UpdateAPIView):
                             else:
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
-                        ids.append(i["id"])
+                        ids.append(int(i["id"]))
                 images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
                 images.delete()
             

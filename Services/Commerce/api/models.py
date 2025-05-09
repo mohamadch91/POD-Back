@@ -11,7 +11,7 @@ class Commerce(models.Model):
     name = models.CharField(max_length = 200,null =True,blank =True)
     year = models.IntegerField(null =True,blank =True)
     weight = models.IntegerField(null =True,blank =True)
-    lentgh = models.FloatField(null=True,blank=True)
+    length = models.FloatField(null=True,blank=True)
     width = models.FloatField(null=True,blank=True)
     height = models.FloatField(null=True,blank=True)
     description = models.TextField(max_length =1000,null =True,blank =True)

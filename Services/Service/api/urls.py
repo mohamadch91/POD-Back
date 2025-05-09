@@ -8,7 +8,6 @@ urlpatterns = [
     path('list/', ServiceListView.as_view(), name='get all service'),
     path('admin/list/', ServiceListAdminView.as_view(), name='get all service'),
     path('admin/actions/', ServiceActionsAdminView.as_view(), name='get all commerce'),
-
     path('detail/', ServiceDetailView.as_view(), name='get detail of one service'),
     path('user-active/', UserServiceView.as_view(), name='get user services'),
     path('add/', AddServiceView.as_view(), name='add service'),
