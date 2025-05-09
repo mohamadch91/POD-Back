@@ -91,7 +91,7 @@ class NewsAdminView(APIView):
                 images.append('content/media/' + x.image)
             temp["images"] = images
             final_response.append(temp)
-            return CustomResponse(final_response,status=status.HTTP_200_OK)
+            return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
         news = News.objects.all()
         page = request.GET.get("page")
         category = request.GET.get("category")
@@ -141,6 +141,39 @@ class NewsAdminView(APIView):
         serializer = NewsSerializer(news,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
+            if("images" in request.data):
+                ids= []
+                for i in request.data["images"]:
+                    if(i["edited"] == True or i["edited"] == "true"):
+                        if("id" in i):
+                            ids.append(i["id"])
+                            body ={
+                                "news": id,
+                                "image" : i["image"],
+                                "id": i["id"]
+                            }
+                            image = get_object_or_404(NewsImages,id=i["id"])
+                            image_ser = NewsImagesSerializer (image,data=body,partial=True)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                        else:
+                            body ={
+                                "news": id,
+                                "image" : i["image"]
+                            }
+                            image_ser = NewsImagesSerializer (data =body)
+                            if (image_ser.is_valid()):
+                                image_ser.save()
+                                ids.append(image_ser.data["id"])
+                            else:
+                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    else:
+                        ids.append(i["id"])
+                images = NewsImages.objects.filter(news=id).exclude(id__in=ids)
+                images.delete()
+            
             return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"خبر"))
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 
