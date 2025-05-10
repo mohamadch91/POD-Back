@@ -201,7 +201,7 @@ class CommerceActionsAdminView(APIView):
     def put(self, request):
         id = request.data["id"]
         commerce = get_object_or_404(Commerce,id=id)
-        serializer = CommerceSerializer(commerce,data = request.data)
+        serializer = CommerceSerializer(commerce,data = request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
             new_data=convert_form_to_list(request.data)

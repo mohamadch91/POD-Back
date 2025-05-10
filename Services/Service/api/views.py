@@ -146,7 +146,7 @@ class ServiceActionsAdminView(APIView):
     def put(self, request):
         id = request.data["id"]
         service = get_object_or_404(Service,id=id)
-        serializer = ServiceSerializer(service,data = request.data)
+        serializer = ServiceSerializer(service,data = request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
             new_data= convert_form_to_list(request.data)
@@ -304,7 +304,7 @@ class EditServiceView(generics.UpdateAPIView):
     def put(self, request):
         id = request.data["id"]
         service = get_object_or_404(Service,id=id)
-        serializer = ServiceSerializer(service,data = request.data)
+        serializer = ServiceSerializer(service,data = request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
             new_data= convert_form_to_list(request.data)
