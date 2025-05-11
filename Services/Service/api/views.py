@@ -286,14 +286,14 @@ class UserServiceView(generics.RetrieveAPIView):
         status_param= request.GET.get("status")
         category = request.GET.get("category")
         user = request.user
-        commerce = Service.objects.filter(user_id =user.id)
+        service = Service.objects.filter(user_id =user.id)
         if(is_active):
             if(is_active == True or is_active=='true'):
-                commerce= commerce.filter(is_active=True)
+                service= service.filter(is_active=True)
             else:
-                commerce= commerce.filter(is_active=False)
+                service= service.filter(is_active=False)
         if(status_param):
-            commerce= commerce.filter(status=int(status_param))
+            service= service.filter(status=int(status_param))
        
         if(category):
             service = service.filter(category = category)
