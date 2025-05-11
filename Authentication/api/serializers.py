@@ -13,7 +13,7 @@ import user_pb2
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture']
+        fields = ['pk','phone','birth','national_code','city','province','postalCode','address','created_at','updated_at','picture']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -26,18 +26,18 @@ class UserSerializer(serializers.ModelSerializer):
 class LegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
+        fields = ['pk','phone','birth','national_code','city','province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle']
 class RegisterLegalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LegalUser
-        fields = ['user_ptr_id','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle','is_active','is_superuser','is_staff']
+        fields = ['user_ptr_id','phone','birth','national_code','city','province','postalCode','address','created_at','updated_at','picture','companyName','companyID','companyTitle','is_active','is_superuser','is_staff']
   
   
 
 class RealUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealUser
-        fields = ['pk','phone','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture','gender','first_name','last_name']
+        fields = ['pk','phone','birth','national_code','city','province','postalCode','address','created_at','updated_at','picture','gender','first_name','last_name']
     def validate_password(self, value: str) -> str:
         """
         Hash value passed by user.
@@ -57,7 +57,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk','birth','national_code','city','Province','postalCode','address','created_at','updated_at','picture']
+        fields = ['pk','birth','national_code','city','province','postalCode','address','created_at','updated_at','picture']
 
 class UpdateLegalUserSerializer(serializers.ModelSerializer):
     class Meta:

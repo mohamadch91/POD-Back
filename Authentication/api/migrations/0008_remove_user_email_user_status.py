@@ -14,5 +14,10 @@ class Migration(migrations.Migration):
             model_name='user',
             name='email',
         ),
+          migrations.AddField(
+            model_name='user',
+            name='status',
+            field=models.IntegerField(blank=True, default=0, null=True),
+        ),
      
     ]

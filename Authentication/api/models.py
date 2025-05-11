@@ -58,7 +58,7 @@ class User(AbstractUser):
     updated_at=models.DateTimeField(auto_now=True)
     picture=models.ImageField(upload_to='profile_pictures/',blank=True,null=True)
     city = models.IntegerField (null=True,blank=True)
-    Province = models.IntegerField(null=True,blank=True)
+    province = models.IntegerField(null=True,blank=True)
     postalCode =models.CharField(max_length = 50,null=True,blank=True)
     address =models.CharField (max_length =500,null=True,blank=True)
     status = models.IntegerField(default=0,null=True,blank=True)
