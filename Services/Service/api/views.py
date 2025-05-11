@@ -21,6 +21,7 @@ class ServiceListView(generics.ListAPIView):
        
         if(category):
             service = service.filter(category = category)
+        total_count = len(service)
         if (page):
             if(page_size):
                 page_size = int(page_size)
@@ -60,8 +61,12 @@ class ServiceListView(generics.ListAPIView):
                             data["category"] = j.value
 
             answer.append(data)
+        final_answer={
+            "total_count" : total_count,
+            "data": answer
+        }
        
-        return CustomResponse(answer,status=status.HTTP_200_OK,message=CustomMessage(1))
+        return CustomResponse(final_answer,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 
@@ -76,6 +81,7 @@ class ServiceListAdminView(generics.ListAPIView):
        
         if(category):
             service = service.filter(category = category)
+        total_count = len(service)
         if (page):
             page_size = int(page_size)
             service = service[page_size*int(page):page_size*(int(page)+1)]
@@ -104,6 +110,7 @@ class ServiceListAdminView(generics.ListAPIView):
                 "sold" : 2455,
                 "category" : None,
                 "status":i["status"],
+                "is_active":i["is_active"],
 
             }
             if(datas):
@@ -114,8 +121,13 @@ class ServiceListAdminView(generics.ListAPIView):
                             data["category"] = j.value
 
             answer.append(data)
+        
+        final_answer={
+            "total_count" : total_count,
+            "data": answer
+        }
        
-        return CustomResponse(answer,status=status.HTTP_200_OK,message=CustomMessage(1))
+        return CustomResponse(final_answer,status=status.HTTP_200_OK,message=CustomMessage(1))
     
 
 
@@ -187,7 +199,10 @@ class ServiceActionsAdminView(APIView):
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
     def delete(self, request):
-        service=  get_object_or_404(Service,request.data["id"])
+        id = request.GET.get('id')
+        if(id == None):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        service=  get_object_or_404(Service,id=id)
         service.delete()
         
         return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="سرویس"))

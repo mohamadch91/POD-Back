@@ -163,7 +163,8 @@ class CommerceListAdminView(generics.ListAPIView):
                 "price":i["price"],
                 "image":img,
                 "status":i["status"],
-                "votes" : float(format(sum_votes, ".2f"))
+                "votes" : float(format(sum_votes, ".2f")),
+                "is_active": i["is_active"]
             }
             answer.append(data)
         final_response = {
@@ -241,7 +242,10 @@ class CommerceActionsAdminView(APIView):
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
     def delete(self, request):
-        commerce=  get_object_or_404(Commerce,id=request.data["id"])
+        id = request.GET.get('id')
+        if(id == None):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        commerce=  get_object_or_404(Commerce,id=id)
         commerce.delete()
         return CustomResponse({"message" : "deleted"},status=status.HTTP_204_NO_CONTENT,message=CustomMessage(type=7,data="بازرگانی"))
   
