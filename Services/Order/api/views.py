@@ -85,9 +85,9 @@ class ChangeStatusView(APIView):
     permission_classes = [IsAdminUser]
     def post(self, request):
         order_id = request.data.get('order_id')
-        status = request.data.get('status')
+        order_status = request.data.get('status')
         order = get_object_or_404(Order, id=order_id)
-        order.status = status
+        order.status = order_status
         order.save()
         return CustomResponse(OrderSerializer(order).data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سفارشات"))
     
