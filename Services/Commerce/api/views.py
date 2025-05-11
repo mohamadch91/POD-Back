@@ -18,7 +18,7 @@ class CommerceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset =Commerce.objects.all()
     def get(self, request):
-        commerce = Commerce.objects.filter(status=1)
+        commerce = Commerce.objects.filter(status=1,is_active=True)
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
         category = request.GET.get("category")
@@ -318,10 +318,31 @@ class UserCommerceView(generics.RetrieveAPIView):
 
     queryset =Commerce.objects.all()
     def get(self, request):
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        is_active= request.GET.get("is_active")
+        status_param= request.GET.get("status")
         user = request.user
         commerce = Commerce.objects.filter(user_id =user.id)
+        if(is_active):
+            if(is_active == True or is_active=='true'):
+                commerce= commerce.filter(is_active=True)
+            else:
+                commerce= commerce.filter(is_active=False)
+        if(status_param):
+            commerce= commerce.filter(status=int(status_param))
+        total_count = len(commerce)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            commerce = commerce[page*page_size:page_size*(page+1)]
+        
         serializer = CommerceSerializer(commerce,many=True)
-        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+        final_response ={
+            "total_count" : total_count,
+            "data": serializer.data
+        }
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddCommerceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
