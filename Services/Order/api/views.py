@@ -13,13 +13,40 @@ import copy
 
 import json
 from.customResponse import CustomResponse,CustomMessage
+from.publish import get_user
 
 class OrderViewAdmin(APIView):
     permission_classes = [IsAdminUser]
     def get(self, request):
+        page = request.GET.get("page")
+        page_size=request.GET.get("page_size")
         orders = Order.objects.all()
+        total_count= len(orders)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            orders = orders[page*page_size:page_size*(page+1)]
         serializer = OrderSerializer(orders, many=True)
-        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=1,data="سفارشات"))
+        res=[]
+        for i in serializer.data:
+            body={
+                "id":i['id'],
+                "user_id":get_user(i['user_id']),
+                "order_type":i['order_type'],
+                "amount":i['amount'],
+                "status":i['status'],
+                "created_at":i['created_at'],
+                "updated_at":i['updated_at']
+            }
+            res.append(body)
+        response = {
+            "total_count": total_count,
+
+            "orders": res
+        }
+
+
+        return CustomResponse(response,status=status.HTTP_200_OK,message=CustomMessage(type=1,data="سفارشات"))
     
 
     
@@ -45,10 +72,8 @@ class AddOrderView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         data = copy.deepcopy(request.data)
-        print(request.user)
-        user,token = request.user
-        user= json.loads(user)
-        data['user_id'] = user['id']
+        user = request.user
+        data['user_id'] = user.id
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
