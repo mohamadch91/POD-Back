@@ -338,9 +338,35 @@ class UserCommerceView(generics.RetrieveAPIView):
             commerce = commerce[page*page_size:page_size*(page+1)]
         
         serializer = CommerceSerializer(commerce,many=True)
-        final_response ={
+        answer = []
+
+        for i in serializer.data:
+            img =''
+            image  = CommerceImages.objects.filter(commerce=i["id"] )
+            if(len(image)>0):
+                image =image[0]
+                img = 'commerce/media/'+str(image.image)
+            votes = CommerceVotes.objects.filter(commerce=i["id"] )
+            sum_votes = 0
+            if(len(votes)>0):
+                for k in votes:
+                    sum_votes+=k.votes
+                sum_votes /= len(votes)
+          
+            data ={
+                "id":i["id"],
+                "name":i["name"],
+                "description":i["description"],
+                "price":i["price"],
+                "image":img,
+                "status":i["status"],
+                "votes" : float(format(sum_votes, ".2f")),
+                "is_active": i["is_active"]
+            }
+            answer.append(data)
+        final_response = {
             "total_count" : total_count,
-            "data": serializer.data
+            "list" : answer
         }
         return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 

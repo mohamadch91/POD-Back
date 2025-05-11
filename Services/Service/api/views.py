@@ -50,7 +50,6 @@ class ServiceListView(generics.ListAPIView):
                 "month_price":i["month_price"],
                 "image":img,
                 "available" : i["available_count"],
-                "sold" : 2455,
                 "category" : None
             }
             if(datas):
@@ -107,7 +106,6 @@ class ServiceListAdminView(generics.ListAPIView):
                 "month_price":i["month_price"],
                 "image":img,
                 "available" : i["available_count"],
-                "sold" : 2455,
                 "category" : None,
                 "status":i["status"],
                 "is_active":i["is_active"],
@@ -286,6 +284,7 @@ class UserServiceView(generics.RetrieveAPIView):
         page_size=request.GET.get("page_size")
         is_active= request.GET.get("is_active")
         status_param= request.GET.get("status")
+        category = request.GET.get("category")
         user = request.user
         commerce = Service.objects.filter(user_id =user.id)
         if(is_active):
@@ -295,18 +294,53 @@ class UserServiceView(generics.RetrieveAPIView):
                 commerce= commerce.filter(is_active=False)
         if(status_param):
             commerce= commerce.filter(status=int(status_param))
-        total_count = len(commerce)
-        if(page and page_size):
-            page = int(page)
-            page_size = int(page_size)
-            commerce = commerce[page*page_size:page_size*(page+1)]
+       
+        if(category):
+            service = service.filter(category = category)
+        total_count = len(service)
+        if (page):
+            if(page_size):
+                page_size = int(page_size)
+                service = service[page_size*int(page):page_size*(int(page)+1)]
+            else:
+                service = service[9*int(page):9*(int(page)+1)]
         
-        serializer = ServiceSerializer(commerce,many=True)
-        final_response ={
+        serializer = ServiceSerializer(service,many=True)
+        answer = []
+
+        for i in serializer.data:
+            img =''
+            image  = ServiceImages.objects.filter(service=i["id"] )
+            if(len(image)>0):
+                image =image[0]
+                img = '/service/media/'+str(image.image)
+            transfer_data={
+              
+                "serviceCategory" : i["category"]
+            }
+            datas= get_info(transfer_data)
+            data ={
+                "id":i["id"],
+                "name":i["name"],
+                "description":i["description"],
+                "month_price":i["month_price"],
+                "image":img,
+                "available" : i["available_count"],
+                "category" : None
+            }
+            if(datas):
+                if(datas.baseInfo):
+                    datas = datas.baseInfo
+                    for j in datas:
+                        if(j.key == "category"):
+                            data["category"] = j.value
+
+            answer.append(data)
+        final_answer={
             "total_count" : total_count,
-            "data": serializer.data
+            "data": answer
         }
-        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
+        return CustomResponse(final_answer,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddServiceView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
