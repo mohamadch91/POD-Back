@@ -11,7 +11,7 @@ urlpatterns = [
     path('user-active/', UserOrderView.as_view(), name='get user orders'),
     path('add/', AddOrderView.as_view(), name='add order'),
     path('change-status/', ChangeStatusView.as_view(), name='change status of order'),
-    path('list/admin', OrderViewAdmin.as_view(), name='change status of order'),
+    path('list/admin/', OrderViewAdmin.as_view(), name='change status of order'),
     
 
 ]
