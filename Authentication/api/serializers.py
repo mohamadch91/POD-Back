@@ -115,3 +115,8 @@ class RealUserProtoSerializer(proto_serializers.ModelProtoSerializer):
         model = RealUser
         proto_class = user_pb2.User
         fields = ['id','phone','first_name','last_name','is_superuser']
+
+class OTPRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OTPRequest
+        fields = '__all__'

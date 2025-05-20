@@ -336,16 +336,63 @@ class UserAdminView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
+        page = request.GET.get('page', 0)
+        page_size = request.GET.get('page_size', 10)
         users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1).message)
+        total_count= len(users)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            users = users[page*page_size:(page+1)*page_size]
+        res= []
+        for i in users:
+            user= get_object_or_404(User,phone =i.phone)
+            try:
+                user= get_object_or_404(LegalUser,phone =i.phone)
+                serializer = LegalUserSerializer(user)
+            except:
+                try:
+                    user= get_object_or_404(RealUser,phone =i.phone)
+                    serializer = RealUserSerializer(user)
+                except:
+                    serializer = UserSerializer(user)
+            res.append(serializer.data)
+        response = {
+            "total_count": total_count,  
+            "results": res
+        }
+        return CustomResponse(data=response,status=status.HTTP_200_OK,message=CustomMessage(1).message)
+        
 
 
 class UserStatusView(APIView):
     permission_classes = [IsAdminUser]
-
     def post(self, request):
         user = get_object_or_404(User,pk=request.data["id"])
         user.status = request.data["status"]
         user.save()
         return CustomResponse(None,status=status.HTTP_202_ACCEPTED,message=CustomMessage(data="وضعیت کاربر با موفقیت تغییر کرد").message)
+    
+
+class OTPViewAdmin(APIView):
+    permission_classes= [IsAdminUser]
+    def get(self, request):
+        page = request.GET.get('page', 0)
+        page_size = request.GET.get('page_size', 10)
+        otp_requests= OTPRequest.objects.all()
+        total_count= len(otp_requests)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            otp_requests = otp_requests[page*page_size:(page+1)*page_size]
+        serializer = OTPRequestSerializer(otp_requests, many=True)
+        response = {
+            "total_count": total_count,
+           
+            "results": serializer.data
+        }
+        return CustomResponse(data=response,status=status.HTTP_200_OK,message=CustomMessage(1).message)
+        
+
+
+
