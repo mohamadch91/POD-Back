@@ -380,11 +380,13 @@ class OTPViewAdmin(APIView):
         page = request.GET.get('page', 0)
         page_size = request.GET.get('page_size', 10)
         otp_requests= OTPRequest.objects.all()
+        otp_requests = otp_requests.order_by('-created')
         total_count= len(otp_requests)
         if(page and page_size):
             page = int(page)
             page_size = int(page_size)
             otp_requests = otp_requests[page*page_size:(page+1)*page_size]
+        
         serializer = OTPRequestSerializer(otp_requests, many=True)
         response = {
             "total_count": total_count,
