@@ -35,12 +35,14 @@ class Service(models.Model):
     fair_price = models.BooleanField(default=True,null =True,blank =True)
     valid_seller = models.BooleanField(default=True,null =True,blank =True)
     is_active=models.BooleanField(default=True,null=True,blank=True)
+    country= models.CharField(max_length=300,blank=True,null=True)
 
 
 
-class ServiceImages(models.Model):
+
+class ServiceFiles(models.Model):
     id = models.AutoField(primary_key=True) 
-    image = models.ImageField(upload_to='images',)
+    file = models.FileField(upload_to='files',)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
 class ServiceComments(models.Model):
     id = models.AutoField(primary_key=True) 
@@ -77,3 +79,4 @@ class ServiceNegotiate(models.Model):
     user_id = models.IntegerField(null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    description=models.CharField(max_length=700,blank=True,null=True)

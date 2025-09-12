@@ -29,11 +29,12 @@ class Commerce(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     is_active=models.BooleanField(default=True,null=True,blank=True)
+    country= models.CharField(max_length=300,blank=True,null=True)
 
 
-class CommerceImages(models.Model):
+class CommerceFiles(models.Model):
     id = models.AutoField(primary_key=True) 
-    image = models.ImageField(upload_to='images')
+    file = models.FileField(upload_to='files')
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
 
 
@@ -74,3 +75,4 @@ class CommerceNegotiate(models.Model):
     user_id = models.IntegerField(null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    description=models.CharField(max_length=700,blank=True,null=True)
