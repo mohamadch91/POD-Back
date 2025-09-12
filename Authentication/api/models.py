@@ -73,9 +73,9 @@ class User(AbstractUser):
     
 
 class LegalUser(User):
-    companyName= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
-    companyID = models.IntegerField(unique=True,null=True,blank=True)
-    companyTitle = models.CharField(unique=True,max_length = 50,null=True,blank=True)
+    company_name= models.CharField(max_length=50,unique=True,null=True,blank=True,db_index=True)
+    company_id = models.IntegerField(unique=True,null=True,blank=True)
+    company_title = models.CharField(unique=True,max_length = 50,null=True,blank=True)
     
     def __str__(self):
         return "{}".format(self.phone)

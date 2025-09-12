@@ -20,15 +20,56 @@ class UpdateProfileView(APIView):
         type=request.data["type"]
         phone=request.data["phone"]
         if(type=="real"):
-            user = RealUser.objects.get_or_create(phone=phone)
-            ser=UpdateRealUserSerializer(user[0],data=request.data,partial=True)
-            if(ser.is_valid()):
-                ser.save()
-                return CustomResponse(ser.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
-            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,ser._errors).message)
+            data= {}
+            try:
+                real_user = get_object_or_404(RealUser,user_ptr_id=request.data["pk"])
+                real_user_ser=RealUserSerializer(real_user,data=request.data,partial=True)
+                if(real_user_ser.is_valid()):
+                    real_user_ser.save()
+                    return  CustomResponse(real_user_ser.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
+
+                else:
+                    return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,legal_user_ser._errors).message)
+            except:
+                # assign user to a legal user and create legal user
+                user = get_object_or_404(User,phone=phone)
+                user_ser= UpdateUserSerializer(user,data=request.data,partial=True)
+                if(user_ser.is_valid()):
+                    user_ser.save()
+                    data = user_ser.data
+                else:
+                    return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,user_ser._errors).message)
+                
+                # do with cursor 
+                try:
+                    real_data ={
+                    }
+                    if( "first_name" in request.data):
+                        real_data["first_name"] = request.data["first_name"]
+                    else:
+                        real_data["first_name"] = None
+                    if( "last_name" in request.data):
+                        real_data["last_name"] = request.data["last_name"]
+                    else:
+                        real_data["last_name"] = ""
+                    if( "gender" in request.data):
+                        real_data["gender"] = request.data["gender"]
+                    else:
+                        real_data["gender"] = ""
+
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO public.api_legaluser ("user_ptr_id", "last_name", "first_name", "gender")
+                            VALUES (%s, %s, %s, %s)
+                        """, [user.pk, real_data["last_name"], real_data["first_name"], real_data["gender"]])
+                    data = data | real_data
+                    return CustomResponse(data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
+                except Exception as e:
+                    print("Error inserting data:", e)
+                    return CustomResponse(None, status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,"خطا در  ورودی").message)   
+        
         if(type=="legal"):
             data= {}
-         
             try:
                 legal_user = get_object_or_404(LegalUser,user_ptr_id=request.data["pk"])
                 legal_user_ser=LegalUserSerializer(legal_user,data=request.data,partial=True)
@@ -52,24 +93,24 @@ class UpdateProfileView(APIView):
                 try:
                     legal_data ={
                     }
-                    if( "companyID" in request.data):
-                        legal_data["companyID"] = request.data["companyID"]
+                    if( "company_id" in request.data):
+                        legal_data["company_id"] = request.data["company_id"]
                     else:
-                        legal_data["companyID"] = None
-                    if( "companyName" in request.data):
-                        legal_data["companyName"] = request.data["companyName"]
+                        legal_data["company_id"] = None
+                    if( "company_name" in request.data):
+                        legal_data["company_name"] = request.data["company_name"]
                     else:
-                        legal_data["companyName"] = ""
-                    if( "companyTitle" in request.data):
-                        legal_data["companyTitle"] = request.data["companyTitle"]
+                        legal_data["company_name"] = ""
+                    if( "company_title" in request.data):
+                        legal_data["company_title"] = request.data["company_title"]
                     else:
-                        legal_data["companyTitle"] = ""
+                        legal_data["company_title"] = ""
 
                     with connection.cursor() as cursor:
                         cursor.execute("""
-                            INSERT INTO public.api_legaluser ("user_ptr_id", "companyName", "companyID", "companyTitle")
+                            INSERT INTO public.api_legaluser ("user_ptr_id", "company_name", "company_id", "company_title")
                             VALUES (%s, %s, %s, %s)
-                        """, [user.pk, legal_data["companyName"], legal_data["companyID"], legal_data["companyTitle"]])
+                        """, [user.pk, legal_data["company_name"], legal_data["company_id"], legal_data["company_title"]])
                     data = data | legal_data
                     return CustomResponse(data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
                 except Exception as e:
