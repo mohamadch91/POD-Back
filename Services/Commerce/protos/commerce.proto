@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package commerce;
+
+
+service CommerceController {
+    rpc GetList(GetCommerceRequest) returns (GetCommerceResponse){}
+ 
+}
+
+
+
+message GetCommerceRequest {
+    string name = 1;
+    int32 id = 2;
+    string country =3;
+
+}
+
+
+message GetCommerceResponse{
+    string name = 1;
+    string image = 2;
+}
+
