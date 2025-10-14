@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-from .base_info_pb2 import GetBaseInfoRequest, GetBaseInfoResponse
-
+import base_info_pb2 as base__info__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -36,9 +35,9 @@ class BaseInfoControllerStub(object):
             channel: A grpc.Channel.
         """
         self.GetInfo = channel.unary_unary(
-                '/authentication.BaseInfoController/GetInfo',
-                request_serializer=GetBaseInfoRequest.SerializeToString,
-                response_deserializer=GetBaseInfoResponse.FromString,
+                '/base_info.BaseInfoController/GetInfo',
+                request_serializer=base__info__pb2.GetBaseInfoRequest.SerializeToString,
+                response_deserializer=base__info__pb2.GetBaseInfoResponse.FromString,
                 _registered_method=True)
 
 
@@ -56,14 +55,14 @@ def add_BaseInfoControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.GetInfo,
-                    request_deserializer=GetBaseInfoRequest.FromString,
-                    response_serializer=GetBaseInfoResponse.SerializeToString,
+                    request_deserializer=base__info__pb2.GetBaseInfoRequest.FromString,
+                    response_serializer=base__info__pb2.GetBaseInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'authentication.BaseInfoController', rpc_method_handlers)
+            'base_info.BaseInfoController', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('authentication.BaseInfoController', rpc_method_handlers)
+    server.add_registered_method_handlers('base_info.BaseInfoController', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -84,9 +83,9 @@ class BaseInfoController(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/authentication.BaseInfoController/GetInfo',
-            GetBaseInfoRequest.SerializeToString,
-            GetBaseInfoResponse.FromString,
+            '/base_info.BaseInfoController/GetInfo',
+            base__info__pb2.GetBaseInfoRequest.SerializeToString,
+            base__info__pb2.GetBaseInfoResponse.FromString,
             options,
             channel_credentials,
             insecure,
