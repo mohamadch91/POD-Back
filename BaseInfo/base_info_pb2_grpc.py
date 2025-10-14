@@ -35,7 +35,7 @@ class BaseInfoControllerStub(object):
             channel: A grpc.Channel.
         """
         self.GetInfo = channel.unary_unary(
-                '/authentication.BaseInfoController/GetInfo',
+                '/base_info.BaseInfoController/GetInfo',
                 request_serializer=base__info__pb2.GetBaseInfoRequest.SerializeToString,
                 response_deserializer=base__info__pb2.GetBaseInfoResponse.FromString,
                 _registered_method=True)
@@ -60,9 +60,9 @@ def add_BaseInfoControllerServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'authentication.BaseInfoController', rpc_method_handlers)
+            'base_info.BaseInfoController', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('authentication.BaseInfoController', rpc_method_handlers)
+    server.add_registered_method_handlers('base_info.BaseInfoController', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -83,7 +83,7 @@ class BaseInfoController(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/authentication.BaseInfoController/GetInfo',
+            '/base_info.BaseInfoController/GetInfo',
             base__info__pb2.GetBaseInfoRequest.SerializeToString,
             base__info__pb2.GetBaseInfoResponse.FromString,
             options,

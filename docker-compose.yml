@@ -84,7 +84,25 @@ services:
 
       db:
         condition: service_healthy
+  commerce-grpc:
+    image: commerce:latest
+    build: ./Services/Commerce
+    container_name: commerce-grpc
+    command: > 
+      sh -c "python3 manage.py customgrpcrunserver"
+    volumes:
+      - ./media/pod/commerce/media/:/code/media/
+    ports:
+        - 50053:50053
+    env_file:
+      - .env
+    networks:
+        - pod_net
+    depends_on:
 
+      db:
+        condition: service_healthy
+  
     
   service:
     image: service:latest
@@ -101,6 +119,24 @@ services:
     networks:
         - pod_net
     depends_on:
+      db:
+        condition: service_healthy
+  service-grpc:
+    image: commerce:latest
+    build: ./Services/Service
+    container_name: commerce-grpc
+    command: > 
+      sh -c "python3 manage.py customgrpcrunserver"
+    volumes:
+      - ./media/pod/service/media/:/code/media/
+    ports:
+        - 50054:50054
+    env_file:
+      - .env
+    networks:
+        - pod_net
+    depends_on:
+
       db:
         condition: service_healthy
 

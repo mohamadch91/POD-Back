@@ -24,21 +24,21 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x62\x61se_info.proto\x12\x0e\x61uthentication\"G\n\x12GetBaseInfoRequest\x12\x31\n\x08\x62\x61seInfo\x18\x01 \x03(\x0b\x32\x1f.authentication.BaseInfoRequest\"+\n\x0f\x42\x61seInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\"I\n\x13GetBaseInfoResponse\x12\x32\n\x08\x62\x61seInfo\x18\x01 \x03(\x0b\x32 .authentication.BaseInfoResponse\".\n\x10\x42\x61seInfoResponse\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t2j\n\x12\x42\x61seInfoController\x12T\n\x07GetInfo\x12\".authentication.GetBaseInfoRequest\x1a#.authentication.GetBaseInfoResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x62\x61se_info.proto\x12\tbase_info\"B\n\x12GetBaseInfoRequest\x12,\n\x08\x62\x61seInfo\x18\x01 \x03(\x0b\x32\x1a.base_info.BaseInfoRequest\"+\n\x0f\x42\x61seInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\"D\n\x13GetBaseInfoResponse\x12-\n\x08\x62\x61seInfo\x18\x01 \x03(\x0b\x32\x1b.base_info.BaseInfoResponse\".\n\x10\x42\x61seInfoResponse\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t2`\n\x12\x42\x61seInfoController\x12J\n\x07GetInfo\x12\x1d.base_info.GetBaseInfoRequest\x1a\x1e.base_info.GetBaseInfoResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'base_info_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_GETBASEINFOREQUEST']._serialized_start=35
-  _globals['_GETBASEINFOREQUEST']._serialized_end=106
-  _globals['_BASEINFOREQUEST']._serialized_start=108
-  _globals['_BASEINFOREQUEST']._serialized_end=151
-  _globals['_GETBASEINFORESPONSE']._serialized_start=153
-  _globals['_GETBASEINFORESPONSE']._serialized_end=226
-  _globals['_BASEINFORESPONSE']._serialized_start=228
-  _globals['_BASEINFORESPONSE']._serialized_end=274
-  _globals['_BASEINFOCONTROLLER']._serialized_start=276
-  _globals['_BASEINFOCONTROLLER']._serialized_end=382
+  _globals['_GETBASEINFOREQUEST']._serialized_start=30
+  _globals['_GETBASEINFOREQUEST']._serialized_end=96
+  _globals['_BASEINFOREQUEST']._serialized_start=98
+  _globals['_BASEINFOREQUEST']._serialized_end=141
+  _globals['_GETBASEINFORESPONSE']._serialized_start=143
+  _globals['_GETBASEINFORESPONSE']._serialized_end=211
+  _globals['_BASEINFORESPONSE']._serialized_start=213
+  _globals['_BASEINFORESPONSE']._serialized_end=259
+  _globals['_BASEINFOCONTROLLER']._serialized_start=261
+  _globals['_BASEINFOCONTROLLER']._serialized_end=357
 # @@protoc_insertion_point(module_scope)
