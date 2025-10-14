@@ -17,9 +17,9 @@ class CommerceSerializer(serializers.ModelSerializer):
         model = Commerce
         fields = '__all__'
         
-class CommerceImagesSerializer(serializers.ModelSerializer):
+class CommerceFilesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CommerceImages
+        model = CommerceFiles
         fields = '__all__'
         
 class CommerceCommentsSerializer(serializers.ModelSerializer):
