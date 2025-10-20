@@ -124,7 +124,7 @@ services:
   service-grpc:
     image: commerce:latest
     build: ./Services/Service
-    container_name: commerce-grpc
+    container_name: service-grpc
     command: > 
       sh -c "python3 manage.py customgrpcrunserver"
     volumes:
