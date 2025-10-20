@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import *
 from django.contrib import admin
-from Commerce import settings
+from Search import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import *
 urlpatterns = [

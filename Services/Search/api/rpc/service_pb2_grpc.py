@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-import service_pb2 as service__pb2
-
+from .service_pb2 import GetServiceRequest,GetServiceResponse
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
@@ -36,8 +35,8 @@ class ServiceControllerStub(object):
         """
         self.GetList = channel.unary_unary(
                 '/service.ServiceController/GetList',
-                request_serializer=service__pb2.GetServiceRequest.SerializeToString,
-                response_deserializer=service__pb2.GetServiceResponse.FromString,
+                request_serializer=GetServiceRequest.SerializeToString,
+                response_deserializer=GetServiceResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +54,8 @@ def add_ServiceControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetList': grpc.unary_unary_rpc_method_handler(
                     servicer.GetList,
-                    request_deserializer=service__pb2.GetServiceRequest.FromString,
-                    response_serializer=service__pb2.GetServiceResponse.SerializeToString,
+                    request_deserializer=GetServiceRequest.FromString,
+                    response_serializer=GetServiceResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +83,8 @@ class ServiceController(object):
             request,
             target,
             '/service.ServiceController/GetList',
-            service__pb2.GetServiceRequest.SerializeToString,
-            service__pb2.GetServiceResponse.FromString,
+            GetServiceRequest.SerializeToString,
+            GetServiceResponse.FromString,
             options,
             channel_credentials,
             insecure,

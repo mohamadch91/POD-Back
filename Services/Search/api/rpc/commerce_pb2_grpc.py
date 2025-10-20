@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-import commerce_pb2 as commerce__pb2
-
+from .commerce_pb2 import GetCommerceRequest,GetCommerceResponse
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
@@ -36,8 +35,8 @@ class CommerceControllerStub(object):
         """
         self.GetList = channel.unary_unary(
                 '/commerce.CommerceController/GetList',
-                request_serializer=commerce__pb2.GetCommerceRequest.SerializeToString,
-                response_deserializer=commerce__pb2.GetCommerceResponse.FromString,
+                request_serializer=GetCommerceRequest.SerializeToString,
+                response_deserializer=GetCommerceResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +54,8 @@ def add_CommerceControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetList': grpc.unary_unary_rpc_method_handler(
                     servicer.GetList,
-                    request_deserializer=commerce__pb2.GetCommerceRequest.FromString,
-                    response_serializer=commerce__pb2.GetCommerceResponse.SerializeToString,
+                    request_deserializer=GetCommerceRequest.FromString,
+                    response_serializer=GetCommerceResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +83,8 @@ class CommerceController(object):
             request,
             target,
             '/commerce.CommerceController/GetList',
-            commerce__pb2.GetCommerceRequest.SerializeToString,
-            commerce__pb2.GetCommerceResponse.FromString,
+            GetCommerceRequest.SerializeToString,
+            GetCommerceResponse.FromString,
             options,
             channel_credentials,
             insecure,
