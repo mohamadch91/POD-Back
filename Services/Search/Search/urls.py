@@ -18,6 +18,6 @@ from django.urls import path,include
 
 urlpatterns = [
     
-    path('commerce/',include('api.urls'))
+    path('search/',include('api.urls'))
 
 ]

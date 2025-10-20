@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package service;
+
+
+service ServiceController {
+    rpc GetList(GetServiceRequest) returns (GetServiceResponse){}
+ 
+}
+
+
+
+message GetServiceRequest {
+    string name = 1;
+    int32 id = 2;
+    string country =3;
+
+}
+
+
+message GetServiceResponse{
+      string name = 1;
+    string image = 2;
+}
+

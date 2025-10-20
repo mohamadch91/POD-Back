@@ -15,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path,include
-
+import commerce_pb2_grpc
+from api.services import CommerceService
 urlpatterns = [
     
     path('commerce/',include('api.urls'))
 
 ]
+
+def grpc_handlers(server):
+    commerce_pb2_grpc.add_CommerceControllerServicer_to_server(CommerceService.as_servicer(), server)

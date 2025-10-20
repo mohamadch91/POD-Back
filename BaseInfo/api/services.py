@@ -3,7 +3,6 @@ from django_grpc_framework.services import Service
 from .serializers import *
 import grpc
 from google.protobuf import empty_pb2
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 import json
 class BaseInfoService(Service):
@@ -130,8 +129,6 @@ class BaseInfoService(Service):
         res ={
                 "baseInfo":final_response
         }
-        print("here protobuf")
-        print(res)
         return BaseInfoRequestProtoSerializer(res).message
     
 
