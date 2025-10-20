@@ -59,7 +59,7 @@ class UpdateProfileView(APIView):
 
                     with connection.cursor() as cursor:
                         cursor.execute("""
-                            INSERT INTO public.api_legaluser ("user_ptr_id", "last_name", "first_name", "gender")
+                            INSERT INTO public.api_realuser ("user_ptr_id", "last_name", "first_name", "gender")
                             VALUES (%s, %s, %s, %s)
                         """, [user.pk, real_data["last_name"], real_data["first_name"], real_data["gender"]])
                     data = data | real_data
@@ -372,6 +372,16 @@ class LegalUserView(APIView):
         user= get_object_or_404(LegalUser,phone =user)
         serializer = LegalUserSerializer(user)
         return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1).message)
+class RealUserView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user = request.user
+        user= get_object_or_404(RealUser,phone =user)
+        serializer = RealUserSerializer(user)
+        return CustomResponse(data=serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1).message)
+
+
 
 class UserAdminView(APIView):
     permission_classes = [IsAdminUser]
