@@ -43,6 +43,7 @@ class Service(models.Model):
 class ServiceFiles(models.Model):
     id = models.AutoField(primary_key=True) 
     file = models.FileField(upload_to='files',)
+    default = models.BooleanField(default=False,null=True,blank=True)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
 class ServiceComments(models.Model):
     id = models.AutoField(primary_key=True) 

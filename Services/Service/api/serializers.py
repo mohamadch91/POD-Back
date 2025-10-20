@@ -42,7 +42,7 @@ class ServiceQuestionsSerializer(serializers.ModelSerializer):
         model = ServiceQuestions
         fields = '__all__'
 
-class CommerceRequestProtoSerializer(proto_serializers.ProtoSerializer):
+class ServiceRequestProtoSerializer(proto_serializers.ProtoSerializer):
     name = serializers.CharField()
     id= serializers.IntegerField()
     country = serializers.CharField()
@@ -55,7 +55,7 @@ class CommerceRequestProtoSerializer(proto_serializers.ProtoSerializer):
         return MessageToDict(message)
        
 
-class CommerceResponseProtoSerializer(proto_serializers.ProtoSerializer):
+class ServiceResponseProtoSerializer(proto_serializers.ProtoSerializer):
     name = serializers.CharField()
     image = serializers.CharField()
     class Meta:

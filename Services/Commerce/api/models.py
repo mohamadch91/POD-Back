@@ -35,6 +35,7 @@ class Commerce(models.Model):
 class CommerceFiles(models.Model):
     id = models.AutoField(primary_key=True) 
     file = models.FileField(upload_to='files')
+    default = models.BooleanField(default=False,null=True,blank=True)
     commerce = models.ForeignKey(Commerce,db_index= True , on_delete= models.CASCADE)
 
 
