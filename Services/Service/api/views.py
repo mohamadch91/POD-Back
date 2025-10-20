@@ -34,10 +34,10 @@ class ServiceListView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceImages.objects.filter(service=i["id"] )
+            image  = ServiceFiles.objects.filter(service=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = '/service/media/'+str(image.image)
+                img = '/service/media/'+str(image.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -90,10 +90,10 @@ class ServiceListAdminView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceImages.objects.filter(service=i["id"] )
+            image  = ServiceFiles.objects.filter(service=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = '/service/media/'+str(image.image)
+                img = '/service/media/'+str(image.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -145,7 +145,7 @@ class ServiceActionsAdminView(APIView):
                     "service": id,
                     "image" : i
                 }
-                image_ser = ServiceImagesSerializer (data =body)
+                image_ser = ServiceFilesSerializer (data =body)
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
@@ -171,8 +171,8 @@ class ServiceActionsAdminView(APIView):
                                 "image" : i["image"],
                                 "id": int(i["id"])
                             }
-                            image = get_object_or_404(ServiceImages,id=int(i["id"]))
-                            image_ser = ServiceImagesSerializer (image,data=body,partial=True)
+                            image = get_object_or_404(ServiceFiles,id=int(i["id"]))
+                            image_ser = ServiceFilesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                             else:
@@ -182,7 +182,7 @@ class ServiceActionsAdminView(APIView):
                                 "service": id,
                                 "image" : i["image"]
                             }
-                            image_ser = ServiceImagesSerializer (data =body)
+                            image_ser = ServiceFilesSerializer (data =body)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                                 ids.append(image_ser.data["id"])
@@ -190,7 +190,7 @@ class ServiceActionsAdminView(APIView):
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
+                images = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
                 images.delete()
             
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
@@ -224,8 +224,8 @@ class ServiceDetailView(generics.RetrieveAPIView):
 
             }
             datas= get_info(transfer_data)
-            images  = ServiceImages.objects.filter(service=i["id"] )
-            image_data = ServiceImagesSerializer(images,many=True).data
+            images  = ServiceFiles.objects.filter(service=i["id"] )
+            image_data = ServiceFilesSerializer(images,many=True).data
             images_response=[]
             for j in image_data:
                 body ={
@@ -310,10 +310,10 @@ class UserServiceView(generics.RetrieveAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceImages.objects.filter(service=i["id"] )
+            image  = ServiceFiles.objects.filter(service=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = '/service/media/'+str(image.image)
+                img = '/service/media/'+str(image.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -359,7 +359,7 @@ class AddServiceView(generics.CreateAPIView):
                     "service": id,
                     "image" : i
                 }
-                image_ser = ServiceImagesSerializer (data =body)
+                image_ser = ServiceFilesSerializer (data =body)
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
@@ -389,8 +389,8 @@ class EditServiceView(generics.UpdateAPIView):
                                 "image" : i["image"],
                                 "id": int(i["id"])
                             }
-                            image = get_object_or_404(ServiceImages,id=int(i["id"]))
-                            image_ser = ServiceImagesSerializer (image,data=body,partial=True)
+                            image = get_object_or_404(ServiceFiles,id=int(i["id"]))
+                            image_ser = ServiceFilesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                             else:
@@ -400,7 +400,7 @@ class EditServiceView(generics.UpdateAPIView):
                                 "service": id,
                                 "image" : i["image"]
                             }
-                            image_ser = ServiceImagesSerializer (data =body)
+                            image_ser = ServiceFilesSerializer (data =body)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                                 ids.append(image_ser.data["id"])
@@ -408,7 +408,7 @@ class EditServiceView(generics.UpdateAPIView):
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = ServiceImages.objects.filter(service=id).exclude(id__in=ids)
+                images = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
                 images.delete()
             
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))

@@ -66,10 +66,10 @@ class CommerceListView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceImages.objects.filter(commerce=i["id"] )
+            image  = CommerceFiles.objects.filter(commerce=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = 'commerce/media/'+str(image.image)
+                img = 'commerce/media/'+str(image.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -145,10 +145,10 @@ class CommerceListAdminView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceImages.objects.filter(commerce=i["id"] )
+            image  = CommerceFiles.objects.filter(commerce=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = 'commerce/media/'+str(image.image)
+                img = 'commerce/media/'+str(image.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -191,7 +191,7 @@ class CommerceActionsAdminView(APIView):
                     "commerce": id,
                     "image" : i
                 }
-                image_ser = CommerceImagesSerializer (data =body)
+                image_ser = CommerceFilesSerializer (data =body)
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
@@ -217,8 +217,8 @@ class CommerceActionsAdminView(APIView):
                                 "image" : i["image"],
                                 "id": int(i["id"])
                             }
-                            image = get_object_or_404(CommerceImages,id=int(i["id"]))
-                            image_ser = CommerceImagesSerializer (image,data=body,partial=True)
+                            image = get_object_or_404(CommerceFiles,id=int(i["id"]))
+                            image_ser = CommerceFilesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                             else:
@@ -228,7 +228,7 @@ class CommerceActionsAdminView(APIView):
                                 "commerce": id,
                                 "image" : i["image"]
                             }
-                            image_ser = CommerceImagesSerializer (data =body)
+                            image_ser = CommerceFilesSerializer (data =body)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                                 ids.append(image_ser.data["id"])
@@ -236,7 +236,7 @@ class CommerceActionsAdminView(APIView):
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = CommerceImages.objects.filter(commerce=id).exclude(id__in=ids)
+                images = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
                 images.delete()            
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
@@ -267,8 +267,8 @@ class CommerceDetailView(generics.RetrieveAPIView):
             }
             datas= get_info(transfer_data)
             
-            images  = CommerceImages.objects.filter(commerce=i["id"] )
-            image_data = CommerceImagesSerializer(images,many=True).data
+            images  = CommerceFiles.objects.filter(commerce=i["id"] )
+            image_data = CommerceFilesSerializer(images,many=True).data
             images_response= []
             for j in image_data:
                 body ={
@@ -342,10 +342,10 @@ class UserCommerceView(generics.RetrieveAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceImages.objects.filter(commerce=i["id"] )
+            image  = CommerceFiles.objects.filter(commerce=i["id"] )
             if(len(image)>0):
                 image =image[0]
-                img = 'commerce/media/'+str(image.image)
+                img = 'commerce/media/'+str(image.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -389,7 +389,7 @@ class AddCommerceView(generics.CreateAPIView):
                     "commerce": id,
                     "image" : i
                 }
-                image_ser = CommerceImagesSerializer (data =body)
+                image_ser = CommerceFilesSerializer (data =body)
                 if (image_ser.is_valid()):
                     image_ser.save()
                 else:
@@ -420,8 +420,8 @@ class EditCommerceView(generics.UpdateAPIView):
                                 "image" : i["image"],
                                 "id": int(i["id"])
                             }
-                            image = get_object_or_404(CommerceImages,id=int(i["id"]))
-                            image_ser = CommerceImagesSerializer (image,data=body,partial=True)
+                            image = get_object_or_404(CommerceFiles,id=int(i["id"]))
+                            image_ser = CommerceFilesSerializer (image,data=body,partial=True)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                             else:
@@ -431,7 +431,7 @@ class EditCommerceView(generics.UpdateAPIView):
                                 "commerce": id,
                                 "image" : i["image"]
                             }
-                            image_ser = CommerceImagesSerializer (data =body)
+                            image_ser = CommerceFilesSerializer (data =body)
                             if (image_ser.is_valid()):
                                 image_ser.save()
                                 ids.append(image_ser.data["id"])
@@ -439,7 +439,7 @@ class EditCommerceView(generics.UpdateAPIView):
                                 return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = CommerceImages.objects.filter(commerce=id).exclude(id__in=ids)
+                images = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
                 images.delete()
 
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
