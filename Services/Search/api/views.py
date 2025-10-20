@@ -7,23 +7,27 @@ from .serializers import SearchResponseSerializer
 from .customResponse import CustomResponse,CustomMessage 
 
 class SearchView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self,request):
         query = request.GET.get("query")
         if(query):
             commerces=get_commerce_list(query)
             services= get_service_list(query)
+            
             final_response=[]
-            for i in commerces:
-                i["type"] = "commerce"
-                final_response.append(i)
-            for j in services:
-                j["type"] = "service"
-                final_response.append(j)
-            ser= SearchResponseSerializer(final_response)
+            if commerces and len(commerces)>0 :
+
+                for i in commerces:
+                    i["type"] = "commerce"
+                    final_response.append(i)
+            if services and len(services)>0:
+                for j in services:
+                    j["type"] = "service"
+                    final_response.append(j)
+            ser= SearchResponseSerializer(final_response,many=True)
             return CustomResponse(ser.data,status=status.HTTP_200_OK,message=CustomMessage(type=1))
 
         else:
-            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2))
+            return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=""))
     

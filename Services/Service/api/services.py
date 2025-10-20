@@ -1,12 +1,7 @@
-from django_grpc_framework.services import Service
-import grpc
-from google.protobuf import empty_pb2
+from django_grpc_framework.services import Service as service
 from .models import *
 from .serializers import *
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.shortcuts import get_object_or_404
-import json
-class ServiceService(Service):
+class CustomService(service):
     """
     gRPC service that allows users to be retrieved or updated.
     """

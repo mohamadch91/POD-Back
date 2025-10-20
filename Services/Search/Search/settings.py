@@ -40,6 +40,8 @@ INSTALLED_APPS = [
      'corsheaders',
      'django_filters',
      'api',
+     'django_grpc_framework',
+
 ]
 
 MIDDLEWARE = [

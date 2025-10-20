@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
 
 admin.site.register(Commerce)
-admin.site.register(CommerceImages)
+admin.site.register(CommerceFiles)
 admin.site.register(CommerceComments)
 admin.site.register(CommerceVotes)
 

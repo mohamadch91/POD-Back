@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.urls import path,include
 import service_pb2_grpc
-from api.services import ServiceService
+from api.services import CustomService
 urlpatterns = [
         path('service/',include('api.urls'))
 ]
 
 def grpc_handlers(server):
-    service_pb2_grpc.add_ServiceControllerServicer_to_server(ServiceService.as_servicer(), server)
+       service_pb2_grpc.add_ServiceControllerServicer_to_server(CustomService.as_servicer(), server)
