@@ -15,7 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path,include
-
+import service_pb2_grpc
+from api.services import ServiceService
 urlpatterns = [
         path('service/',include('api.urls'))
 ]
+
+def grpc_handlers(server):
+    service_pb2_grpc.add_ServiceControllerServicer_to_server(ServiceService.as_servicer(), server)

@@ -7,6 +7,7 @@ from django.contrib.staticfiles.urls import *
 urlpatterns = [
 
     path('admin/', admin.site.urls),
+     path('', SearchView.as_view(), name='get all commerce'),
 
 
 ]

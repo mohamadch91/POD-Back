@@ -12,33 +12,7 @@ from django.contrib.auth.hashers import make_password
 
   
 
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Service
-        fields = '__all__'
-        
-class ServiceFilesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceFiles
-        fields = '__all__'
-        
-        
-class ServiceCommentsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceComments
-        fields = '__all__'
-class ServiceVotesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceVotes
-        fields = '__all__'
-       
-
-class ServiceNegotiateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceNegotiate
-        fields = '__all__'
-
-class ServiceQuestionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ServiceQuestions
-        fields = '__all__'
+class SearchResponseSerializer(serializers.ModelSerializer):
+    name= serializers.CharField()
+    image = serializers.CharField()
+    type = models.CharField()
