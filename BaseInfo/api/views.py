@@ -27,7 +27,57 @@ class CityView(generics.ListAPIView):
         cities = City.objects.filter( province = prov)
         serializer = CitySerializer(cities,many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+    
+class CountryView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    queryset =City.objects.all()
+ 
+    def get(self, request):
+        country = Country.objects.all()
+        serializer = CountrySerializer(country,many=True)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+    def post(self, request):
+        serializer = CountrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(5,"کشور"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
+    
+    
+class CountryAdmin(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+
+    queryset =City.objects.all()
+ 
+    def get(self, request):
+        country = Country.objects.all()
+        serializer = CountrySerializer(country,many=True)
+        return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+
+    def post(self, request):
+        serializer = CountrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(5,"کشور"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
+    
+    def put(self, request):
+        commerceCategory = get_object_or_404(Country, id=request.data["id"])
+        serializer = CountrySerializer(commerceCategory, data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(6,"کشور"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
+    
+    def delete(self, request):
+        id = request.GET.get('id')
+        commerceCategory = get_object_or_404(Country, id = id)
+        commerceCategory.delete()
+        return CustomResponse(status=status.HTTP_204_NO_CONTENT,message=CustomMessage(7," کشور "))
+    
 class CommerceCategoryView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset =CommerceCategory.objects.all()
  
     def get(self, request):
@@ -35,6 +85,8 @@ class CommerceCategoryView(generics.ListAPIView):
         serializer = CommerceCategorySerializer(cities,many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 class ServiceCategoryView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset =ServiceCategory.objects.all()
  
     def get(self, request):
@@ -42,19 +94,35 @@ class ServiceCategoryView(generics.ListAPIView):
         serializer = ServiceCategorySerializer(cities,many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 class CommerceBrandsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset =CommerceBrands.objects.all()
  
     def get(self, request):
         cities = CommerceBrands.objects.all()
         serializer = CommerceBrandsSerializer(cities,many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+    def post(self, request):
+        serializer = CommerceBrandsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(5,"برند بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 class ServiceBrandsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset =ServiceBrands.objects.all()
  
     def get(self, request):
         cities = ServiceBrands.objects.all()
         serializer = ServiceBrandsSerializer(cities,many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
+    def post(self, request):
+            serializer = ServiceBrandsSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(5,"برند خدمات"))
+            return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,serializer._errors))
 class SaleMethodsView(generics.ListAPIView):
     queryset =SaleMethod.objects.all()
  
@@ -73,6 +141,7 @@ class DeliveryMethodsView(generics.ListAPIView):
 
 
 class CommerceStatusView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset =CommerceStatus.objects.all()
  
     def get(self, request):
@@ -81,6 +150,8 @@ class CommerceStatusView(generics.ListAPIView):
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class ServiceStatusView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset =ServiceStatus.objects.all()
  
     def get(self, request):
@@ -107,6 +178,8 @@ class BusinessTypeView(generics.ListAPIView):
     
 
 class OrderStatusView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     queryset =OrderStatus.objects.all()
  
     def get(self, request):

@@ -7,6 +7,9 @@ from BaseInfo import settings
 urlpatterns = [
     path('provinces/', ProvinceView.as_view(), name='get all provinces'),
     path('cities/', CityView.as_view(), name='get all cities'),
+    path('countries/', CityView.as_view(), name='get all cities'),
+    path('countryAdmin/', CityView.as_view(), name='get all cities'),
+
     path('commerceBrands/', CommerceBrandsView.as_view(), name='get all cities'),
     path('commerCategories/', CommerceCategoryView.as_view(), name='get all cities'),
     path('serviceBrands/', ServiceBrandsView.as_view(), name='get all cities'),
