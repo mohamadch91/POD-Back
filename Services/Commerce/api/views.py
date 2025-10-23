@@ -66,10 +66,10 @@ class CommerceListView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceFiles.objects.filter(commerce=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = 'commerce/media/'+str(image.file)
+            file  = CommerceFiles.objects.filter(commerce=i["id"],default=True )
+            if(len(file)>0):
+                file =file[0]
+                img = 'commerce/media/'+str(file.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -82,7 +82,7 @@ class CommerceListView(generics.ListAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "price":i["price"],
-                "image":img,
+                "file":img,
                 "votes" : float(format(sum_votes, ".2f"))
             }
             answer.append(data)
@@ -145,10 +145,10 @@ class CommerceListAdminView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceFiles.objects.filter(commerce=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = 'commerce/media/'+str(image.file)
+            file  = CommerceFiles.objects.filter(commerce=i["id"],default=True )
+            if(len(file)>0):
+                file =file[0]
+                img = 'commerce/media/'+str(file.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -161,7 +161,7 @@ class CommerceListAdminView(generics.ListAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "price":i["price"],
-                "image":img,
+                "file":img,
                 "status":i["status"],
                 "votes" : float(format(sum_votes, ".2f")),
                 "is_active": i["is_active"]
@@ -180,22 +180,24 @@ class CommerceActionsAdminView(APIView):
     def post(self, request):
         user = request.user
         temp = copy.deepcopy(request.data)
-        images = request.FILES.getlist('images')
+        files = request.FILES.getlist('files')
         temp["user_id"] = user.id
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in images:
+            for i in files:
                 body ={
                     "commerce": id,
-                    "image" : i
+                    "file" : i,
+                    "default":i["default"]
+
                 }
-                image_ser = CommerceFilesSerializer (data =body)
-                if (image_ser.is_valid()):
-                    image_ser.save()
+                file_ser = CommerceFilesSerializer (data =body)
+                if (file_ser.is_valid()):
+                    file_ser.save()
                 else:
-                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -206,38 +208,44 @@ class CommerceActionsAdminView(APIView):
         if(serializer.is_valid()):
             serializer.save()
             new_data=convert_form_to_list(request.data)
-            if("images" in new_data):
+            if("files" in new_data):
                 ids= []
-                for i in new_data["images"]:
+                for i in new_data["files"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
                             ids.append(int(i["id"]))
                             body ={
                                 "commerce": id,
-                                "image" : i["image"],
-                                "id": int(i["id"])
+                                "file" : i["file"],
+                                "id": int(i["id"]),
+                                "default":i["default"]
+
+                                
+                                
                             }
-                            image = get_object_or_404(CommerceFiles,id=int(i["id"]))
-                            image_ser = CommerceFilesSerializer (image,data=body,partial=True)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
+                            file = get_object_or_404(CommerceFiles,id=int(i["id"]))
+                            file_ser = CommerceFilesSerializer (file,data=body,partial=True)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                         else:
                             body ={
                                 "commerce": id,
-                                "image" : i["image"]
+                                "file" : i["file"],
+                                "default":i["default"]
+
                             }
-                            image_ser = CommerceFilesSerializer (data =body)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
-                                ids.append(image_ser.data["id"])
+                            file_ser = CommerceFilesSerializer (data =body)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
+                                ids.append(file_ser.data["id"])
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
-                images.delete()            
+                files = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
+                files.delete()            
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -267,15 +275,16 @@ class CommerceDetailView(generics.RetrieveAPIView):
             }
             datas= get_info(transfer_data)
             
-            images  = CommerceFiles.objects.filter(commerce=i["id"] )
-            image_data = CommerceFilesSerializer(images,many=True).data
-            images_response= []
-            for j in image_data:
+            files  = CommerceFiles.objects.filter(commerce=i["id"] )
+            file_data = CommerceFilesSerializer(files,many=True).data
+            files_response= []
+            for j in file_data:
                 body ={
                     "id":j["id"],
-                    "image":'commerce'+j["image"]
+                    "file":'commerce'+j["file"],
+                    "default":j["default"]
                 }
-                images_response.append(body)
+                files_response.append(body)
            
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
@@ -287,7 +296,7 @@ class CommerceDetailView(generics.RetrieveAPIView):
             final_response =copy.deepcopy(i)
             # final_response["city_id"] = datas["city"]
             
-            final_response["images"] = images_response
+            final_response["files"] = files_response
             final_response["votes"] = sum_votes
             final_response["brand"] = None
             final_response["category"] = None
@@ -323,12 +332,12 @@ class UserCommerceView(generics.RetrieveAPIView):
         is_active= request.GET.get("is_active")
         status_param= request.GET.get("status")
         user = request.user
-        commerce = Commerce.objects.filter(user_id =user.id)
+        commerce = Commerce.objects.filter(user_id =user.id).order_by("-updated_at")
         if(is_active):
             if(is_active == True or is_active=='true'):
-                commerce= commerce.filter(is_active=True)
+                commerce= commerce.filter(is_active=True).order_by("-updated_at")
             else:
-                commerce= commerce.filter(is_active=False)
+                commerce= commerce.filter(is_active=False).order_by("-updated_at")
         if(status_param):
             commerce= commerce.filter(status=int(status_param))
         total_count = len(commerce)
@@ -342,10 +351,10 @@ class UserCommerceView(generics.RetrieveAPIView):
 
         for i in serializer.data:
             img =''
-            image  = CommerceFiles.objects.filter(commerce=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = 'commerce/media/'+str(image.file)
+            file  = CommerceFiles.objects.filter(commerce=i["id"],default=True )
+            if(len(file)>0):
+                file =file[0]
+                img = 'commerce/media/'+str(file.file)
             votes = CommerceVotes.objects.filter(commerce=i["id"] )
             sum_votes = 0
             if(len(votes)>0):
@@ -358,7 +367,7 @@ class UserCommerceView(generics.RetrieveAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "price":i["price"],
-                "image":img,
+                "file":img,
                 "status":i["status"],
                 "votes" : float(format(sum_votes, ".2f")),
                 "is_active": i["is_active"]
@@ -378,22 +387,24 @@ class AddCommerceView(generics.CreateAPIView):
     def post(self, request):
         user = request.user
         temp = copy.deepcopy(request.data)
-        images = request.FILES.getlist('images')
+        files = request.FILES.getlist('files')
         temp["user_id"] = user.id
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in images:
+            for i in files:
                 body ={
                     "commerce": id,
-                    "image" : i
+                    "file" : i,
+                    "default":i["default"]
+
                 }
-                image_ser = CommerceFilesSerializer (data =body)
-                if (image_ser.is_valid()):
-                    image_ser.save()
+                file_ser = CommerceFilesSerializer (data =body)
+                if (file_ser.is_valid()):
+                    file_ser.save()
                 else:
-                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -409,38 +420,42 @@ class EditCommerceView(generics.UpdateAPIView):
         if(serializer.is_valid()):
             serializer.save()
             new_data=convert_form_to_list(request.data)
-            if("images" in new_data):
+            if("files" in new_data):
                 ids= []
-                for i in new_data["images"]:
+                for i in new_data["files"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
                             ids.append(int(i["id"]))
                             body ={
                                 "commerce": id,
-                                "image" : i["image"],
-                                "id": int(i["id"])
+                                "file" : i["file"],
+                                "id": int(i["id"]),
+                                "default":i["default"]
+
                             }
-                            image = get_object_or_404(CommerceFiles,id=int(i["id"]))
-                            image_ser = CommerceFilesSerializer (image,data=body,partial=True)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
+                            file = get_object_or_404(CommerceFiles,id=int(i["id"]))
+                            file_ser = CommerceFilesSerializer (file,data=body,partial=True)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                         else:
                             body ={
                                 "commerce": id,
-                                "image" : i["image"]
+                                "file" : i["file"],
+                                "default":i["default"]
+
                             }
-                            image_ser = CommerceFilesSerializer (data =body)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
-                                ids.append(image_ser.data["id"])
+                            file_ser = CommerceFilesSerializer (data =body)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
+                                ids.append(file_ser.data["id"])
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
-                images.delete()
+                files = CommerceFiles.objects.filter(commerce=id).exclude(id__in=ids)
+                files.delete()
 
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="بازرگانی"))
         
@@ -491,11 +506,12 @@ class NegotiateChatCommerceView(APIView):
         if (user_id and not commerce_id and not negotiate_id):
             if int(user_id) != request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
-            negotiates = CommerceNegotiate.objects.filter(user_id=user_id)
+            negotiates = CommerceNegotiate.objects.filter(user_id=user_id).order_by("-updated_at")
+            
             res=[]
             for i in negotiates:
                 ser_data=CommerceNegotiateSerializer(i).data
-                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id)
+                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id).order_by("-updated_at")
                 chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["commerce_name"] = i.commerce.name
@@ -515,7 +531,7 @@ class NegotiateChatCommerceView(APIView):
             if  negotiate.user_id!= request.user.id or negotiate.commerce.user_id != request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
             ser_data = CommerceNegotiateSerializer(negotiate).data
-            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id)
+            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id).order_by("-updated_at")
             chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -564,11 +580,11 @@ class NegotiateChatAdminCommerceView(APIView):
         commerce_id = request.GET.get("commerce_id")
         negotiate_id= request.GET.get("negotiate_id")
         if (user_id and not commerce_id and not negotiate_id):
-            negotiates = CommerceNegotiate.objects.filter(user_id=user_id)
+            negotiates = CommerceNegotiate.objects.filter(user_id=user_id).order_by("-updated_at")
             res=[]
             for i in negotiates:
                 ser_data=CommerceNegotiateSerializer(i).data
-                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id)
+                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id).order_by("-updated_at")
                 chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["commerce_name"] = i.commerce.name
@@ -577,14 +593,14 @@ class NegotiateChatAdminCommerceView(APIView):
             
         elif commerce_id and not user_id and not negotiate_id:
             commerce = get_object_or_404(Commerce,id=commerce_id)
-            negotiates = CommerceNegotiate.objects.filter(commerce= commerce.id)
+            negotiates = CommerceNegotiate.objects.filter(commerce= commerce.id).order_by("-updated_at")
             ser_data = CommerceNegotiateSerializer(negotiates,many=True).data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
         
         elif negotiate_id and not user_id and not commerce_id:
             negotiate = get_object_or_404(CommerceNegotiate,id = negotiate_id)
             ser_data = CommerceNegotiateSerializer(negotiate).data
-            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id)
+            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id).order_by("-updated_at")
             chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -627,9 +643,9 @@ class NegotiateCommerceAdminView(APIView):
         page_size=request.GET.get("page_size")
         commerce_id=request.GET.get("commerce_id")
         if(commerce_id):
-            negotiate = CommerceNegotiate.objects.filter(commerce = commerce_id)
+            negotiate = CommerceNegotiate.objects.filter(commerce = commerce_id).order_by("-updated_at")
         else:
-            negotiate = CommerceNegotiate.objects.all()
+            negotiate = CommerceNegotiate.objects.all().order_by("-updated_at")
         total_count = len(negotiate)
         if(page and page_size):
             page = int(page)
@@ -678,7 +694,7 @@ class CommerceCommentView(APIView):
         if(commerce_id == None):
             return CustomResponse("need commerce id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
             
-        comment = CommerceComments.objects.filter(commerce=commerce_id)
+        comment = CommerceComments.objects.filter(commerce=commerce_id).order_by("-updated_at")
         # remove comments which they are reply
         comment = comment.filter(reply=None)
         total_cout = len(comment)
@@ -689,7 +705,7 @@ class CommerceCommentView(APIView):
         serializer = CommerceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
-            reply = CommerceComments.objects.filter(reply = i["id"])
+            reply = CommerceComments.objects.filter(reply = i["id"]).order_by("-updated_at")
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
@@ -754,9 +770,9 @@ class CommerceAdminCommentView(APIView):
         page_size=request.GET.get("page_size")
         commerce_id=request.GET.get("commerce_id")
         if(commerce_id):
-            comment = CommerceComments.objects.filter(commerce=commerce_id)
+            comment = CommerceComments.objects.filter(commerce=commerce_id).order_by("-updated_at")
         else:       
-            comment = CommerceComments.objects.all()
+            comment = CommerceComments.objects.all().order_by("-updated_at")
         comment = comment.filter(reply=None)
         total_count = len(comment)
         if(page and page_size):
@@ -766,7 +782,7 @@ class CommerceAdminCommentView(APIView):
         serializer = CommerceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
-            reply = CommerceComments.objects.filter(reply = i["id"])
+            reply = CommerceComments.objects.filter(reply = i["id"]).order_by("-updated_at")
             reply_data = CommerceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
@@ -836,9 +852,9 @@ class CommerceQuestionView(APIView):
         page_size=request.GET.get("page_size")
         if(commerce_id == None):
             return CustomResponse("need commerce id",status=status.HTTP_400_BAD_REQUEST)
-        question = CommerceQuestions.objects.filter(commerce=commerce_id)
-        empty_answer = question.filter(answer=None,status=1)
-        answered= question.filter(status=4)
+        question = CommerceQuestions.objects.filter(commerce=commerce_id).order_by("-updated_at")
+        empty_answer = question.filter(answer=None,status=1).order_by("-updated_at")
+        answered= question.filter(status=4).order_by("-updated_at")
         final_questions = empty_answer| answered
         total_cout = len(question)
         if(page and page_size):
@@ -901,9 +917,9 @@ class CommerceAdminQuestionView(APIView):
         commerce_id=request.GET.get("commerce_id")
         commerce_status= request.GET.get("status")
         if(commerce_id):
-            question = CommerceQuestions.objects.filter(commerce=commerce_id)
+            question = CommerceQuestions.objects.filter(commerce=commerce_id).order_by("-updated_at")
         else:
-            question = CommerceQuestions.objects.all()
+            question = CommerceQuestions.objects.all().order_by("-updated_at")
         if commerce_status:
             question = question.filter(status=commerce_status)
         total_cout = len(question)
@@ -963,9 +979,9 @@ class CommerceQuestionAnswerView(APIView):
         commerce = get_object_or_404(Commerce,id= commerce_id)
         if(commerce.user_id != request.user.id):
             return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
-        question = CommerceQuestions.objects.filter(commerce=commerce_id,status__in=[1,3,5])
+        question = CommerceQuestions.objects.filter(commerce=commerce_id,status__in=[1,3,5]).order_by("-updated_at")
         if commerce_status:
-            question = question.filter(status=commerce_status)
+            question = question.filter(status=commerce_status).order_by("-updated_at")
         total_cout = len(question)
         if(page and page_size):
             page = int(page)
