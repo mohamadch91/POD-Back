@@ -63,6 +63,14 @@ class ServiceQuestions(models.Model):
     answer = models.CharField(max_length = 200,null=True,blank=True)
     user_id = models.IntegerField(null=True,blank=True)
     service = models.ForeignKey(Service,db_index= True , on_delete= models.CASCADE)
+     # 0 is default
+    # 1 is question accepted
+    # 2 question rejected
+    # 3 answered
+    # 4 answer accepted
+    # 5 answer rejected
+    status = models.IntegerField(default=0,null=True,blank=True)
+    reject_reason = models.CharField(max_length=400, null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     

@@ -1037,6 +1037,8 @@ class CommerceAdminQuestionConfirmView(APIView):
         for i in data:
             question = get_object_or_404(CommerceQuestions,id=i["id"])
             question.status = i["status"]
+            if "reject_reason" in i:
+                question.reject_reason = i["reject_reason"]
             question.save()
         return CustomResponse([],status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
         
