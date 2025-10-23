@@ -93,7 +93,7 @@ services:
     volumes:
       - ./media/pod/commerce/media/:/code/media/
     ports:
-        - 50053:50053
+        - 50055:50055
     env_file:
       - .env
     networks:
