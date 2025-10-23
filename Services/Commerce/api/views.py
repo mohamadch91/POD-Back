@@ -495,7 +495,7 @@ class NegotiateChatCommerceView(APIView):
             res=[]
             for i in negotiates:
                 ser_data=CommerceNegotiateSerializer(i).data
-                chats = CommerceNegoatiateChat.objects.filter(negotiate=i.id)
+                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id)
                 chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["commerce_name"] = i.commerce.name
@@ -515,7 +515,7 @@ class NegotiateChatCommerceView(APIView):
             if  negotiate.user_id!= request.user.id or negotiate.commerce.user_id != request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
             ser_data = CommerceNegotiateSerializer(negotiate).data
-            chats=CommerceNegoatiateChat.objects.filter(negotiate= negotiate.id)
+            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id)
             chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -538,7 +538,7 @@ class NegotiateChatCommerceView(APIView):
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
     def put(self, request):
         requested_user = request.user
-        negotiate_chat = get_object_or_404(CommerceNegoatiateChat,id=request.data["id"])
+        negotiate_chat = get_object_or_404(CommerceNegotiateChat,id=request.data["id"])
         if requested_user.id != negotiate_chat.user_id :
             return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به این مذاکره ندارد."))
         serializer = CommerceNegotiateChatSerializer(negotiate_chat,data = request.data,partial =True)
@@ -550,7 +550,7 @@ class NegotiateChatCommerceView(APIView):
     def delete(self, request):
         requested_user = request.user
         id = request.GET.get('id')
-        negotiate_chat = get_object_or_404(CommerceNegoatiateChat,id=id)
+        negotiate_chat = get_object_or_404(CommerceNegotiateChat,id=id)
         if requested_user.id != negotiate_chat.user_id :
             return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به این مذاکره ندارد."))
         negotiate_chat.delete()
@@ -568,7 +568,7 @@ class NegotiateChatAdminCommerceView(APIView):
             res=[]
             for i in negotiates:
                 ser_data=CommerceNegotiateSerializer(i).data
-                chats = CommerceNegoatiateChat.objects.filter(negotiate=i.id)
+                chats = CommerceNegotiateChat.objects.filter(negotiate=i.id)
                 chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["commerce_name"] = i.commerce.name
@@ -584,7 +584,7 @@ class NegotiateChatAdminCommerceView(APIView):
         elif negotiate_id and not user_id and not commerce_id:
             negotiate = get_object_or_404(CommerceNegotiate,id = negotiate_id)
             ser_data = CommerceNegotiateSerializer(negotiate).data
-            chats=CommerceNegoatiateChat.objects.filter(negotiate= negotiate.id)
+            chats=CommerceNegotiateChat.objects.filter(negotiate= negotiate.id)
             chat_data = CommerceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -600,7 +600,7 @@ class NegotiateChatAdminCommerceView(APIView):
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
     def put(self, request):
-        negotiate_chat = get_object_or_404(CommerceNegoatiateChat,id=request.data["id"])
+        negotiate_chat = get_object_or_404(CommerceNegotiateChat,id=request.data["id"])
         serializer = CommerceNegotiateChatSerializer(negotiate_chat,data = request.data,partial =True)
         if(serializer.is_valid()):
             serializer.save()
@@ -609,7 +609,7 @@ class NegotiateChatAdminCommerceView(APIView):
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
     def delete(self, request):
         id = request.GET.get('id')
-        negotiate_chat = get_object_or_404(CommerceNegoatiateChat,id=id)
+        negotiate_chat = get_object_or_404(CommerceNegotiateChat,id=id)
         negotiate_chat.delete()
         return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="درخواست مذاکره بازرگانی"))
 

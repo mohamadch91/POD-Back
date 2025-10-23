@@ -40,7 +40,7 @@ class CommerceNegotiateSerializer(serializers.ModelSerializer):
 
 class CommerceNegotiateChatSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CommerceNegoatiateChat
+        model = CommerceNegotiateChat
         fields = '__all__'
 
 class CommerceQuestionsSerializer(serializers.ModelSerializer):
