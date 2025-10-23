@@ -77,3 +77,11 @@ class CommerceNegotiate(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     description=models.CharField(max_length=700,blank=True,null=True)
+
+class CommerceNegoatiateChat(models.Model):
+    id = models.AutoField(primary_key=True)
+    negotiate= models.ForeignKey(CommerceNegotiate,db_index=True,on_delete=models.CASCADE)
+    message = models.CharField(max_length=500)
+    user_id = models.IntegerField(null=True,blank=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)

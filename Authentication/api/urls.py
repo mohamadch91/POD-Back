@@ -18,12 +18,10 @@ urlpatterns = [
     path('user/', UserView.as_view(), name='admin_login'),
     path('legal/', LegalUserView.as_view(), name='profile'),
     path('real/', RealUserView.as_view(), name='profile'),
-
     path('token/', TokenObtainPairView.as_view(), name='profile'),
     path('user-admin/', UserAdminView.as_view(), name='profile'),
     path('user/status/', UserStatusView.as_view(), name='profile'),
     path('sms/admin/',OTPViewAdmin.as_view(),name="OTP viewvregister "),
-    
     path('admin/', admin.site.urls),
 
 

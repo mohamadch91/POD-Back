@@ -38,6 +38,11 @@ class CommerceNegotiateSerializer(serializers.ModelSerializer):
         model = CommerceNegotiate
         fields = '__all__'
 
+class CommerceNegotiateChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommerceNegoatiateChat
+        fields = '__all__'
+
 class CommerceQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommerceQuestions
