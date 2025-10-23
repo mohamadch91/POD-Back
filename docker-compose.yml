@@ -35,7 +35,7 @@ services:
         condition: service_healthy
 
   baseInfo:
-    image: baseinfo
+    image: baseinfo:latest
     build: ./BaseInfo
     container_name: baseInfo
     command: > 
@@ -52,7 +52,7 @@ services:
       db:
         condition: service_healthy
   baseInfo-grpc:
-    image: baseinfo
+    image: baseinfo:latest
     build: ./BaseInfo
     container_name: baseInfo-grpc
     command: > 
@@ -122,7 +122,7 @@ services:
       db:
         condition: service_healthy
   service-grpc:
-    image: commerce:latest
+    image: service:latest
     build: ./Services/Service
     container_name: service-grpc
     command: > 
