@@ -37,6 +37,11 @@ class ServiceNegotiateSerializer(serializers.ModelSerializer):
         model = ServiceNegotiate
         fields = '__all__'
 
+class ServiceNegotiateChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommerceNegoatiateChat
+        fields = '__all__'
+
 class ServiceQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceQuestions

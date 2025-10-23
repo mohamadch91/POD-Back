@@ -510,7 +510,7 @@ class NegotiateChatCommerceView(APIView):
             ser_data = CommerceNegotiateSerializer(negotiates,many=True).data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
         
-        elif negotiate_id and not user_id and not commerce:
+        elif negotiate_id and not user_id and not commerce_id:
             negotiate = get_object_or_404(CommerceNegotiate,id = negotiate_id)
             if  negotiate.user_id!= request.user.id or negotiate.commerce.user_id != request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
@@ -581,7 +581,7 @@ class NegotiateChatAdminCommerceView(APIView):
             ser_data = CommerceNegotiateSerializer(negotiates,many=True).data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
         
-        elif negotiate_id and not user_id and not commerce:
+        elif negotiate_id and not user_id and not commerce_id:
             negotiate = get_object_or_404(CommerceNegotiate,id = negotiate_id)
             ser_data = CommerceNegotiateSerializer(negotiate).data
             chats=CommerceNegoatiateChat.objects.filter(negotiate= negotiate.id)

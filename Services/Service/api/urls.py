@@ -14,6 +14,10 @@ urlpatterns = [
     path('delete/', DeleteServiceView.as_view(), name='delete service'),
     path('edit/', EditServiceView.as_view(), name='edit  service'),
     path('negotiate/', NegotiateServiceView.as_view(), name='edit  service'),
+    path('negotiate/chat/', NegotiateChatServiceView.as_view(), name='edit  commerce'),
+    path('admin/negotiate/chat/', NegotiateChatAdminServiceView.as_view(), name='edit  commerce'),
+
+
     path('admin/negotiate/', NegotiateServiceAdminView.as_view(), name='edit  service'),
     path('change-status/', ChangeStatusView.as_view(), name='change status of service'),
     path('admin/question/', ServiceAdminQuestionView.as_view(), name='get all Service'),
