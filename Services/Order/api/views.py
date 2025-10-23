@@ -20,7 +20,7 @@ class OrderViewAdmin(APIView):
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
-        orders = Order.objects.all()
+        orders = Order.objects.all().order_by("-updated_at")
         total_count= len(orders)
         if(page and page_size):
             page = int(page)
@@ -63,7 +63,7 @@ class OrderDetailView(APIView):
 class UserOrderView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        queryset = Order.objects.filter(user_id=request.user.id)
+        queryset = Order.objects.filter(user_id=request.user.id).order_by("-updated_at")
         serializer = OrderSerializer(queryset, many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=1,data="سفارشات"))
 

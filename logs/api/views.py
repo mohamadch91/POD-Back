@@ -32,7 +32,7 @@ class PermiumRequestAdminView(APIView):
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
-        permium_requests = PermiumRequest.objects.all()
+        permium_requests = PermiumRequest.objects.all().order_by("-updated_at")
         total_count = len(permium_requests)
         if(page and page_size):
             page = int(page)
@@ -71,7 +71,7 @@ class ConsultationRequestAdminView(APIView):
         def get(self, request):
             page = request.GET.get("page")
             page_size=request.GET.get("page_size")
-            consultation_requests = ConsultationRequest.objects.all()
+            consultation_requests = ConsultationRequest.objects.all().order_by("-updated_at")
             total_count = len(consultation_requests)
             if(page and page_size):
                 page = int(page)
@@ -118,7 +118,7 @@ class ContactUsAdminView(APIView):
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
-        contact_us = ContactUs.objects.all()
+        contact_us = ContactUs.objects.all().order_by("-updated_at")
         total_count = len(contact_us)
         if(page and page_size):
             page = int(page)

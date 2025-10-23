@@ -14,7 +14,7 @@ class NewsCategoryAdminView(APIView):
     def get(self, request):
         page = request.GET.get("page")
         page_size=request.GET.get("page_size")
-        news_categories = NewsCategory.objects.all()
+        news_categories = NewsCategory.objects.all().order_by("-updated_at")
         total_count = len(news_categories)
         if(page and page_size):
             page = int(page)
@@ -58,7 +58,7 @@ class BannerCategoryAdminView(APIView):
     permission_classes= [IsAdminUser]
 
     def get(self, request):
-        banner_categories = BannerCategory.objects.all()
+        banner_categories = BannerCategory.objects.all().order_by("-updated_at")
         serializer = BannerCategorySerializer(banner_categories, many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
 
@@ -106,7 +106,7 @@ class NewsAdminView(APIView):
             temp["images"] = images
             final_response.append(temp)
             return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
-        news = News.objects.all()
+        news = News.objects.all().order_by("-updated_at")
         page = request.GET.get("page")
         category = request.GET.get("category")
         page_size = request.GET.get("page_size")
@@ -207,7 +207,7 @@ class BannerAdminView(APIView):
     def get(self, request):
         id = request.GET.get('id')
         if(id == None):
-            banners = Banner.objects.all()
+            banners = Banner.objects.all().order_by("-updated_at")
             serializer = BannerSerializer(banners, many=True)
             return CustomResponse(serializer.data)
         banner = get_object_or_404(Banner,id=id)
@@ -271,7 +271,7 @@ class NewsView(APIView):
         if(id != None):
             news = get_object_or_404(News,id=id)
             serializer = NewsSerializer(news)
-            images = NewsImages.objects.filter(news=news)
+            images = NewsImages.objects.filter(news=news).order_by("-updated_at")
             final_response = []
             temp = copy.copy(serializer.data)
             temp["image"] = 'content' + serializer.data["image"]
@@ -311,7 +311,7 @@ class NewsView(APIView):
 
 class BannerView(APIView):
     def get(self, request):
-        banners = Banner.objects.filter(status=2)
+        banners = Banner.objects.filter(status=2).order_by("-updated_at")
         serializer = BannerSerializer(banners, many=True)
         return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(1))
     

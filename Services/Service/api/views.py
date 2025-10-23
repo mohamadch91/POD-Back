@@ -20,7 +20,7 @@ class ServiceListView(generics.ListAPIView):
         category = request.GET.get("category")
        
         if(category):
-            service = service.filter(category = category)
+            service = service.filter(category = category).order_by("-updated_at")
         total_count = len(service)
         if (page):
             if(page_size):
@@ -34,10 +34,10 @@ class ServiceListView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceFiles.objects.filter(service=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = '/service/media/'+str(image.file)
+            file  = ServiceFiles.objects.filter(service=i["id"],default=True)
+            if(len(file)>0):
+                file =file[0]
+                img = '/service/media/'+str(file.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -48,7 +48,7 @@ class ServiceListView(generics.ListAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
-                "image":img,
+                "file":img,
                 "available" : i["available_count"],
                 "category" : None
             }
@@ -79,7 +79,7 @@ class ServiceListAdminView(generics.ListAPIView):
         category = request.GET.get("category")
        
         if(category):
-            service = service.filter(category = category)
+            service = service.filter(category = category).order_by("-updated_at")
         total_count = len(service)
         if (page):
             page_size = int(page_size)
@@ -90,10 +90,10 @@ class ServiceListAdminView(generics.ListAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceFiles.objects.filter(service=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = '/service/media/'+str(image.file)
+            file  = ServiceFiles.objects.filter(service=i["id"],default=True )
+            if(len(file)>0):
+                file =file[0]
+                img = '/service/media/'+str(file.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -104,7 +104,7 @@ class ServiceListAdminView(generics.ListAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
-                "image":img,
+                "file":img,
                 "available" : i["available_count"],
                 "category" : None,
                 "status":i["status"],
@@ -134,22 +134,23 @@ class ServiceActionsAdminView(APIView):
     def post(self, request):
         user= request.user
         temp = copy.deepcopy(request.data)
-        images = request.FILES.getlist('images')
+        files = request.FILES.getlist('files')
         temp["user_id"] = user.id
         serializer = ServiceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in images:
+            for i in files:
                 body ={
                     "service": id,
-                    "image" : i
+                    "file" : i,
+                    "default":i["default"],
                 }
-                image_ser = ServiceFilesSerializer (data =body)
-                if (image_ser.is_valid()):
-                    image_ser.save()
+                file_ser = ServiceFilesSerializer (data =body)
+                if (file_ser.is_valid()):
+                    file_ser.save()
                 else:
-                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سرویس"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
@@ -160,38 +161,40 @@ class ServiceActionsAdminView(APIView):
         if(serializer.is_valid()):
             serializer.save()
             new_data= convert_form_to_list(request.data)
-            if("images" in new_data):
+            if("files" in new_data):
                 ids= []
-                for i in new_data["images"]:
+                for i in new_data["files"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
                             ids.append(int(i["id"]))
                             body ={
                                 "service": id,
-                                "image" : i["image"],
-                                "id": int(i["id"])
+                                "file" : i["file"],
+                                "id": int(i["id"]),
+                                "default":i["default"],
                             }
-                            image = get_object_or_404(ServiceFiles,id=int(i["id"]))
-                            image_ser = ServiceFilesSerializer (image,data=body,partial=True)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
+                            file = get_object_or_404(ServiceFiles,id=int(i["id"]))
+                            file_ser = ServiceFilesSerializer (file,data=body,partial=True)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                         else:
                             body ={
                                 "service": id,
-                                "image" : i["image"]
+                                "file" : i["file"],
+                                "default":i["default"],
                             }
-                            image_ser = ServiceFilesSerializer (data =body)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
-                                ids.append(image_ser.data["id"])
+                            file_ser = ServiceFilesSerializer (data =body)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
+                                ids.append(file_ser.data["id"])
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
-                images.delete()
+                files = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
+                files.delete()
             
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
@@ -224,15 +227,18 @@ class ServiceDetailView(generics.RetrieveAPIView):
 
             }
             datas= get_info(transfer_data)
-            images  = ServiceFiles.objects.filter(service=i["id"] )
-            image_data = ServiceFilesSerializer(images,many=True).data
-            images_response=[]
-            for j in image_data:
+            files  = ServiceFiles.objects.filter(service=i["id"] )
+            file_data = ServiceFilesSerializer(files,many=True).data
+            files_response=[]
+            for j in file_data:
                 body ={
                     "id":j["id"],
-                    "image":'service'+j["image"]
+                    "file":'service'+j["file"],
+                    "default":j["default"]
+
+
                 }
-                images_response.append(body)
+                files_response.append(body)
 
 
             votes = ServiceVotes.objects.filter(service=i["id"] )
@@ -246,7 +252,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
             final_response["city_id"] = None
             final_response["brand"] = None
             final_response["category"] = None
-            final_response["images"] = images_response
+            final_response["files"] = files_response
             final_response["votes"] = sum_votes
             if(datas):
                 if(datas.baseInfo):
@@ -286,7 +292,7 @@ class UserServiceView(generics.RetrieveAPIView):
         status_param= request.GET.get("status")
         category = request.GET.get("category")
         user = request.user
-        service = Service.objects.filter(user_id =user.id)
+        service = Service.objects.filter(user_id =user.id).order_by("-updated_at")
         if(is_active):
             if(is_active == True or is_active=='true'):
                 service= service.filter(is_active=True)
@@ -310,10 +316,10 @@ class UserServiceView(generics.RetrieveAPIView):
 
         for i in serializer.data:
             img =''
-            image  = ServiceFiles.objects.filter(service=i["id"] )
-            if(len(image)>0):
-                image =image[0]
-                img = '/service/media/'+str(image.file)
+            file  = ServiceFiles.objects.filter(service=i["id"],default=True )
+            if(len(file)>0):
+                file =file[0]
+                img = '/service/media/'+str(file.file)
             transfer_data={
               
                 "serviceCategory" : i["category"]
@@ -324,7 +330,7 @@ class UserServiceView(generics.RetrieveAPIView):
                 "name":i["name"],
                 "description":i["description"],
                 "month_price":i["month_price"],
-                "image":img,
+                "file":img,
                 "available" : i["available_count"],
                 "category" : None
             }
@@ -348,22 +354,23 @@ class AddServiceView(generics.CreateAPIView):
     def post(self, request):
         user= request.user
         temp = copy.deepcopy(request.data)
-        images = request.FILES.getlist('images')
+        files = request.FILES.getlist('files')
         temp["user_id"] = user.id
         serializer = ServiceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in images:
+            for i in files:
                 body ={
                     "service": id,
-                    "image" : i
+                    "file" : i,
+                    "default":i["default"],
                 }
-                image_ser = ServiceFilesSerializer (data =body)
-                if (image_ser.is_valid()):
-                    image_ser.save()
+                file_ser = ServiceFilesSerializer (data =body)
+                if (file_ser.is_valid()):
+                    file_ser.save()
                 else:
-                    return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=image_ser._errors))
+                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=file_ser._errors))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سرویس"))
 
     
@@ -378,38 +385,41 @@ class EditServiceView(generics.UpdateAPIView):
         if(serializer.is_valid()):
             serializer.save()
             new_data= convert_form_to_list(request.data)
-            if("images" in new_data):
+            if("files" in new_data):
                 ids= []
-                for i in new_data["images"]:
+                for i in new_data["files"]:
                     if(i["edited"] == True or i["edited"] == "true"):
                         if("id" in i):
                             ids.append(int(i["id"]))
                             body ={
                                 "service": id,
-                                "image" : i["image"],
-                                "id": int(i["id"])
+                                "file" : i["file"],
+                                "id": int(i["id"]),
+                                "default":i["default"],
                             }
-                            image = get_object_or_404(ServiceFiles,id=int(i["id"]))
-                            image_ser = ServiceFilesSerializer (image,data=body,partial=True)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
+                            file = get_object_or_404(ServiceFiles,id=int(i["id"]))
+                            file_ser = ServiceFilesSerializer (file,data=body,partial=True)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                         else:
                             body ={
                                 "service": id,
-                                "image" : i["image"]
+                                "file" : i["file"],
+                                "default":i["default"],
+
                             }
-                            image_ser = ServiceFilesSerializer (data =body)
-                            if (image_ser.is_valid()):
-                                image_ser.save()
-                                ids.append(image_ser.data["id"])
+                            file_ser = ServiceFilesSerializer (data =body)
+                            if (file_ser.is_valid()):
+                                file_ser.save()
+                                ids.append(file_ser.data["id"])
                             else:
-                                return CustomResponse(image_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=image_ser._errors))
+                                return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
                     else:
                         ids.append(int(i["id"]))
-                images = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
-                images.delete()
+                files = ServiceFiles.objects.filter(service=id).exclude(id__in=ids)
+                files.delete()
             
             return CustomResponse(serializer.data,status=status.HTTP_200_OK,message=CustomMessage(type=6,data="سرویس"))
         
@@ -467,7 +477,7 @@ class NegotiateChatServiceView(APIView):
             res=[]
             for i in negotiates:
                 ser_data=ServiceNegotiateSerializer(i).data
-                chats = ServiceNegotiateChat.objects.filter(negotiate=i.id)
+                chats = ServiceNegotiateChat.objects.filter(negotiate=i.id).order_by("-updated_at")
                 chat_data = ServiceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["service_name"] = i.service.name
@@ -478,7 +488,7 @@ class NegotiateChatServiceView(APIView):
             service = get_object_or_404(Service,id=service_id)
             if  service.user_id!= request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
-            negotiates = ServiceNegotiate.objects.filter(service= service.id)
+            negotiates = ServiceNegotiate.objects.filter(service= service.id).order_by("-updated_at")
             ser_data = ServiceNegotiateSerializer(negotiates,many=True).data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
         
@@ -487,7 +497,7 @@ class NegotiateChatServiceView(APIView):
             if  negotiate.user_id!= request.user.id or negotiate.service.user_id != request.user.id:
                 return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="کاربر دسترسی به دیدن این مذاکره ها ندارد"))
             ser_data = ServiceNegotiateSerializer(negotiate).data
-            chats=ServiceNegotiateChat.objects.filter(negotiate= negotiate.id)
+            chats=ServiceNegotiateChat.objects.filter(negotiate= negotiate.id).order_by("-updated_at")
             chat_data = ServiceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -537,11 +547,11 @@ class NegotiateChatAdminServiceView(APIView):
         service_id = request.GET.get("service_id")
         negotiate_id= request.GET.get("negotiate_id")
         if (user_id and not service_id and not negotiate_id):
-            negotiates = ServiceNegotiate.objects.filter(user_id=user_id)
+            negotiates = ServiceNegotiate.objects.filter(user_id=user_id).order_by("-updated_at")
             res=[]
             for i in negotiates:
                 ser_data=ServiceNegotiateSerializer(i).data
-                chats = ServiceNegotiateChat.objects.filter(negotiate=i.id)
+                chats = ServiceNegotiateChat.objects.filter(negotiate=i.id).order_by("-updated_at")
                 chat_data = ServiceNegotiateChatSerializer(chats,many=True).data
                 ser_data["chats"] = chat_data
                 ser_data["service_name"] = i.service.name
@@ -550,14 +560,14 @@ class NegotiateChatAdminServiceView(APIView):
             
         elif service_id and not user_id and not service_id:
             service = get_object_or_404(Service,id=service_id)
-            negotiates = ServiceNegotiate.objects.filter(service= service.id)
+            negotiates = ServiceNegotiate.objects.filter(service= service.id).order_by("-updated_at")
             ser_data = ServiceNegotiateSerializer(negotiates,many=True).data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
         
         elif negotiate_id and not user_id and not service_id:
             negotiate = get_object_or_404(ServiceNegotiate,id = negotiate_id)
             ser_data = ServiceNegotiateSerializer(negotiate).data
-            chats=ServiceNegotiateChat.objects.filter(negotiate= negotiate.id)
+            chats=ServiceNegotiateChat.objects.filter(negotiate= negotiate.id).order_by("-updated_at")
             chat_data = ServiceNegotiateChatSerializer(chats,many=True).data
             ser_data["chats"]= chat_data
             return CustomResponse(ser_data,status=status.HTTP_200_OK,message=CustomMessage(1))
@@ -602,9 +612,9 @@ class NegotiateServiceAdminView(APIView):
         page_size=request.GET.get("page_size")
         service_id=request.GET.get("service_id")
         if service_id:
-            negotiate = ServiceNegotiate.objects.filter(service=service_id)
+            negotiate = ServiceNegotiate.objects.filter(service=service_id).order_by("-updated_at")
         else:
-            negotiate = ServiceNegotiate.objects.all()
+            negotiate = ServiceNegotiate.objects.all().order_by("-updated_at")
         total_count = len(negotiate)
         if(page and page_size):
             page = int(page)
@@ -651,8 +661,8 @@ class ServiceCommentView(APIView):
         if(service_id == None):
             return CustomResponse("need service id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
             
-        comment = ServiceComments.objects.filter(service=service_id)
-        comment = comment.filter(reply=None)
+        comment = ServiceComments.objects.filter(service=service_id).order_by("-updated_at")
+        comment = comment.filter(reply=None).order_by("-updated_at")
         total_cout = len(comment)
         if(page and page_size):
             page = int(page)
@@ -661,7 +671,7 @@ class ServiceCommentView(APIView):
         serializer = ServiceCommentsSerializer(comment,many=True).data
         final =[]
         for i in serializer:
-            reply = ServiceComments.objects.filter(reply = i["id"])
+            reply = ServiceComments.objects.filter(reply = i["id"]).order_by("-updated_at")
             reply_data = ServiceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
@@ -719,9 +729,9 @@ class ServiceAdminCommentView(APIView):
         page_size=request.GET.get("page_size")
         service_id=request.GET.get("service_id")
         if service_id:
-            comment = ServiceComments.objects.filter(service=service_id)
+            comment = ServiceComments.objects.filter(service=service_id).order_by("-updated_at")
         else:
-            comment = ServiceComments.objects.all()
+            comment = ServiceComments.objects.all().order_by("-updated_at")
         comment = comment.filter(reply=None)
         total_cout = len(comment)
         if(page and page_size):
@@ -732,7 +742,7 @@ class ServiceAdminCommentView(APIView):
         final =[]
         for i in serializer:
         
-            reply = ServiceComments.objects.filter(reply = i["id"])
+            reply = ServiceComments.objects.filter(reply = i["id"]).order_by("-updated_at")
             reply_data = ServiceCommentsSerializer(reply,many=True).data
             for j in reply_data:
                 user_id= j["user_id"]
@@ -798,9 +808,9 @@ class ServiceQuestionView(APIView):
         page_size=request.GET.get("page_size")
         if(service_id == None):
             return CustomResponse("need service id",status=status.HTTP_400_BAD_REQUEST)
-        question = ServiceQuestions.objects.filter(service=service_id)
-        empty_answer = question.filter(answer=None,status=1)
-        answered= question.filter(status=4)
+        question = ServiceQuestions.objects.filter(service=service_id).order_by("-updated_at")
+        empty_answer = question.filter(answer=None,status=1).order_by("-updated_at")
+        answered= question.filter(status=4).order_by("-updated_at")
         final_questions = empty_answer| answered
         total_cout = len(question)
         if(page and page_size):
@@ -863,9 +873,9 @@ class ServiceAdminQuestionView(APIView):
         service_id=request.GET.get("service_id")
         service_status= request.GET.get("status")
         if(service_id):
-            question = ServiceQuestions.objects.filter(service=service_id)
+            question = ServiceQuestions.objects.filter(service=service_id).order_by("-updated_at")
         else:
-            question = ServiceQuestions.objects.all()
+            question = ServiceQuestions.objects.all().order_by("-updated_at")
         if service_status:
             question = question.filter(status=service_status)
         total_cout = len(question)
@@ -925,9 +935,9 @@ class ServiceQuestionAnswerView(APIView):
         service = get_object_or_404(Service,id= service_id)
         if(service.user_id != request.user.id):
             return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
-        question = ServiceQuestions.objects.filter(service=service_id,status__in=[1,3,5])
+        question = ServiceQuestions.objects.filter(service=service_id,status__in=[1,3,5]).order_by("-updated_at")
         if service_status:
-            question = question.filter(status=service_status)
+            question = question.filter(status=service_status).order_by("-updated_at")
         total_cout = len(question)
         if(page and page_size):
             page = int(page)
@@ -1006,56 +1016,3 @@ class ServiceAdminQuestionConfirmView(APIView):
         
         
         
-    permission_classes = [IsAdminUser]
-
-    def get(self,request):
-        page= request.GET.get("page")
-        page_size=request.GET.get("page_size")
-        service_id=request.GET.get("service_id")
-        if service_id:
-            question = ServiceQuestions.objects.filter(service=service_id)
-        else:
-            question = ServiceQuestions.objects.all()
-        total_cout = len(question)
-        if(page and page_size):
-            page = int(page)
-            page_size = int(page_size)
-            question = question[page*page_size:page*page_size+page_size]
-        serializer = ServiceQuestionsSerializer(question,many=True).data
-        final_answer = []
-        for i in serializer:
-            user_id= i["user_id"]
-            user = get_user(user_id)
-            i["user"] = user
-            final_answer.append(i)
-        final_response ={
-            "total_count" : total_cout,
-            "data": final_answer
-        }
-       
-        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
-    def post(self, request):
-        serializer = ServiceQuestionsSerializer(data = request.data)
-        if(serializer.is_valid()):
-            serializer.save()
-            return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سوال"))
-        
-        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
-    def put(self, request):
-        if('id' not in request.data or 'id' =='' ):
-            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
-        id=request.data["id"]
-        question = get_object_or_404(ServiceQuestions,id=id)
-        serializer = ServiceQuestionsSerializer(question,data=request.data,partial=True)
-        if(serializer.is_valid()):
-            serializer.save()
-            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال"))
-        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
-
-    def delete(self,request):
-        id = request.GET.get('id')
-        if(id == None):
-            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
-        question = get_object_or_404(ServiceQuestions,id=id)
-        question.delete()
-        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="سوال"))
