@@ -836,14 +836,16 @@ class CommerceQuestionView(APIView):
         page_size=request.GET.get("page_size")
         if(commerce_id == None):
             return CustomResponse("need commerce id",status=status.HTTP_400_BAD_REQUEST)
-            
         question = CommerceQuestions.objects.filter(commerce=commerce_id)
+        empty_answer = question.filter(answer=None,status=1)
+        answered= question.filter(status=4)
+        final_questions = empty_answer| answered
         total_cout = len(question)
         if(page and page_size):
             page = int(page)
             page_size = int(page_size)
-            question = question[page*page_size:page*page_size+page_size]
-        serializer = CommerceQuestionsSerializer(question,many=True).data
+            final_questions = final_questions[page*page_size:page*page_size+page_size]
+        serializer = CommerceQuestionsSerializer(final_questions,many=True).data
         final_answer = []
         for i in serializer:
             user_id= i["user_id"]
@@ -869,11 +871,26 @@ class CommerceQuestionView(APIView):
             return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
         id=request.data["id"]
         question = get_object_or_404(CommerceQuestions,id=id)
+        if(question.status >=3):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" سوال قابل ویرایش نیست "))
+
+        if(request.user.id != question.user_id):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+
         serializer = CommerceQuestionsSerializer(question,data=request.data,partial=True)
         if(serializer.is_valid()):
             serializer.save()
             return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
+    def delete(self,request):
+        id = request.GET.get('id')
+        question = get_object_or_404(CommerceQuestions,id=id)
+        if(request.user.id != question.user_id):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+        question.delete()
+        return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="سوال بازرگانی"))
+
+
 
 class CommerceAdminQuestionView(APIView):
     permission_classes = [IsAdminUser]
@@ -882,10 +899,13 @@ class CommerceAdminQuestionView(APIView):
         page= request.GET.get("page")
         page_size=request.GET.get("page_size")
         commerce_id=request.GET.get("commerce_id")
+        commerce_status= request.GET.get("status")
         if(commerce_id):
             question = CommerceQuestions.objects.filter(commerce=commerce_id)
         else:
             question = CommerceQuestions.objects.all()
+        if commerce_status:
+            question = question.filter(status=commerce_status)
         total_cout = len(question)
         if(page and page_size):
             page = int(page)
@@ -929,6 +949,101 @@ class CommerceAdminQuestionView(APIView):
         question = get_object_or_404(CommerceQuestions,id=id)
         question.delete()
         return CustomResponse("deleted",status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=7,data="سوال بازرگانی"))
+
+
+class CommerceQuestionAnswerView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        page= request.GET.get("page")
+        page_size=request.GET.get("page_size")
+        commerce_id=request.GET.get("commerce_id")
+        commerce_status= request.GET.get("status")
+        if not commerce_id:
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        commerce = get_object_or_404(Commerce,id= commerce_id)
+        if(commerce.user_id != request.user.id):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+        question = CommerceQuestions.objects.filter(commerce=commerce_id,status__in=[1,3,5])
+        if commerce_status:
+            question = question.filter(status=commerce_status)
+        total_cout = len(question)
+        if(page and page_size):
+            page = int(page)
+            page_size = int(page_size)
+            question = question[page*page_size:page*page_size+page_size]
+        serializer = CommerceQuestionsSerializer(question,many=True).data
+        final_answer = []
+        for i in serializer:
+            user_id= i["user_id"]
+            user = get_user(user_id)
+            i["user"] = user
+            final_answer.append(i)
+        final_response ={
+            "total_count" : total_cout,
+            "data": final_answer
+        }
+        return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
+    
+    def post(self,request):
+        if('id' not in request.data or 'id' =='' ):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        id=request.data["id"]
+        question = get_object_or_404(CommerceQuestions,id=id)
+        if(request.user.id != question.commerce.user_id):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+        if(question.status !=1):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+
+        edited_data ={
+            "answer": request.data["answer"],
+            "id":id,
+            "status": 3
+
+        }
+        serializer = CommerceQuestionsSerializer(question,data=edited_data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
+    def put(self,request):
+        if('id' not in request.data or 'id' =='' ):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data="نیازمند id "))
+        id=request.data["id"]
+        question = get_object_or_404(CommerceQuestions,id=id)
+        if(request.user.id != question.commerce.user_id):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+        if(question.status <3):
+            return CustomResponse("neeed id",status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=" دسترسی شما کافی نیست "))
+
+        edited_data ={
+            "answer": request.data["answer"],
+            "id":id,
+
+        }
+        if question.status ==5 or question.status ==4 :
+            edited_data["status"] = 3
+        serializer = CommerceQuestionsSerializer(question,data=edited_data,partial=True)
+        if(serializer.is_valid()):
+            serializer.save()
+            return CustomResponse(serializer.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
+        return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
+
+
+
+class CommerceAdminQuestionConfirmView(APIView):
+    permission_classes = [IsAdminUser]
+    def post(self,request):
+        data = request.data
+        for i in data:
+            question = get_object_or_404(CommerceQuestions,id=i["id"])
+            question.status = i["status"]
+            question.save()
+        return CustomResponse([],status=status.HTTP_202_ACCEPTED,message=CustomMessage(type=6,data="سوال بازرگانی"))
+        
+        
+        
+
+            
 
        
         
