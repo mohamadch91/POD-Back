@@ -59,7 +59,7 @@ class User(AbstractUser):
     picture=models.ImageField(upload_to='profile_pictures/',blank=True,null=True)
     city = models.IntegerField (null=True,blank=True)
     province = models.IntegerField(null=True,blank=True)
-    postalCode =models.CharField(max_length = 50,null=True,blank=True)
+    postal_code =models.CharField(max_length = 50,null=True,blank=True)
     address =models.CharField (max_length =500,null=True,blank=True)
     status = models.IntegerField(default=0,null=True,blank=True)
     # status 0 is for defualt ,
