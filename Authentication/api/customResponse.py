@@ -41,6 +41,8 @@ class CustomMessage():
         return message +" با خطا مواجه شد " 
 
     def required(self,fields):
+        if type(fields) == str:
+            return fields
         ans= ""
         for key in fields:
             ans += str(fields[key][0]) + " "
