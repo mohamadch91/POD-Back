@@ -179,7 +179,7 @@ class OTPViewLogin(APIView):
                 
                 res ={
                     "login_data" : login_data,
-                    "user_data" : ser.data,
+                    "user_data" : ser,
                     "wallet_data" :w_ser.data 
                 }
                 return CustomResponse(res, status=status.HTTP_200_OK,message=CustomMessage(1).message)
