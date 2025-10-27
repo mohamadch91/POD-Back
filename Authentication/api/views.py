@@ -160,17 +160,23 @@ class OTPViewLogin(APIView):
                 ser = UserSerializer(user_data)
                 try:
                     user_data= get_object_or_404(LegalUser,phone =user_data.phone)
-                    ser = LegalUserSerializer(user_data)
+                    ser = LegalUserSerializer(user_data).data
+                    ser["type"]="legal"
                 except:
                     try:
                         user_data= get_object_or_404(RealUser,phone =user_data.phone)
-                        ser = RealUserSerializer(user_data)
+                        ser = RealUserSerializer(user_data).data
+                        ser["type"]="real"
+
                     except:
-                        ser = UserSerializer(user_data)
+                        ser = UserSerializer(user_data).data
+                        ser["type"]="no-type"
+
                 
                 wallet = get_object_or_404(Wallet,user = user_data.pk) 
 
                 w_ser= WalletSerializer(wallet,many = False)   
+                
                 res ={
                     "login_data" : login_data,
                     "user_data" : ser.data,
