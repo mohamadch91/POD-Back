@@ -271,7 +271,8 @@ class CommerceDetailView(generics.RetrieveAPIView):
             i = CommerceSerializer(commerce).data
             transfer_data={
                 "commerceBrand" : commerce.brand,
-                "commerceCategory" : commerce.category
+                "commerceCategory" : commerce.category,
+                "country": commerce.country
             }
             datas= get_info(transfer_data)
             
@@ -315,6 +316,12 @@ class CommerceDetailView(generics.RetrieveAPIView):
                                 "id": commerce.category,
                                 "value": j.value
                             }
+                        if(j.key == "country"):
+                            final_response["country"] = {
+                                "id": commerce.country,
+                                "value": j.value
+                            }
+                        
                 
 
             return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))

@@ -125,6 +125,20 @@ class BaseInfoService(Service):
                                         "key":"delivery",
                                         "value":None,
                                 })
+                if (i.name == "country"):
+                        if(i.id):
+                                country = get_object_or_404(Country,id=i.id)
+                                final_response.append({
+                                        "key":"country",
+                                        "value":country.value,
+                                })
+                        else:
+                                final_response.append({
+                                        "key":"country",
+                                        "value":None,
+                                })
+                                
+
         
         res ={
                 "baseInfo":final_response

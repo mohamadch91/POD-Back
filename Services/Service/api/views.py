@@ -224,6 +224,7 @@ class ServiceDetailView(generics.RetrieveAPIView):
                 "city":service.city_id,
                 "serviceBrand" : service.brand,
                 "serviceCategory" : service.category,
+                "country": service.country,
 
             }
             datas= get_info(transfer_data)
@@ -271,6 +272,11 @@ class ServiceDetailView(generics.RetrieveAPIView):
                         if (j.key == "city"):
                             final_response["city"] = {
                                 "id": service.city_id,
+                                "value": j.value
+                            }
+                        if (j.key == "country"):
+                            final_response["country"] = {
+                                "id": service.country,
                                 "value": j.value
                             }
 
