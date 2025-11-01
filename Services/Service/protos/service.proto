@@ -19,7 +19,11 @@ message GetServiceRequest {
 
 
 message GetServiceResponse{
-      string name = 1;
-    string image = 2;
+    repeated ServiceResponse service =1;
 }
 
+message ServiceResponse {
+     string name = 1;
+    string image = 2;
+
+}

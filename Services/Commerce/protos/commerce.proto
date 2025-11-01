@@ -19,7 +19,12 @@ message GetCommerceRequest {
 
 
 message GetCommerceResponse{
-    string name = 1;
+    repeated CommerceResponse commerce =1;
+}
+
+message CommerceResponse {
+     string name = 1;
     string image = 2;
+
 }
 

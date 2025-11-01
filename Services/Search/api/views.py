@@ -14,17 +14,24 @@ class SearchView(APIView):
         if(query):
             commerces=get_commerce_list(query)
             services= get_service_list(query)
-            
             final_response=[]
-            if commerces and len(commerces)>0 :
+            if commerces.commerce and len(commerces.commerce)>0 :
 
-                for i in commerces:
-                    i["type"] = "commerce"
-                    final_response.append(i)
-            if services and len(services)>0:
-                for j in services:
-                    j["type"] = "service"
-                    final_response.append(j)
+                for i in commerces.commerce:
+                    temp ={
+                        "type" : "commerce",
+                        "name": i.name,
+                        "image": i.image
+                    }
+                    final_response.append(temp)
+            if services.service and len(services.service)>0:
+                for j in services.service:
+                    temp ={
+                        "type" : "service",
+                        "name": i.name,
+                        "image": i.image
+                    }
+                    final_response.append(temp)
             ser= SearchResponseSerializer(final_response,many=True)
             return CustomResponse(ser.data,status=status.HTTP_200_OK,message=CustomMessage(type=1))
 

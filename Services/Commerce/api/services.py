@@ -18,7 +18,7 @@ class CommerceService(Service):
         if(id):
             commerce = Commerce.objects.filter(id=id)
         elif(name):
-            commerce = Commerce.objects.filter(name__contains = name)
+            commerce = Commerce.objects.filter(name__contains = name,status=1)
         elif country:
             commerce = Commerce.objects.filter(country=country)
         
@@ -26,11 +26,19 @@ class CommerceService(Service):
         for i in commerce:
             body ={  }
             files = CommerceFiles.objects.filter(commerce= i.id,default = True)
-            files= files[0]
-            body["image"] = 'commerce/media/'+str(files.file)
+            if(files.exists()):
+                files= files[0]
+                body["image"] = 'commerce/media/'+str(files.file)
+
+            else:
+                body["image"] = ''
+
             body["name"]= i.name
             res.append(body)
-        return CommerceResponseProtoSerializer(res).message
+        final_res= {
+            "commerce":res
+        }
+        return CommerceResponseProtoSerializer(final_res).message
     
 
 

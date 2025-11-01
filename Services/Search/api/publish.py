@@ -25,7 +25,6 @@ def authenticate(jwt):
 
 
 def get_commerce_list(query):
-    print(COMMERCE_ADRESS)
     with grpc.insecure_channel(COMMERCE_ADRESS) as channel:
         stub = commerce_pb2_grpc.CommerceControllerStub(channel)
         

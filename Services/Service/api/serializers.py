@@ -60,9 +60,20 @@ class ServiceRequestProtoSerializer(proto_serializers.ProtoSerializer):
         return MessageToDict(message)
        
 
+class ServiceProtoSerializer(proto_serializers.ProtoSerializer):
+    name = serializers.CharField(allow_blank =True)
+    image = serializers.CharField(allow_blank= True)
+    class Meta:
+        proto_class = service_pb2.ServiceResponse
+        fields = ['name', 'image']
+    def message_to_data(self, message):
+        """Protobuf message -> Dict of python primitive datatypes.
+        """
+        return MessageToDict(message)
+
+
 class ServiceResponseProtoSerializer(proto_serializers.ProtoSerializer):
-    name = serializers.CharField()
-    image = serializers.CharField()
+    service =serializers.ListField(child=ServiceProtoSerializer())
     class Meta:
         proto_class = service_pb2.GetServiceResponse
         fields = '__all__'

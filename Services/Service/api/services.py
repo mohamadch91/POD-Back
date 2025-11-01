@@ -22,7 +22,7 @@ class CustomService(service):
         if(id):
             service = Service.objects.filter(id=id)
         elif(name):
-            service = Service.objects.filter(name__contains = name)
+            service = Service.objects.filter(name__contains = name,status=1)
         elif country:
             service = Service.objects.filter(country=country)
         
@@ -30,11 +30,18 @@ class CustomService(service):
         for i in service:
             body ={  }
             files = ServiceFiles.objects.filter(service= i.id,default = True)
-            files= files[0]
-            body["image"] = 'service/media/'+str(files.file)
+            if(files.exists()):
+                files= files[0]
+                body["image"] = 'service/media/'+str(files.file)
+
+            else:
+                body["image"] = ''
             body["name"]= i.name
             res.append(body)
-        return ServiceResponseProtoSerializer(res).message
+        final_res={
+            "service": res
+        }
+        return ServiceResponseProtoSerializer(final_res).message
     
 
 
