@@ -371,7 +371,7 @@ class AddServiceView(generics.CreateAPIView):
                 for i in files:
                     body ={
                         "service": id,
-                        "file" : i,
+                        "file" : i["file"],
                         "default":i["default"],
                     }
                     file_ser = ServiceFilesSerializer (data =body)

@@ -387,7 +387,7 @@ class UserCommerceView(generics.RetrieveAPIView):
         return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddCommerceView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = CommerceSerializer
 
     queryset =Commerce.objects.all()
@@ -396,6 +396,7 @@ class AddCommerceView(generics.CreateAPIView):
         temp = copy.deepcopy(request.data)
         new_data=convert_form_to_list(request.data)
         temp["user_id"] = user.id
+        print(request.data)
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
@@ -404,7 +405,7 @@ class AddCommerceView(generics.CreateAPIView):
                 for i in new_data['files']:
                     body ={
                         "commerce": id,
-                        "file" : i,
+                        "file" : i["file"],
                         "default":i["default"]
 
                     }
@@ -412,7 +413,8 @@ class AddCommerceView(generics.CreateAPIView):
                     if (file_ser.is_valid()):
                         file_ser.save()
                     else:
-                        return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
+                        print(file_ser.errors)
+                        return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser.error_messages))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
