@@ -21,7 +21,8 @@ class SearchView(APIView):
                     temp ={
                         "type" : "commerce",
                         "name": i.name,
-                        "image": i.image
+                        "image": i.image,
+                        "id": i.id
                     }
                     final_response.append(temp)
             if services.service and len(services.service)>0:
@@ -29,7 +30,9 @@ class SearchView(APIView):
                     temp ={
                         "type" : "service",
                         "name": i.name,
-                        "image": i.image
+                        "image": i.image,
+                        "id": i.id
+
                     }
                     final_response.append(temp)
             ser= SearchResponseSerializer(final_response,many=True)
