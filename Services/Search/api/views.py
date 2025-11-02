@@ -41,3 +41,5 @@ class SearchView(APIView):
         else:
             return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=""))
     
+
+    
