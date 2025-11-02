@@ -387,7 +387,7 @@ class UserCommerceView(generics.RetrieveAPIView):
         return CustomResponse(final_response,status=status.HTTP_200_OK,message=CustomMessage(1))
 
 class AddCommerceView(generics.CreateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommerceSerializer
 
     queryset =Commerce.objects.all()
