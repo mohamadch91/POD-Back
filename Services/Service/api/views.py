@@ -360,23 +360,25 @@ class AddServiceView(generics.CreateAPIView):
     def post(self, request):
         user= request.user
         temp = copy.deepcopy(request.data)
-        files = request.FILES.getlist('files')
         temp["user_id"] = user.id
         serializer = ServiceSerializer(data = temp)
+        new_data=convert_form_to_list(request.data)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in files:
-                body ={
-                    "service": id,
-                    "file" : i,
-                    "default":i["default"],
-                }
-                file_ser = ServiceFilesSerializer (data =body)
-                if (file_ser.is_valid()):
-                    file_ser.save()
-                else:
-                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=file_ser._errors))
+            if 'files' in new_data:
+                files = new_data['files']
+                for i in files:
+                    body ={
+                        "service": id,
+                        "file" : i,
+                        "default":i["default"],
+                    }
+                    file_ser = ServiceFilesSerializer (data =body)
+                    if (file_ser.is_valid()):
+                        file_ser.save()
+                    else:
+                        return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=file_ser._errors))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="سرویس"))
 
     
