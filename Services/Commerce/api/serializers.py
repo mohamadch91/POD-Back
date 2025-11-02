@@ -66,9 +66,10 @@ class CommerceRequestProtoSerializer(proto_serializers.ProtoSerializer):
 class CommerceProtoSerializer(proto_serializers.ProtoSerializer):
     name = serializers.CharField(allow_blank =True)
     image = serializers.CharField(allow_blank= True)
+    id= serializers.IntegerField()
     class Meta:
         proto_class = commerce_pb2.CommerceResponse
-        fields = ['name', 'image']
+        fields = ['name', 'image','id']
     def message_to_data(self, message):
         """Protobuf message -> Dict of python primitive datatypes.
         """

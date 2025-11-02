@@ -227,9 +227,14 @@ services:
     depends_on:
       - db
       - authentication
+      - authentication-grpc
       - baseInfo
+      - baseInfo-grpc
       - commerce
+      - commerce-grpc
       - service
+      - search
+      - service-grpc
       - log
       - order
 

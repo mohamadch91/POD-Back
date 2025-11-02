@@ -25,5 +25,6 @@ message GetServiceResponse{
 message ServiceResponse {
      string name = 1;
     string image = 2;
+    int32 id=3;
 
 }

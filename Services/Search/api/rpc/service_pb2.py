@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\">\n\x11GetServiceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07\x63ountry\x18\x03 \x01(\t\"?\n\x12GetServiceResponse\x12)\n\x07service\x18\x01 \x03(\x0b\x32\x18.service.ServiceResponse\".\n\x0fServiceResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05image\x18\x02 \x01(\t2Y\n\x11ServiceController\x12\x44\n\x07GetList\x12\x1a.service.GetServiceRequest\x1a\x1b.service.GetServiceResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x07service\">\n\x11GetServiceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07\x63ountry\x18\x03 \x01(\t\"?\n\x12GetServiceResponse\x12)\n\x07service\x18\x01 \x03(\x0b\x32\x18.service.ServiceResponse\":\n\x0fServiceResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05image\x18\x02 \x01(\t\x12\n\n\x02id\x18\x03 \x01(\x05\x32Y\n\x11ServiceController\x12\x44\n\x07GetList\x12\x1a.service.GetServiceRequest\x1a\x1b.service.GetServiceResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,7 +36,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_GETSERVICERESPONSE']._serialized_start=90
   _globals['_GETSERVICERESPONSE']._serialized_end=153
   _globals['_SERVICERESPONSE']._serialized_start=155
-  _globals['_SERVICERESPONSE']._serialized_end=201
-  _globals['_SERVICECONTROLLER']._serialized_start=203
-  _globals['_SERVICECONTROLLER']._serialized_end=292
+  _globals['_SERVICERESPONSE']._serialized_end=213
+  _globals['_SERVICECONTROLLER']._serialized_start=215
+  _globals['_SERVICECONTROLLER']._serialized_end=304
 # @@protoc_insertion_point(module_scope)

@@ -34,6 +34,7 @@ class CommerceService(Service):
                 body["image"] = ''
 
             body["name"]= i.name
+            body["id"] = i.id
             res.append(body)
         final_res= {
             "commerce":res

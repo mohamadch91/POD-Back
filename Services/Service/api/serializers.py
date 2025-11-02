@@ -63,9 +63,10 @@ class ServiceRequestProtoSerializer(proto_serializers.ProtoSerializer):
 class ServiceProtoSerializer(proto_serializers.ProtoSerializer):
     name = serializers.CharField(allow_blank =True)
     image = serializers.CharField(allow_blank= True)
+    id= serializers.IntegerField()
     class Meta:
         proto_class = service_pb2.ServiceResponse
-        fields = ['name', 'image']
+        fields = ['name', 'image','id']
     def message_to_data(self, message):
         """Protobuf message -> Dict of python primitive datatypes.
         """

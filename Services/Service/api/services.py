@@ -37,6 +37,7 @@ class CustomService(service):
             else:
                 body["image"] = ''
             body["name"]= i.name
+            body['id'] = i.name
             res.append(body)
         final_res={
             "service": res
