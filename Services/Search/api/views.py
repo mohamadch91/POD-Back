@@ -13,6 +13,7 @@ class SearchView(APIView):
         query = request.GET.get("query")
         if(query):
             commerces=get_commerce_list(query)
+            print(commerces)
             services= get_service_list(query)
             final_response=[]
             if commerces.commerce and len(commerces.commerce)>0 :
@@ -42,4 +43,3 @@ class SearchView(APIView):
             return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=""))
     
 
-    
