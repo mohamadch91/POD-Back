@@ -401,7 +401,7 @@ class AddCommerceView(generics.CreateAPIView):
             serializer.save()
             id = serializer.data["id"]
             if('files' in new_data):
-                for i in files:
+                for i in new_data['files']:
                     body ={
                         "commerce": id,
                         "file" : i,

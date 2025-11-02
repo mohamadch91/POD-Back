@@ -7,7 +7,7 @@ from .serializers import SearchResponseSerializer
 from .customResponse import CustomResponse,CustomMessage 
 
 class SearchView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self,request):
         query = request.GET.get("query")
