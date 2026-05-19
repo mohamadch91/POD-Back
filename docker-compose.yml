@@ -257,7 +257,7 @@ services:
     image: postgres:latest
     container_name: db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/
       - ./database/init.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     env_file:
       - .env

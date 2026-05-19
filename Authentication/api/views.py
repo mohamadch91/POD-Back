@@ -27,7 +27,6 @@ class UpdateProfileView(APIView):
                 if(real_user_ser.is_valid()):
                     real_user_ser.save()
                     return  CustomResponse(real_user_ser.data,status=status.HTTP_202_ACCEPTED,message=CustomMessage(6,"پروفایل کاربری").message)
-
                 else:
                     return CustomResponse(None,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(3,legal_user_ser._errors).message)
             except:
