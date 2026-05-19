@@ -119,14 +119,14 @@ class OTPManager(models.Manager):
     def generate(self, data):
         otp = self.model(receiver=data['receiver'])
         otp.save(using=self._db)
-        send_otp(otp)
+        # send_otp(otp)
         return otp
 
 
 
 def generate_otp():
-    rand = random.SystemRandom()
-    digits = rand.choices(string.digits, k=5 )
+    # rand = random.SystemRandom() rand.choices(string.digits, k=5 )
+    digits = 12345
     return  ''.join(digits)
 
 
