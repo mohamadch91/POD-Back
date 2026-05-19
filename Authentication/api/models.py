@@ -126,8 +126,9 @@ class OTPManager(models.Manager):
 
 def generate_otp():
     # rand = random.SystemRandom() rand.choices(string.digits, k=5 )
-    digits = 12345
-    return  ''.join(digits)
+    # digits = rand.choices(string.digits, k=5 )
+    # return  ''.join(digits)
+    return '12345'
 
 
 class OTPRequest(models.Model):
