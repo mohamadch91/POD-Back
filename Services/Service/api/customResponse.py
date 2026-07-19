@@ -38,7 +38,7 @@ class CustomMessage():
 
     def error(self,message):
 
-        return message +" با خطا مواجه شد " 
+        return str(message) +" با خطا مواجه شد " 
 
     def required(self,fields):
         ans= ""

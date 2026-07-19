@@ -396,7 +396,6 @@ class AddCommerceView(generics.CreateAPIView):
         temp = copy.deepcopy(request.data)
         new_data=convert_form_to_list(request.data)
         temp["user_id"] = user.id
-        print(request.data)
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
