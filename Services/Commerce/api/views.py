@@ -180,24 +180,26 @@ class CommerceActionsAdminView(APIView):
     def post(self, request):
         user = request.user
         temp = copy.deepcopy(request.data)
-        files = request.FILES.getlist('files')
+        new_data=convert_form_to_list(request.data)
         temp["user_id"] = user.id
         serializer = CommerceSerializer(data = temp)
         if(serializer.is_valid()):
             serializer.save()
             id = serializer.data["id"]
-            for i in files:
-                body ={
-                    "commerce": id,
-                    "file" : i,
-                    "default":i["default"]
+            if('files' in new_data):
+                for i in new_data['files']:
+                    body ={
+                        "commerce": id,
+                        "file" : i["file"],
+                        "default":i["default"]
 
-                }
-                file_ser = CommerceFilesSerializer (data =body)
-                if (file_ser.is_valid()):
-                    file_ser.save()
-                else:
-                    return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser._errors))
+                    }
+                    file_ser = CommerceFilesSerializer (data =body)
+                    if (file_ser.is_valid()):
+                        file_ser.save()
+                    else:
+                        print(file_ser.errors)
+                        return CustomResponse(file_ser.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=2,data=file_ser.error_messages))
             return CustomResponse(serializer.data,status=status.HTTP_201_CREATED,message=CustomMessage(type=5,data="بازرگانی"))
         
         return CustomResponse(serializer.errors,status=status.HTTP_400_BAD_REQUEST,message=CustomMessage(type=3,data=serializer._errors))
